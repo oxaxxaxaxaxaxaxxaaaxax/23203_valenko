@@ -25,11 +25,11 @@ struct Node{
   Key key = "";
   Value * data;
   bool flag =0;
-  Node * next;
+  Node * next = nullptr;
   Node(){
     data = new Value;
-    next = new Node;
-    next = nullptr;
+    //next = new Node;
+    //next = nullptr;
     //data->age=0;
     //data->weight=0;
   }
@@ -210,8 +210,9 @@ public:
   Value& operator[](const Key& k)const{
     size_t index = hashFunction(k);
     if(!contains(k)){ 
-      
-      //return ;
+      table[index] = new Node;
+      table[index]->key = k;
+      return *((table[index])->data);
     }
     while(table[index]->key != k){
       table[index] = (table[index])->next;
@@ -295,7 +296,12 @@ public:
     if (curr_size >= capacity){
       int new_capacity = capacity*2;
       Node ** new_table = new Node*[new_capacity];
-      new_table = static_cast <Node**>(std::memcpy (new_table, table, capacity*sizeof(Node*)));
+      for(int i=0;i<capacity;i++){
+        new_table[i] = new Node;
+        std::memcpy (new_table[i], table[i], sizeof(Node));
+        delete table[i];
+      }
+      //new_table = static_cast <Node**>(std::memcpy (new_table, table, capacity*sizeof(Node*)));
       delete [] table;
       capacity = new_capacity;
       //table = new_table;
