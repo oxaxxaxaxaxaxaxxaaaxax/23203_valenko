@@ -7,19 +7,31 @@ typedef std::string Key;
 static constexpr int initial_capacity = 4;
 
 struct Value {
-  unsigned int age;
-  unsigned int weight;
+  unsigned int age =0;
+  unsigned int weight = 0;
+  friend bool operator!=(const Value& a, const Value& b){
+    if(a.age != b.age) return 1;
+    if(a.weight != b.weight) return 1;
+    return 0;
+  }
+  friend bool operator==(const Value& a, const Value& b){
+    if(a.age != b.age) return 0;
+    if(a.weight != b.weight) return 0;
+    return 1;
+  }
 };
 
 struct Node{
   Key key = "";
   Value * data;
   bool flag =0;
-  Node * next=nullptr;
+  Node * next;
   Node(){
     data = new Value;
-    data->age=0;
-    data->weight=0;
+    next = new Node;
+    next = nullptr;
+    //data->age=0;
+    //data->weight=0;
   }
   Node(const Key &k, const Value& v):key(k),flag(1){
     data->age = v.age;
@@ -195,9 +207,12 @@ public:
   }
 
   // Возвращает значение по ключу. Небезопасный метод.
-  Value& operator[](const Key& k){
+  Value& operator[](const Key& k)const{
     size_t index = hashFunction(k);
-    if(table[index]->flag == 0){ }//&&&&7777??????
+    if(!contains(k)){ 
+      
+      //return ;
+    }
     while(table[index]->key != k){
       table[index] = (table[index])->next;
     }
@@ -248,30 +263,14 @@ public:
   friend bool operator==(const HashTable& a, const HashTable& b){
     if(a.curr_size != b.curr_size) return 0;
     for(int i=0; i<a.capacity;i++){
-      if(a.table[i]->flag != b.table[i]->flag) return 0;
-      if((a.table[i]->flag == 0) && (b.table[i]->flag==0)) continue;
-      while((a.table[i]-> next != nullptr) && (a.table[i]-> next != nullptr)){
-        if((a.table[i]->data->age != b.table[i]->data->age)||(a.table[i]->data->weight!=b.table[i]->data->weight)||((a.table[i]->key.compare(b.table[i]->key)))) return 0;
-        a.table[i] = a.table[i]->next;
-        b.table[i] = b.table[i]->next;
-      }
-      if((a.table[i]->next == nullptr)&&(b.table[i]->next == nullptr)) continue;
-      else return 0;
+      if(b.operator[](b.table[i]->key) != a.operator[](b.table[i]->key)) return 0;
     }
     return 1;
   }
   friend bool operator!=(const HashTable& a, const HashTable& b){
     if(a.curr_size != b.curr_size) return 1;
     for(int i=0; i<a.capacity;i++){
-      if(a.table[i]->flag != b.table[i]->flag) return 1;
-      if((a.table[i]->flag == 0) && (b.table[i]->flag==0)) continue;
-      while((a.table[i]-> next != nullptr) && (a.table[i]-> next != nullptr)){
-        if((a.table[i]->data->age != b.table[i]->data->age)||(a.table[i]->data->weight!=b.table[i]->data->weight)||((a.table[i]->key.compare(b.table[i]->key)))) return 1;
-        a.table[i] = a.table[i]->next;
-        b.table[i] = b.table[i]->next;
-      }
-      if((a.table[i]->next == nullptr)&&(b.table[i]->next == nullptr)) continue;
-      else return 1;
+      if(b.operator[](b.table[i]->key) != a.operator[](b.table[i]->key)) return 1;
     }
     return 0;
   }
@@ -326,7 +325,7 @@ public:
 
 
 
-int main(void){
+/*int main(void){
   HashTable a;
   Key k1 = "FIT";
   Value v1;
@@ -336,4 +335,4 @@ int main(void){
   bool res2 = a.contains("FIT");
   printf("%d %d\n", res1, res2);
   return 0;
-}
+}*/
