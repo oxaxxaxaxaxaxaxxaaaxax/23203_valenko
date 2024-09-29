@@ -34,6 +34,7 @@ struct Node{
     //data->weight=0;
   }
   Node(const Key &k, const Value& v):key(k),flag(1){
+    data = new Value;
     data->age = v.age;
     data->weight = v.weight;
   }
@@ -285,8 +286,8 @@ public:
     for(int i=0;i<capacity;i++){
       if(new_table[i]->key == "") continue;
       int index = hashFunction(new_table[i]->key);
-      table = new Node*[capacity];
-      table[index] = new Node(*(new_table[i]));
+      table = new_table;
+      table[index] = new_table[i];
     }
     delete [] new_table;
   }
@@ -334,9 +335,7 @@ public:
 /*int main(void){
   HashTable a;
   Key k1 = "FIT";
-  Value v1;
-  v1.age =19;
-  v1.weight =58;
+  Value v1 ={19,58};
   bool res1 = a.insert(k1, v1);
   bool res2 = a.contains("FIT");
   printf("%d %d\n", res1, res2);
