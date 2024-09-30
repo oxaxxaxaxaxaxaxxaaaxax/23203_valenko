@@ -1,5 +1,6 @@
-#include <iostream>
+
 #include <cstring>
+#include <iostream>
 
 
 
@@ -47,7 +48,6 @@ struct Node{
     flag =b.flag;
     data->age=b.data->age;
     data->weight=b.data->weight;
-    //next = b.next; //указатель на следующий лучше не трогать
     return *this;
   }
 };
@@ -138,8 +138,8 @@ public:
     for (int i=0;i<b.capacity;i++){
       new_table[i] = b.table[i];
     }
-    b.curr_size=0;
-    b.capacity =0;
+    //b.curr_size=0;
+    //b.capacity =0;
     delete [] b.table;
     delete [] table;
     table = new_table;
@@ -181,14 +181,19 @@ public:
   }
   // Вставка в контейнер. Возвращаемое значение - успешность вставки.
   bool insert(const Key& k, const Value& v){
-    expandMemoryIfNeeded();
+    curr_size++;
+    if (curr_size>capacity){
+      expandMemoryIfNeeded();
+    }
     size_t index = hashFunction(k);
     if(table[index]->flag == 0){
       *(table[index]) = Node(k, v);
-      table[index]->next = new Node;
+      //table[index]->next = new Node;
       return 1;
     }
+    if(table[index]->key == k) return 0;
     while((table[index])->next!= nullptr){
+      if(table[index]->next->key == k) return 0;
       table[index] = table[index]->next;
     }
     *(table[index]) = Node(k, v);
@@ -283,31 +288,46 @@ public:
 
 
   void Rehash(Node ** new_table){
+    Node ** tmp_table = new Node*[capacity];
+    for(int i=0;i<capacity;i++){
+      tmp_table[i]= new Node;
+    }
     for(int i=0;i<capacity;i++){
       if(new_table[i]->key == "") continue;
       int index = hashFunction(new_table[i]->key);
-      table = new_table;
-      table[index] = new_table[i];
+      if(tmp_table[index]->flag ==0){
+        tmp_table[index] = new_table[i];
+      }
+      else{
+        while(tmp_table[index]->next!= nullptr){
+          tmp_table[index] = tmp_table[index]->next;
+        }
+        tmp_table[index]->next = new_table[i];
+      }
     }
+    table = std::move(tmp_table);
     delete [] new_table;
   }
 
   void expandMemoryIfNeeded(){
-    curr_size++;
-    if (curr_size >= capacity){
-      int new_capacity = capacity*2;
-      Node ** new_table = new Node*[new_capacity];
-      for(int i=0;i<capacity;i++){
-        new_table[i] = new Node;
-        std::memcpy (new_table[i], table[i], sizeof(Node));
-        delete table[i];
-      }
-      //new_table = static_cast <Node**>(std::memcpy (new_table, table, capacity*sizeof(Node*)));
-      delete [] table;
-      capacity = new_capacity;
-      //table = new_table;
-      Rehash(new_table);
+    int new_capacity = capacity*2;
+    Node ** new_table = new Node*[new_capacity];
+    for(int i = 0;i< new_capacity;i++){
+      new_table[i] = new Node;
     }
+    for(int i=0;i<capacity;i++){
+      std::copy(table[i], table[i]+1, new_table[i]);
+      //std::memcpy (new_table[i], table[i], sizeof(Node));
+      //delete table[i];
+    }
+    for(int i=0;i<capacity;i++){
+      delete table[i];
+    }
+    delete [] table;
+    capacity = new_capacity;
+    //table = new_table;
+      //table = new_table;
+    Rehash(new_table);
   }
 
   size_t hashFunction(const Key &key) const {
@@ -332,12 +352,19 @@ public:
 
 
 
-/*int main(void){
+int main(void){
   HashTable a;
-  Key k1 = "FIT";
-  Value v1 ={19,58};
-  bool res1 = a.insert(k1, v1);
-  bool res2 = a.contains("FIT");
-  printf("%d %d\n", res1, res2);
+  Value v1 = {19, 58};
+  Key k1 = "Oksana";
+  Value v2 = {22, 67};
+  Key k2 = "Olesya";
+  Value v3 = {29, 51};
+  Key k3 = "Anya";
+  int res = a.insert(k1,v1);
+  res+= a.insert(k2,v2);
+  res+= a.insert(k3,v3);
+  HashTable b;
+  b=a;
+  std::cout << "fhhffh" <<std::endl;
   return 0;
-}*/
+}
