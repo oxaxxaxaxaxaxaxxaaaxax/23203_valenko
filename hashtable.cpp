@@ -25,25 +25,21 @@ struct Value {
 struct Node{
   Key key = "";
   Value * data;
-  bool flag =0;
+  bool flag =false;
   Node * next = nullptr;
-  Node(){
-    data = new Value;
-    //next = new Node;
-    //next = nullptr;
-    //data->age=0;
-    //data->weight=0;
+  Node(): data(new Value){
+
   }
-  Node(const Key &k, const Value& v):key(k),flag(1){
-    data = new Value;
+  Node(const Key &k, const Value& v):key(k),data( new Value),flag(true){
     data->age = v.age;
     data->weight = v.weight;
   }
-  Node(Node& b):key(b.key),flag (b.flag){
+  Node(const Node& b):key(b.key),flag (b.flag){
     data->age=b.data->age;
     data->weight=b.data->weight;
   }
   Node& operator=(const Node& b){
+    if(this == &b) return *this;
     key=b.key;
     flag =b.flag;
     data->age=b.data->age;
@@ -69,7 +65,9 @@ public:
     delete [] table;
   }
 
-  HashTable(int size):capacity(size),curr_size(size){
+  HashTable(int size){
+    capacity=size;
+    curr_size=size;
     table = new Node*[capacity];
     for(int i=0; i< capacity;i++){
       table[i] = new Node;
@@ -79,7 +77,7 @@ public:
   HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capacity){
     table = new Node*[b.capacity];
     for (int i=0;i<b.capacity;i++){
-      table[i] = b.table[i];
+      *(table[i]) = *(b.table[i]); //&&&
     }
   }
 
@@ -117,16 +115,21 @@ public:
     *this = std::move(c);
   }
 
-  HashTable& operator=(const HashTable& b){
+  HashTable& operator=(const HashTable& b){ //&&&&
     if(this == &b) return *this;
-    curr_size = b.curr_size;
-    capacity = b.capacity;
     Node ** new_table = new Node*[b.capacity];
     for (int i=0;i<b.capacity;i++){
-      new_table[i] = b.table[i];
+      *(new_table[i]) = *(b.table[i]);
+
+    }
+
+    for (int i = 0; i < capacity; ++i) {
+      delete table[i];
     }
     delete [] table;
     table = new_table;
+    curr_size = b.curr_size;
+    capacity = b.capacity;
     return *this;
   }
 
@@ -154,13 +157,13 @@ public:
         continue;
       }
       while(table[i]->next!= nullptr){
-        *(table[i]) = Node();
+        table[i] = new Node(); //new?
         //table[i]->data->age=0;
         //table[i]->data->weight=0;
         //table[i]->key ="";
         table[i]=table[i]->next;
       }
-      *(table[i]) = Node();
+      table[i] = new Node();
       //table[i]->data->age=0;
       //table[i]->data->weight=0;
       //table[i]->key ="";
@@ -187,7 +190,7 @@ public:
     }
     size_t index = hashFunction(k);
     if(table[index]->flag == 0){
-      *(table[index]) = Node(k, v);
+      table[index] =new Node(k, v);
       //table[index]->next = new Node;
       return 1;
     }
@@ -196,7 +199,7 @@ public:
       if(table[index]->next->key == k) return 0;
       table[index] = table[index]->next;
     }
-    *(table[index]) = Node(k, v);
+    table[index] = new Node(k, v);
     table[index]->next = new Node;
     return 1;
   }
@@ -283,7 +286,7 @@ public:
   }
   private:
     int curr_size =0;
-    int capacity;
+    int capacity=0;
     Node ** table;
 
 
@@ -310,6 +313,9 @@ public:
   }
 
   void expandMemoryIfNeeded(){
+    HashTable ht;
+    
+
     int new_capacity = capacity*2;
     Node ** new_table = new Node*[new_capacity];
     for(int i = 0;i< new_capacity;i++){
@@ -365,6 +371,7 @@ int main(void){
   res+= a.insert(k3,v3);
   HashTable b;
   b=a;
-  std::cout << "fhhffh" <<std::endl;
+  Value v0 = a.operator[]("Olesya");
+  std::cout << v0.age <<std::endl;
   return 0;
 }
