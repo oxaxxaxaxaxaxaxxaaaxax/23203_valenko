@@ -69,7 +69,7 @@ TEST(HTtest, test_3){
   EXPECT_TRUE(a.operator[]("Oksana")==b.operator[]("Oksana")&& a.operator[]("Katya")==b.operator[]("Katya")&&res == 6);
 }
 
-/*TEST(HTtest, test_4){
+TEST(HTtest, test_6){
   HashTable a;
   Value v1 = {19, 58};
   Key k1 = "Oksana";
@@ -98,16 +98,16 @@ TEST(HTtest, test_3){
   res+= a.insert(k2,v2);
   HashTable b;
   b = a;
-  res-= b.erase(k5);
-  res+= a.insert(k7,v7);
-  res+= a.insert(k8,v8);
-  res+= a.insert(k9,v9);
-  res+= a.insert(k5,v5);
+  /*res-= b.erase(k5);
+  res+= b.insert(k7,v7);
+  res+= b.insert(k8,v8);
+  res+= b.insert(k9,v9);
+  res+= b.insert(k5,v5);
   res-= b.erase(k7);
   res-= b.erase(k8);
-  res-= b.erase(k9);
+  res-= b.erase(k9);*/
   EXPECT_TRUE(a==b);
-}*/
+}
 
 int main(int argc, char **argv)
 {

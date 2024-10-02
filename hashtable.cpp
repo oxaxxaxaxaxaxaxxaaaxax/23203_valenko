@@ -30,9 +30,10 @@ struct Node{
   Node(): data(new Value){
 
   }
-  Node(const Key &k, const Value& v):key(k),data( new Value),flag(true){
+  Node(const Key &k, const Value& v):key(k),data(new Value),flag(true){
     data->age = v.age;
     data->weight = v.weight;
+    next = nullptr;
   }
   Node(const Node& b):key(b.key),flag (b.flag){
     data->age=b.data->age;
@@ -44,6 +45,18 @@ struct Node{
     flag =b.flag;
     data->age=b.data->age;
     data->weight=b.data->weight;
+    return *this;
+  }
+
+  Node& operator=(const Node&& b){
+    if(this == &b) return *this;
+    key=b.key;
+    flag =b.flag;
+    data->age=b.data->age;
+    data->weight=b.data->weight;
+    next = nullptr;
+    //b.next= nullptr;
+    //b.data = nullptr;
     return *this;
   }
 };
@@ -77,7 +90,8 @@ public:
   HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capacity){
     table = new Node*[b.capacity];
     for (int i=0;i<b.capacity;i++){
-      *(table[i]) = *(b.table[i]); //&&&
+      table[i] = new Node;
+      *(table[i]) = *(b.table[i]); 
     }
   }
 
@@ -119,6 +133,7 @@ public:
     if(this == &b) return *this;
     Node ** new_table = new Node*[b.capacity];
     for (int i=0;i<b.capacity;i++){
+      new_table[i] = new Node;
       *(new_table[i]) = *(b.table[i]);
 
     }
@@ -177,9 +192,12 @@ public:
       table[index] = table[index]->next;
       if(table[index] == nullptr) return 0;
     }
-    (table[index])->data->age = 0;
-    (table[index])->data->age = 0;
-    table[index]->key = "";
+    Node * pointer = table[index]->next;
+    table[index] = std::move(new Node());
+    table[index]->next = pointer;
+    //(table[index])->data->age = 0;
+    //(table[index])->data->age = 0;
+    //table[index]->key = "";
     return 1;
   }
   // Вставка в контейнер. Возвращаемое значение - успешность вставки.
@@ -199,19 +217,20 @@ public:
       if(table[index]->next->key == k) return 0;
       table[index] = table[index]->next;
     }
-    table[index] = new Node(k, v);
-    table[index]->next = new Node;
+    table[index]->next = new Node(k, v);
+    //table[index]->next = new Node;
     return 1;
   }
 
   // Проверка наличия значения по заданному ключу.
   bool contains(const Key& k) const{ 
     size_t index = hashFunction(k);
+    if(k == table[index]->key) return 1;
     while(table[index]->next != nullptr){
+      if(table[index]->next->flag == 0) break;
       if(k == table[index]->key) return 1;
       table[index] = table[index]->next;
     }
-    if(k == table[index]->key) return 1;
     return 0;
   }
 
@@ -358,7 +377,7 @@ public:
 
 
 
-int main(void){
+/*int main(void){
   HashTable a;
   Value v1 = {19, 58};
   Key k1 = "Oksana";
@@ -370,8 +389,12 @@ int main(void){
   res+= a.insert(k2,v2);
   res+= a.insert(k3,v3);
   HashTable b;
+  res-= a.erase("Oksana");
   b=a;
   Value v0 = a.operator[]("Olesya");
+  res += a.insert(k1,v1);
+  Value v6 = a.operator[]("Oksana");
+  std::cout << v6.age <<std::endl;
   std::cout << v0.age <<std::endl;
   return 0;
-}
+}*/
