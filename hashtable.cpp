@@ -27,8 +27,10 @@ struct Node{
   Value * data;
   bool flag =false;
   Node * next = nullptr;
-  Node(): data(new Value){
-
+  Node(): data(new Value){}
+  ~Node(){
+    delete data;
+    delete next;
   }
   Node(const Key &k, const Value& v):key(k),data(new Value),flag(true){
     data->age = v.age;
@@ -48,15 +50,15 @@ struct Node{
     return *this;
   }
 
-  Node& operator=(const Node&& b){
+  Node& operator=(Node&& b){
     if(this == &b) return *this;
     key=b.key;
     flag =b.flag;
     data->age=b.data->age;
     data->weight=b.data->weight;
     next = nullptr;
-    //b.next= nullptr;
-    //b.data = nullptr;
+    b.next= nullptr;
+    b.data = nullptr;
     return *this;
   }
 };
@@ -117,8 +119,6 @@ public:
       b.table[i] = nullptr;
     }
   }
-
-
 
   // Обменивает значения двух хэш-таблиц.
   // Подумайте, зачем нужен этот метод, при наличии стандартной функции
@@ -187,6 +187,11 @@ public:
 
   // Удаляет элемент по заданному ключу.
   bool erase(const Key& k){
+    if(!curr_size) {
+      curr_size++;
+      return 0;
+    }
+    curr_size--;
     size_t index = hashFunction(k);
     while(table[index]->key != k){
       table[index] = table[index]->next;
@@ -378,23 +383,13 @@ public:
 
 
 /*int main(void){
+  Value v6 = {18, 69};
   HashTable a;
-  Value v1 = {19, 58};
-  Key k1 = "Oksana";
-  Value v2 = {22, 67};
-  Key k2 = "Olesya";
-  Value v3 = {29, 51};
-  Key k3 = "Anya";
-  int res = a.insert(k1,v1);
-  res+= a.insert(k2,v2);
-  res+= a.insert(k3,v3);
-  HashTable b;
-  res-= a.erase("Oksana");
-  b=a;
-  Value v0 = a.operator[]("Olesya");
-  res += a.insert(k1,v1);
-  Value v6 = a.operator[]("Oksana");
-  std::cout << v6.age <<std::endl;
-  std::cout << v0.age <<std::endl;
+  Value v1 = {0,0};
+  int res = a.insert("", v1);
+  res += a.insert()
+  a.erase("");
+  int size = a.size();
+  std::cout<< << std::endl;
   return 0;
 }*/
