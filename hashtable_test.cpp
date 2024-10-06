@@ -161,8 +161,37 @@ TEST(HTtest, test_8){
 
 TEST(HTtest, test_9){
   HashTable a;
+  Value v6 = {18, 69};
+  int res = a.insert("aaa", v6);
+  try {
+        // Код, который бросает std::runtime_error
+        throw std::runtime_error("Value is not found");
+        FAIL() << "Ожидаемое исключение не было брошено";
+    } catch (const std::runtime_error& e) {
+        EXPECT_STREQ("Value is not found", e.what());
+    }
+}
+  //EXPECT_THROW(a.at("aa"), std::runtime_error("Value is not found"));
+
+TEST(HTtest, test_10){
+  HashTable a;
+  const Value v6 = {18, 69};
+  const Key k6 = "aaa";
+  int res = a.insert(k6, v6);
+  try {
+        // Код, который бросает std::runtime_error
+        throw std::runtime_error("Value is not found");
+        FAIL() << "Ожидаемое исключение не было брошено";
+    } catch (const std::runtime_error& e) {
+        EXPECT_STREQ("Value is not found", e.what());
+    }
+  //EXPECT_THROW(a.at("aa"), "Value is not found");
+}
+
+TEST(HTtest, test_11){
 
 }
+
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

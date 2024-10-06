@@ -143,7 +143,7 @@ public:
 
     }
 
-    for (int i = 0; i < capacity; ++i) {
+    for (int i = 0; i < capacity; i++) {
       delete table[i];
     }
     delete [] table;
@@ -201,18 +201,18 @@ public:
   // Удаляет элемент по заданному ключу.
   bool erase(const Key& k){
     if(!curr_size) {
-      curr_size++;
       return 0;
     }
-    curr_size--;
     size_t index = hashFunction(k);
-    while(table[index]->key != k){
+    while((table[index]->key != k)||((table[index]->flag ==0)&&(k == ""))){
       table[index] = table[index]->next;
       if(table[index] == nullptr) return 0;
     }
     Node * pointer = table[index]->next;
     table[index] = std::move(new Node());
     table[index]->next = pointer;
+
+    curr_size--;
     //(table[index])->data->age = 0;
     //(table[index])->data->age = 0;
     //table[index]->key = "";
@@ -276,13 +276,13 @@ public:
     try{
       while(table[index]->key != k){
         if(table[index]->flag == 0){
-          throw -1;
+          throw std::runtime_error("Value is not found");
         }
         table[index] = (table[index])->next;
       }
     }
-    catch(int a){
-      std::cout<< "Value is not found" << std::endl;
+    catch(const std::runtime_error&e){
+      std::cout<< e.what() << std::endl;
     }
     return *((table[index])->data);
   }
@@ -326,8 +326,8 @@ public:
     return 0;
   }
   private:
-    int curr_size =0;
-    int capacity=0;
+    size_t curr_size =0;
+    size_t capacity=0;
     Node ** table;
 
 
@@ -422,26 +422,8 @@ public:
 
 /*int main(void){
   HashTable a;
-  Value v1 = {19, 58};
-  Key k1 = "Oksana";
-  Value v2 = {22, 67};
-  Key k2 = "Olesya";
-  Value v3 = {29, 51};
-  Key k3 = "Anya";
-  Value v4 = {32, 62};
-  Key k4 = "Katya";
-  Value v5 = {15, 55};
-  Key k5 = "Tonya";
   Value v6 = {18, 69};
-  Key k6 = "Sasha";
-  int res = a.insert(k1,v1);
-  res+= a.insert(k2,v2);
-  res+= a.insert(k3,v3);
-  res+= a.insert(k4,v4);
-  res+= a.insert(k5,v5);
-  res+= a.insert(k6,v6);
-  res+= a.insert(k2,v2);
-  HashTable b;
-  b = std::move(a);
-  return 0;
+  a.insert("aaa", v6);
+  Value v0 = a.at("aa");
+  //EXPECT_THROW(a.at("aa"), std::runtime_error);
 }*/
