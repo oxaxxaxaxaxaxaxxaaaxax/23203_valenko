@@ -10,6 +10,12 @@ static constexpr int initial_capacity = 4;
 struct Value {
   unsigned int age =0;
   unsigned int weight = 0;
+
+  Value& operator=(const Value& b){
+    age = b.age;
+    weight = b.weight;
+    return *this;
+  }
   friend bool operator!=(const Value& a, const Value& b){
     if(a.age != b.age) return 1;
     if(a.weight != b.weight) return 1;
@@ -134,13 +140,14 @@ public:
     *this = std::move(c);
   }
 
-  HashTable& operator=(const HashTable& b){ //&&&&
+  HashTable& operator=(const HashTable& b){ 
     if(this == &b) return *this;
     Node ** new_table = new Node*[b.capacity];
-    for (int i=0;i<b.capacity;i++){
+    for (int i = 0; i < b.capacity; i++) {
       new_table[i] = new Node;
-      *(new_table[i]) = *(b.table[i]);
-
+    }
+    for(int i=0;i<b.capacity;i++){
+      std::copy(b.table[i], b.table[i]+1, new_table[i]);
     }
 
     for (int i = 0; i < capacity; i++) {
@@ -161,7 +168,7 @@ public:
     }*/
    for(int i=0;i<capacity;i++){
       //if(table[i] == nullptr) continue;
-      std::cout << table[i] << std::endl;
+      //std::cout << table[i] << std::endl;
       delete table[i];
     }
     delete [] table;
@@ -423,7 +430,11 @@ public:
 /*int main(void){
   HashTable a;
   Value v6 = {18, 69};
+  Value v5 = {16,77};
   a.insert("aaa", v6);
-  Value v0 = a.at("aa");
+  HashTable b;
+  b=a;
+  b["aaa"] = v5;
+  std::cout << b["aaa"].age << std::endl;
   //EXPECT_THROW(a.at("aa"), std::runtime_error);
 }*/
