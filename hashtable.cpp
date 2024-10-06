@@ -1,7 +1,7 @@
 
 #include <cstring>
 #include <iostream>
-
+#include <utility>
 
 
 typedef std::string Key;
@@ -29,8 +29,12 @@ struct Node{
   Node * next = nullptr;
   Node(): data(new Value){}
   ~Node(){
-    delete data;
-    delete next;
+    if(data != nullptr){
+      delete data;
+    }
+    if(next != nullptr){
+      delete next;
+    }
   }
   Node(const Key &k, const Value& v):key(k),data(new Value),flag(true){
     data->age = v.age;
@@ -74,6 +78,7 @@ public:
   }
 
    ~HashTable(){
+    if(table == nullptr) return;
     for(int i=0; i< capacity;i++){
       delete table[i];
     }
@@ -82,7 +87,7 @@ public:
 
   HashTable(int size){
     capacity=size;
-    curr_size=size;
+    curr_size=0;
     table = new Node*[capacity];
     for(int i=0; i< capacity;i++){
       table[i] = new Node;
@@ -150,17 +155,25 @@ public:
 
   HashTable& operator=(HashTable&& b){
     if(this == &b) return *this;
+    //Node ** new_table = new Node*[b.capacity];
+    /*for (int i=0;i<b.capacity;i++){
+      new_table[i] = std::move(b.table[i]);
+    }*/
+   for(int i=0;i<capacity;i++){
+      //if(table[i] == nullptr) continue;
+      std::cout << table[i] << std::endl;
+      delete table[i];
+    }
+    delete [] table;
+    table = b.table;
+    b.table = nullptr;
+
     curr_size = b.curr_size;
     capacity = b.capacity;
-    Node ** new_table = new Node*[b.capacity];
-    for (int i=0;i<b.capacity;i++){
-      new_table[i] = b.table[i];
-    }
     //b.curr_size=0;
     //b.capacity =0;
-    delete [] b.table;
-    delete [] table;
-    table = new_table;
+    //delete [] b.table;
+    //table = new_table;
     return *this;
   }
 
@@ -207,6 +220,7 @@ public:
   }
   // Вставка в контейнер. Возвращаемое значение - успешность вставки.
   bool insert(const Key& k, const Value& v){
+
     curr_size++;
     if (curr_size>capacity){
       expandMemoryIfNeeded();
@@ -217,7 +231,10 @@ public:
       //table[index]->next = new Node;
       return 1;
     }
-    if(table[index]->key == k) return 0;
+    if(table[index]->key == k) {
+      curr_size--;
+      return 0;
+    }
     while((table[index])->next!= nullptr){
       if(table[index]->next->key == k) return 0;
       table[index] = table[index]->next;
@@ -314,8 +331,23 @@ public:
     Node ** table;
 
 
-  void Rehash(Node ** new_table){
-    Node ** tmp_table = new Node*[capacity];
+  void Rehash(HashTable &a){
+    for(int i=0;i<capacity;i++){
+      if(!(table[i]->flag)) continue;
+      while(table[i]->next!= nullptr){
+        a.insert(table[i]->key, (*(table[i]->data)));
+        table[i] = table[i]->next;
+      }
+      a.insert(table[i]->key, (*(table[i]->data)));
+    }
+    for(int i=0;i<a.capacity;i++){
+      std::cout << a.table[i] << std::endl;
+    }
+    std::cout<< std::endl;
+    *this = std::move(a);
+
+
+    /*Node ** tmp_table = new Node*[capacity];
     for(int i=0;i<capacity;i++){
       tmp_table[i]= new Node;
     }
@@ -333,14 +365,20 @@ public:
       }
     }
     table = std::move(tmp_table);
-    delete [] new_table;
+    delete [] new_table;*/
+
+
   }
 
   void expandMemoryIfNeeded(){
-    HashTable ht;
-    
-
-    int new_capacity = capacity*2;
+    HashTable a(capacity*2);
+    for(int i=0;i<a.capacity;i++){
+      std::cout << a.table[i] << std::endl;
+    }
+    std::cout<< std::endl;
+    //a.capacity *=2;
+    Rehash(a);
+    /*int new_capacity = capacity*2;
     Node ** new_table = new Node*[new_capacity];
     for(int i = 0;i< new_capacity;i++){
       new_table[i] = new Node;
@@ -357,7 +395,7 @@ public:
     capacity = new_capacity;
     //table = new_table;
       //table = new_table;
-    Rehash(new_table);
+    Rehash(new_table);*/
   }
 
   size_t hashFunction(const Key &key) const {
@@ -383,13 +421,27 @@ public:
 
 
 /*int main(void){
-  Value v6 = {18, 69};
   HashTable a;
-  Value v1 = {0,0};
-  int res = a.insert("", v1);
-  res += a.insert()
-  a.erase("");
-  int size = a.size();
-  std::cout<< << std::endl;
+  Value v1 = {19, 58};
+  Key k1 = "Oksana";
+  Value v2 = {22, 67};
+  Key k2 = "Olesya";
+  Value v3 = {29, 51};
+  Key k3 = "Anya";
+  Value v4 = {32, 62};
+  Key k4 = "Katya";
+  Value v5 = {15, 55};
+  Key k5 = "Tonya";
+  Value v6 = {18, 69};
+  Key k6 = "Sasha";
+  int res = a.insert(k1,v1);
+  res+= a.insert(k2,v2);
+  res+= a.insert(k3,v3);
+  res+= a.insert(k4,v4);
+  res+= a.insert(k5,v5);
+  res+= a.insert(k6,v6);
+  res+= a.insert(k2,v2);
+  HashTable b;
+  b = std::move(a);
   return 0;
 }*/
