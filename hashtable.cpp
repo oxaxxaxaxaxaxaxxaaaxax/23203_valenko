@@ -189,6 +189,7 @@ public:
       //table[i]->data->weight=0;
       //table[i]->key ="";
     }
+    curr_size=0;
   }
 
   // Удаляет элемент по заданному ключу.
@@ -268,32 +269,22 @@ public:
   // Возвращает значение по ключу. Бросает исключение при неудаче.
   Value& at(const Key& k){
     size_t index = hashFunction(k);
-    try{
       while(table[index]->key != k){
         if(table[index]->flag == 0){
           throw std::runtime_error("Value is not found");
         }
         table[index] = (table[index])->next;
       }
-    }
-    catch(const std::runtime_error&e){
-      std::cout<< e.what() << std::endl;
-    }
     return *((table[index])->data);
   }
   const Value& at(const Key& k) const{
     size_t index = hashFunction(k);
-    try{
       while(table[index]->key != k){
         if(table[index]->flag == 0){
           throw std::runtime_error("Value is not found");
         }
         table[index] = (table[index])->next;
       }
-    }
-    catch(const std::runtime_error&e){
-      std::cout<< e.what()<< std::endl;
-    }
     const Value& temp = *((table[index])->data);
     return temp;
   }

@@ -164,7 +164,7 @@ TEST(HTtest, test_9){
   Value v6 = {18, 69};
   int res = a.insert("aaa", v6);
   try {
-    throw std::runtime_error("Value is not found");
+    a.at("aa");
     FAIL() << "Ожидаемое исключение не было брошено";
   } catch (const std::runtime_error& e) {
     EXPECT_STREQ("Value is not found", e.what());
@@ -177,12 +177,7 @@ TEST(HTtest, test_10){
   const Value v6 = {18, 69};
   const Key k6 = "aaa";
   int res = a.insert(k6, v6);
-  try {
-    a.at("aa");
-    FAIL() << "Ожидаемое исключение не было брошено";
-  } catch (const std::runtime_error& e) {
-    EXPECT_EQ(std::string( e.what()), "Value is not found");
-  }
+  EXPECT_THROW(a.at("aa"), std::runtime_error);
 }
 
 TEST(HTtest, test_11){
@@ -222,6 +217,87 @@ TEST(HTtest, test_13){
   b["FIT"] = v7;
   b["aaa"] = v5;
   EXPECT_TRUE(b["FIT"] == v7);
+}
+
+TEST(HTtest, test_14){
+  HashTable a;
+  Value v1 = {19, 58};
+  Key k1 = "Oksana";
+  Value v2 = {22, 67};
+  Key k2 = "Olesya";
+  Value v3 = {29, 51};
+  Key k3 = "Anya";
+  Value v4 = {32, 62};
+  Key k4 = "Katya";
+  Value v5 = {15, 55};
+  Key k5 = "Tonya";
+  Value v6 = {18, 69};
+  Key k6 = "Sasha";
+  Value v7 = {312, 621};
+  Key k7 = "Sonya";
+  Value v8 = {151, 551};
+  Key k8 = "Tanya";
+  Value v9 = {181, 619};
+  Key k9 = "Diana";
+  int res = a.insert(k1,v1);
+  res+= a.insert(k2,v2);
+  res+= a.insert(k3,v3);
+  res+= a.insert(k4,v4);
+  res+= a.insert(k5,v5);
+  res+= a.insert(k6,v6);
+  res+= a.insert(k2,v2);
+  HashTable b;
+  b = std::move(a);
+  res-= b.erase(k5);
+  res+= b.insert(k7,v7);
+  res+= b.insert(k8,v8);
+  res+= b.insert(k9,v9);
+  res+= b.insert(k5,v5);
+  res-= b.erase(k7);
+  res-= b.erase(k8);
+  res-= b.erase(k9);
+  EXPECT_TRUE(b["Tonya"] == v5);
+}
+
+TEST(HTtest, test_15){
+  HashTable a;
+  Value v1 = {19, 58};
+  Key k1 = "Oksana";
+  Value v2 = {22, 67};
+  Key k2 = "Olesya";
+  Value v3 = {29, 51};
+  Key k3 = "Anya";
+  Value v4 = {32, 62};
+  Key k4 = "Katya";
+  Value v5 = {15, 55};
+  Key k5 = "Tonya";
+  Value v6 = {18, 69};
+  Key k6 = "Sasha";
+  Value v7 = {312, 621};
+  Key k7 = "Sonya";
+  Value v8 = {151, 551};
+  Key k8 = "Tanya";
+  Value v9 = {181, 619};
+  Key k9 = "Diana";
+  int res = a.insert(k1,v1);
+  res+= a.insert(k2,v2);
+  res+= a.insert(k3,v3);
+  res+= a.insert(k4,v4);
+  res+= a.insert(k5,v5);
+  res+= a.insert(k6,v6);
+  res+= a.insert(k2,v2);
+  HashTable b;
+  b = std::move(a);
+  res-= b.erase(k5);
+  res+= b.insert(k7,v7);
+  res+= b.insert(k8,v8);
+  res+= b.insert(k9,v9);
+  res+= b.insert(k5,v5);
+  res-= b.erase(k7);
+  res-= b.erase(k8);
+  res-= b.erase(k9);
+  b.clear();
+  EXPECT_TRUE(b.empty());
 }
 
 int main(int argc, char **argv)
