@@ -1,3 +1,4 @@
+//#include "hashtable.h"
 #include "hashtable.cpp"
 #include "googletest/googletest/include/gtest/gtest.h"
 using namespace std;
@@ -298,6 +299,37 @@ TEST(HTtest, test_15){
   res-= b.erase(k9);
   b.clear();
   EXPECT_TRUE(b.empty());
+}
+
+TEST(HTtest, test_16){
+  HashTable a;
+  Value v1 = {19, 58};
+  Key k1 = "Oksana";
+  Value v2 = {22, 67};
+  Key k2 = "Olesya";
+  Value v3 = {29, 51};
+  Key k3 = "Anya";
+  Value v4 = {32, 62};
+  Key k4 = "Katya";
+  Value v5 = {15, 55};
+  Key k5 = "Tonya";
+  Value v6 = {18, 69};
+  Key k6 = "Sasha";
+  Value v7 = {312, 621};
+  Key k7 = "Sonya";
+  Value v8 = {151, 551};
+  Key k8 = "Tanya";
+  Value v9 = {181, 619};
+  Key k9 = "Diana";
+  int res = a.insert(k1,v1);
+  res+= a.insert(k2,v2);
+  res+= a.insert(k3,v3);
+  res+= a.insert(k4,v4);
+  res+= a.insert(k5,v5);
+  res+= a.insert(k6,v6);
+  HashTable c;
+  a.swap(c);
+  EXPECT_TRUE(a.empty());
 }
 
 int main(int argc, char **argv)
