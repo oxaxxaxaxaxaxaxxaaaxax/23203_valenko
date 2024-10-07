@@ -16,7 +16,7 @@ struct Node{
 
   Node(): data(new Value){}
 
-  ~Node(){
+  ~Node(){ 
     if(data != nullptr){
       delete data;
     }
@@ -98,9 +98,9 @@ HashTable::HashTable(HashTable&& b):curr_size(b.curr_size),capacity(b.capacity){
 
 
 void HashTable::swap(HashTable& b){
-    HashTable c(std::move(b));
-    b= std::move(*this);
-    *this = std::move(c);
+    std::swap(capacity, b.capacity);
+    std::swap(curr_size, b.curr_size);
+    std::swap(table, b.table);
   }
 
 HashTable& HashTable::operator=(const HashTable& b){ 

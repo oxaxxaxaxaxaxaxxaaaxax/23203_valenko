@@ -6,15 +6,30 @@
 typedef std::string Key;
 
 struct Value {
+
   unsigned int age =0;
   unsigned int weight = 0;
 
-  Value& operator=(const Value& b);
-
-  friend bool operator!=(const Value& a, const Value& b);
-
-  friend bool operator==(const Value& a, const Value& b);
+  //Assign Value by copy.
+  Value& operator=(const Value& b){
+    age = b.age;
+    weight = b.weight;
+    return *this;
+  }
+  //Return true if not equal.
+  friend bool operator!=(const Value& a, const Value& b){
+    if(a.age != b.age) return 1;
+    if(a.weight != b.weight) return 1;
+    return 0;
+  }
+  //Return true if equal.
+  friend bool operator==(const Value& a, const Value& b){
+    if(a.age != b.age) return 0;
+    if(a.weight != b.weight) return 0;
+    return 1;
+  }
 };
+
 
 struct Node;
 
@@ -39,10 +54,10 @@ public:
   //Swap two table
   void swap(HashTable& b);
 
-  //Assign hashtable by copy.
+  //Assign Hashtable by copy.
   HashTable& operator=(const HashTable& b);
 
-  //Assign hashtable by moving.
+  //Assign Hashtable by moving.
   HashTable& operator=(HashTable&& b);
 
 

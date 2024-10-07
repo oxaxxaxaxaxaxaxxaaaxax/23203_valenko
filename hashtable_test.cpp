@@ -2,7 +2,6 @@
 #include "hashtable.cpp"
 #include "googletest/googletest/include/gtest/gtest.h"
 using namespace std;
-//static constexpr int COUNTER = 6;
 
 TEST(HTtest, test_1) {
   HashTable a;
