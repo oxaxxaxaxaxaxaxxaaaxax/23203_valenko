@@ -178,10 +178,10 @@ TEST(HTtest, test_10){
   const Key k6 = "aaa";
   int res = a.insert(k6, v6);
   try {
-    throw std::runtime_error("Value is not found");
+    a.at("aa");
     FAIL() << "Ожидаемое исключение не было брошено";
   } catch (const std::runtime_error& e) {
-    EXPECT_STREQ("Value is not found", e.what());
+    EXPECT_EQ(std::string( e.what()), "Value is not found");
   }
 }
 
@@ -194,6 +194,34 @@ TEST(HTtest, test_11){
   b=a;
   b["aaa"] = v5;
   EXPECT_TRUE(b["aaa"].age == 16);
+}
+
+TEST(HTtest, test_12){
+  HashTable a;
+  Value v6 = {18, 69};
+  Value v5 = {16,77};
+  a.insert("aaa", v6);
+  HashTable b(std::move(a));
+  Value v7 = {44,79};
+  Value v8 = {32,46};
+  Value v9 = {13,100};
+  b["FIT"] = v7;
+  b["aaa"] = v5;
+  EXPECT_TRUE(b["FIT"] == v7);
+}
+
+TEST(HTtest, test_13){
+  HashTable a;
+  Value v6 = {18, 69};
+  Value v5 = {16,77};
+  a.insert("aaa", v6);
+  HashTable b(a);
+  Value v7 = {44,79};
+  Value v8 = {32,46};
+  Value v9 = {13,100};
+  b["FIT"] = v7;
+  b["aaa"] = v5;
+  EXPECT_TRUE(b["FIT"] == v7);
 }
 
 int main(int argc, char **argv)

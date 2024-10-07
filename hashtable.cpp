@@ -11,6 +11,9 @@ struct Value {
   unsigned int age =0;
   unsigned int weight = 0;
 
+  //Value():age(0),weight(0){}
+
+
   Value& operator=(const Value& b){
     age = b.age;
     weight = b.weight;
@@ -101,34 +104,17 @@ public:
   }
 
   HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capacity){
-    table = new Node*[b.capacity];
-    for (int i=0;i<b.capacity;i++){
+    table = new Node*[capacity];
+    for (int i=0;i<capacity;i++){
       table[i] = new Node;
-      *(table[i]) = *(b.table[i]); 
+      std::copy(b.table[i], b.table[i]+1, table[i]);
     }
   }
 
-  HashTable(HashTable&& b){
-    //table = new Node*[b.capacity];
-    //table = b.table;
-    for (int i=0;i<capacity;i++){
-      delete [] table[i]; 
-    }
-    delete [] table;
-    curr_size = b.curr_size;
-    capacity = b.capacity;
-    table = new Node*[capacity];
-    for (int i=0;i<capacity;i++){
-      table[i] = b.table[i];
-    }
-    for (int i=0;i<b.capacity;i++){
-      while(b.table[i]->next!=nullptr){
-        b.table[i]->data = nullptr;
-        b.table[i]=b.table[i]->next;
-      }
-      b.table[i]->data = nullptr;
-      b.table[i] = nullptr;
-    }
+  HashTable(HashTable&& b):curr_size(b.curr_size),capacity(b.capacity){
+    //table = new Node*[capacity];
+    table = b.table;
+    b.table = nullptr;
   }
 
   // Обменивает значения двух хэш-таблиц.
@@ -257,24 +243,26 @@ public:
     if(k == table[index]->key) return 1;
     while(table[index]->next != nullptr){
       if(table[index]->next->flag == 0) break;
-      if(k == table[index]->key) return 1;
+      if(k == table[index]->next->key) return 1;
       table[index] = table[index]->next;
     }
     return 0;
   }
 
   // Возвращает значение по ключу. Небезопасный метод.
-  Value& operator[](const Key& k)const{
-    size_t index = hashFunction(k);
+  Value& operator[](const Key& k){
     if(!contains(k)){ 
-      table[index] = new Node;
-      table[index]->key = k;
-      return *((table[index])->data);
+      int res = insert(k, Value());
+      //table[index] = new Node;
+      //table[index]->key = k;
+      return this->operator[](k);
     }
-    while(table[index]->key != k){
-      table[index] = (table[index])->next;
+    size_t index = hashFunction(k);
+    Node *a = table[index];
+    while(a->key != k){
+      a = a->next;
     }
-    return *((table[index])->data);
+    return *(a->data);
   }
 
   // Возвращает значение по ключу. Бросает исключение при неудаче.
@@ -321,14 +309,14 @@ public:
   friend bool operator==(const HashTable& a, const HashTable& b){
     if(a.curr_size != b.curr_size) return 0;
     for(int i=0; i<a.capacity;i++){
-      if(b.operator[](b.table[i]->key) != a.operator[](b.table[i]->key)) return 0;
+      if(b.at(b.table[i]->key) != a.at(b.table[i]->key)) return 0;
     }
     return 1;
   }
   friend bool operator!=(const HashTable& a, const HashTable& b){
     if(a.curr_size != b.curr_size) return 1;
     for(int i=0; i<a.capacity;i++){
-      if(b.operator[](b.table[i]->key) != a.operator[](b.table[i]->key)) return 1;
+      if(b.at(b.table[i]->key) != a.at(b.table[i]->key)) return 1;
     }
     return 0;
   }
@@ -348,9 +336,7 @@ public:
       a.insert(table[i]->key, (*(table[i]->data)));
     }
     for(int i=0;i<a.capacity;i++){
-      std::cout << a.table[i] << std::endl;
     }
-    std::cout<< std::endl;
     *this = std::move(a);
 
 
@@ -380,9 +366,7 @@ public:
   void expandMemoryIfNeeded(){
     HashTable a(capacity*2);
     for(int i=0;i<a.capacity;i++){
-      std::cout << a.table[i] << std::endl;
     }
-    std::cout<< std::endl;
     //a.capacity *=2;
     Rehash(a);
     /*int new_capacity = capacity*2;
@@ -432,9 +416,12 @@ public:
   Value v6 = {18, 69};
   Value v5 = {16,77};
   a.insert("aaa", v6);
-  HashTable b;
-  b=a;
+  HashTable b(a);
+  Value v7 = {44,79};
+  Value v8 = {32,46};
+  Value v9 = {13,100};
+  b["FIT"] = v7;
   b["aaa"] = v5;
-  std::cout << b["aaa"].age << std::endl;
+  std::cout << b["FIT"].age << std::endl;
   //EXPECT_THROW(a.at("aa"), std::runtime_error);
 }*/
