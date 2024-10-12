@@ -12,7 +12,7 @@ namespace {
 struct Node{ //HashTanle::Node
   Key key = "";
   Value * data;
-  //bool flag =false;
+  bool flag =true;
   Node * next = nullptr;
 
   Node(): data(new Value){
@@ -179,12 +179,17 @@ bool HashTable::erase(const Key& k){
     }
     size_t index = hashFunction(k);
     Node * tmp = table[index];
-    while((tmp->key != k)||((tmp ==nullptr)&&(k == ""))){
+    if(tmp ==nullptr) return 0;
+    while((tmp->key != k)||((!(tmp->flag))&&(k == ""))){
       tmp = tmp->next;
       if(tmp == nullptr) return 0;
     }
     Node * pointer = table[index]->next;
-    table[index] = std::move(new Node());
+    table[index] ->key ="";
+    table[index]->data->age =0;
+    table[index]->data->weight=0;
+    table[index]->flag = false;
+    //table[index] = std::move(new Node()); //что то придумать 
     table[index]->next = pointer;
 
     curr_size--;
@@ -341,47 +346,15 @@ size_t HashTable::hashFunction(const Key &key) const {
 
 
 /*int main(void){
-  HashTable a;
-  Value v1 = {19, 58};
-  Key k1 = "Oksana";
-  Value v2 = {22, 67};
-  Key k2 = "Olesya";
-  Value v3 = {29, 51};
-  Key k3 = "Anya";
-  Value v4 = {32, 62};
-  Key k4 = "Katya";
-  Value v5 = {15, 55};
-  Key k5 = "Tonya";
+    HashTable a;
+  Value v1 = {0,0};
   Value v6 = {18, 69};
-  Key k6 = "Sasha";
-  Value v7 = {312, 621};
-  Key k7 = "Sonya";
-  Value v8 = {151, 551};
-  Key k8 = "Tanya";
-  Value v9 = {181, 619};
-  Key k9 = "Diana";
-  int res = a.insert(k1,v1);
-  res+= a.insert(k2,v2);
-  res+= a.insert(k3,v3);
-  res+= a.insert(k4,v4);
-  res+= a.insert(k5,v5);
-  res+= a.insert(k6,v6);
-  res+= a.insert(k2,v2);
-  HashTable b;
-  b = a;
-  res-= b.erase(k5);
-  res-= b.erase(k5);
-  res+= b.insert(k7,v7);
-  res+= b.insert(k8,v8);  
-  res+= b.insert(k9,v9);
-  res+= b.insert(k5,v5);
-  res-= b.erase(k7);
-  res-= b.erase(k8);
-  res-= b.erase(k9);
-  int d = 0;
-  if(a==b) {
-    int d = 1;
-  }
+  int res = a.insert("", v1);
+  res += a.insert("a", v6 );
+  res -= a.erase("");
+  res -= a.erase("");
+  int size = a.size();
+  int d =0;
   std::cout << d<<std::endl;
   return 0;
 }*/
