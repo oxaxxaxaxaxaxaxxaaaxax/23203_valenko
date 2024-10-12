@@ -98,6 +98,7 @@ TEST(HTtest, test_6){
   HashTable b;
   b = a;
   res-= b.erase(k5);
+  res-= b.erase(k5);
   res+= b.insert(k7,v7);
   res+= b.insert(k8,v8);
   res+= b.insert(k9,v9);
@@ -141,10 +142,11 @@ TEST(HTtest, test_7){
   res+= b.insert(k7,v7);
   res+= b.insert(k8,v8);
   res+= b.insert(k9,v9);
+  res+= b.insert(k5,v5);
   res-= b.erase(k7);
   res-= b.erase(k8);
   res-= b.erase(k9);
-  EXPECT_TRUE(a!=b);
+  EXPECT_TRUE(!(a!=b));
 }
 
 TEST(HTtest, test_8){
