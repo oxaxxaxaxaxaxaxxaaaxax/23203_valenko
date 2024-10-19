@@ -1,28 +1,19 @@
 #pragma once
 #include <string>
-#include <iostream>
 
 
 typedef std::string Key;
 
 struct Value {
 
-  unsigned int age =0;
+  unsigned int age = 0;
   unsigned int weight = 0;
 
-  //Assign Value by copy.
-  Value& operator=(const Value& b){
-    age = b.age;
-    weight = b.weight;
-    return *this;
-  }
-  //Return true if not equal.
   friend bool operator!=(const Value& a, const Value& b){
     if(a.age != b.age) return 1;
     if(a.weight != b.weight) return 1;
     return 0;
   }
-  //Return true if equal.
   friend bool operator==(const Value& a, const Value& b){
     if(a.age != b.age) return 0;
     if(a.weight != b.weight) return 0;
@@ -31,7 +22,7 @@ struct Value {
 };
 
 
-struct Node;
+struct Node; ///??????????????????????
 
 class HashTable
 {
@@ -59,7 +50,6 @@ public:
 
   //Assign Hashtable by moving.
   HashTable& operator=(HashTable&& b);
-
 
   //Clear the container.
   void clear();
@@ -89,8 +79,7 @@ public:
 
   //Return true if is empty.
   bool empty() const{
-    if(!curr_size) return 1;
-    return 0;
+    return (!curr_size);
   }
 
   //Return true if equal.
@@ -102,7 +91,7 @@ public:
 private:
   size_t curr_size =0;
   size_t capacity=0;
-  Node ** table;
+  Node ** table= nullptr;
 
   //Rehashing the table by value.
   void Rehash(HashTable &a);
