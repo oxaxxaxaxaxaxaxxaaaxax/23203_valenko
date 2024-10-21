@@ -22,6 +22,60 @@ struct Value {
 };
 
 
+struct Node{ 
+    Key key = "";
+    Value * data;
+    bool flag =true;
+    Node * next = nullptr;
+
+    Node(): data(new Value){}
+    ~Node(){ 
+      delete data;
+      if(next != nullptr){
+        delete next;
+      }
+    }
+  
+    Node(const Key &k, const Value& v):key(k),data(new Value){
+      data->age = v.age;
+      data->weight = v.weight;
+      next = nullptr;
+    }
+
+    Node& operator=(const Node& b){
+      if(this == &b) return *this;
+      const Node *tmp = &b;
+      Node * pointer = this;
+      while(tmp->next!= nullptr){
+        pointer->key=tmp->key;
+        pointer->flag =tmp->flag;
+        pointer->data->age=tmp->data->age;
+        pointer->data->weight=tmp->data->weight;
+        pointer->next = new Node();
+        pointer = pointer->next;
+        tmp = tmp->next;
+      }
+      pointer->key=tmp->key;
+      pointer->flag =tmp->flag;
+      pointer->data->age=tmp->data->age;
+      pointer->data->weight=tmp->data->weight;
+      return *this;
+    }
+
+    Node& operator=(Node&& b){
+      if(this == &b) return *this;
+      key=b.key;
+      flag =b.flag;
+      data->age=b.data->age;
+      data->weight=b.data->weight;
+      next = nullptr;
+      b.next= nullptr;
+      b.data = nullptr;
+      return *this;
+    }
+
+ };
+
 class HashTable
 {
 public:
@@ -86,10 +140,12 @@ public:
   //Return true if not equal.
   friend bool operator!=(const HashTable& a, const HashTable& b);
 
+  
+
 private:
   size_t curr_size =0;
   size_t capacity=0;
-  struct Node;
+  //struct Node;
   Node ** table= nullptr;
 
   //Rehashing the table by value.
@@ -101,6 +157,6 @@ private:
   //Get an index for hashtanle element.
   size_t hashFunction(const Key &key) const ;
 
-  
+  //Node* GetNull();
 
 };
