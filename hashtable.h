@@ -22,8 +22,6 @@ struct Value {
 };
 
 
-struct Node; ///??????????????????????
-
 class HashTable
 {
 public:
@@ -91,6 +89,7 @@ public:
 private:
   size_t curr_size =0;
   size_t capacity=0;
+  struct Node;
   Node ** table= nullptr;
 
   //Rehashing the table by value.
@@ -101,5 +100,7 @@ private:
 
   //Get an index for hashtanle element.
   size_t hashFunction(const Key &key) const ;
+
+  
 
 };

@@ -9,63 +9,63 @@ namespace {
   constexpr int initial_capacity = 4; //???
 }
 
-struct Node{ //HashTanle::Node
-  Key key = "";
-  Value * data;
-  bool flag =true;
-  Node * next = nullptr;
+ struct HashTable::Node{ 
+    Key key = "";
+    Value * data;
+    bool flag =true;
+    Node * next = nullptr;
 
-  Node(): data(new Value){}
-  ~Node(){ 
-    delete data;
-    if(next != nullptr){
-      delete next;
+    Node(): data(new Value){}
+    ~Node(){ 
+      delete data;
+      if(next != nullptr){
+        delete next;
+      }
     }
-  }
   
-  Node(const Key &k, const Value& v):key(k),data(new Value){
-    data->age = v.age;
-    data->weight = v.weight;
-    next = nullptr;
-  }
+    Node(const Key &k, const Value& v):key(k),data(new Value){
+      data->age = v.age;
+      data->weight = v.weight;
+      next = nullptr;
+    }
 
-  Node& operator=(const Node& b){
-    if(this == &b) return *this;
-    const Node *tmp = &b;
-    Node * pointer = this;
-    while(tmp->next!= nullptr){
+    Node& operator=(const Node& b){
+      if(this == &b) return *this;
+      const Node *tmp = &b;
+      Node * pointer = this;
+      while(tmp->next!= nullptr){
+        pointer->key=tmp->key;
+        pointer->flag =tmp->flag;
+        pointer->data->age=tmp->data->age;
+        pointer->data->weight=tmp->data->weight;
+        pointer->next = new Node();
+        pointer = pointer->next;
+        tmp = tmp->next;
+      }
       pointer->key=tmp->key;
       pointer->flag =tmp->flag;
       pointer->data->age=tmp->data->age;
       pointer->data->weight=tmp->data->weight;
-      pointer->next = new Node();
-      pointer = pointer->next;
-      tmp = tmp->next;
+      return *this;
     }
-    pointer->key=tmp->key;
-    pointer->flag =tmp->flag;
-    pointer->data->age=tmp->data->age;
-    pointer->data->weight=tmp->data->weight;
-    return *this;
-  }
 
-  Node& operator=(Node&& b){
-    if(this == &b) return *this;
-    key=b.key;
+    Node& operator=(Node&& b){
+      if(this == &b) return *this;
+      key=b.key;
     //flag =b.flag;
-    data->age=b.data->age;
-    data->weight=b.data->weight;
-    next = nullptr;
-    b.next= nullptr;
-    b.data = nullptr;
-    return *this;
-  }
-};
+      data->age=b.data->age;
+      data->weight=b.data->weight;
+      next = nullptr;
+      b.next= nullptr;
+      b.data = nullptr;
+      return *this;
+    }
+ };
 
 
 HashTable::HashTable():capacity(initial_capacity){
     table = new Node*[initial_capacity];
-    //std::generate(table[0], table[capacity], new Node);
+    //std::generate(table[0], table[capacity], new Node());
     for(int i=0; i< capacity;i++){
       table[i] = nullptr;
     }
@@ -350,6 +350,8 @@ size_t HashTable::hashFunction(const Key &key) const {
     bucketIndex = sum;
     return bucketIndex;
   }
+
+
 
 
 
