@@ -9,18 +9,67 @@ namespace {
   constexpr int initial_capacity = 4; 
 }
 
+struct HashTable::Node{ 
+    Key key = "";
+    Value * data;
+    bool flag =true;
+    Node * next = nullptr;
+
+    Node(): data(new Value){}
+    ~Node(){ 
+      delete data;
+      if(next != nullptr){
+        delete next;
+      }
+    }
+  
+    Node(const Key &k, const Value& v):key(k),data(new Value){
+      data->age = v.age;
+      data->weight = v.weight;
+      next = nullptr;
+    }
+
+    Node& operator=(const Node& b){
+      if(this == &b) return *this;
+      const Node *tmp = &b;
+      Node * pointer = this;
+      while(tmp->next!= nullptr){
+        pointer->key=tmp->key;
+        pointer->flag =tmp->flag;
+        pointer->data->age=tmp->data->age;
+        pointer->data->weight=tmp->data->weight;
+        pointer->next = new Node();
+        pointer = pointer->next;
+        tmp = tmp->next;
+      }
+      pointer->key=tmp->key;
+      pointer->flag =tmp->flag;
+      pointer->data->age=tmp->data->age;
+      pointer->data->weight=tmp->data->weight;
+      return *this;
+    }
+
+    Node& operator=(Node&& b){
+      if(this == &b) return *this;
+      key=b.key;
+      flag =b.flag;
+      data->age=b.data->age;
+      data->weight=b.data->weight;
+      next = nullptr;
+      b.next= nullptr;
+      b.data = nullptr;
+      return *this;
+    }
+
+ };
 
 
-static Node* GetNull(){
-    return nullptr;
-  }
 
 HashTable::HashTable():capacity(initial_capacity),
     table(new Node*[initial_capacity]){
-    std::generate(&table[0], &table[capacity], GetNull);
-    /*for(int i=0; i< capacity;i++){
-      table[i] = nullptr;
-    }*/
+    std::generate(&table[0], &table[capacity], [](){
+      return nullptr;
+    });
   }
 
 HashTable::~HashTable(){
@@ -33,10 +82,9 @@ HashTable::~HashTable(){
 
 HashTable::HashTable(int size):capacity(size),curr_size(0),
     table(new Node*[capacity]){
-    std::generate(&table[0], &table[capacity], GetNull);
-    /*for(int i=0; i< capacity;i++){
-      table[i] = nullptr;
-    }*/
+    std::generate(&table[0], &table[capacity], [](){
+      return nullptr;
+    });
   }
 
 HashTable::HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capacity){
@@ -76,7 +124,7 @@ HashTable& HashTable::operator=(const HashTable& b){
     for(int i=0;i<b.capacity;i++){
       *(new_table[i]) = *(b.table[i]);
     }
-
+    
     for (int i = 0; i < capacity; i++) {
       delete table[i];
     }
