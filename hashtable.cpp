@@ -29,6 +29,9 @@ struct HashTable::Node{
       next = nullptr;
     }
 
+    Node(Node &b) = delete;
+    Node(Node &&b) = delete;
+
     Node& operator=(const Node& b){
       if(this == &b) return *this;
       const Node *tmp = &b;
@@ -87,8 +90,8 @@ HashTable::HashTable(int size):capacity(size),curr_size(0),
     });
   }
 
-HashTable::HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capacity){
-    table = new Node*[capacity];
+HashTable::HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capacity),
+    table(new Node*[b.capacity]){
     for (int i=0;i<capacity;i++){
       if(b.table[i] == nullptr) {
         table[i] = nullptr;
@@ -96,7 +99,6 @@ HashTable::HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capac
       }
       table[i] = new Node;
       *(table[i]) = *(b.table[i]);
-      //std::copy(b.table[i], b.table[i]+1, table[i]);
     }
   }
 
@@ -106,9 +108,7 @@ HashTable::HashTable(HashTable&& b):curr_size(b.curr_size),capacity(b.capacity),
 
 
 void HashTable::swap(HashTable& b){
-  HashTable c(std::move(b));
-  b = std::move(*this);
-  *this = std::move(c);
+  std::swap(b, *this);
   }
 
 HashTable& HashTable::operator=(const HashTable& b){ 
@@ -187,6 +187,8 @@ bool HashTable::erase(const Key& k){
       delete tmp;
       tmp = nullptr;
       curr_size--;
+      std::cout<< "ERASE"<< std::endl;
+      std::cout<< k<< std::endl;
       return 1;
     }
     Node * previous;
@@ -201,7 +203,10 @@ bool HashTable::erase(const Key& k){
     tmp = nullptr;
     previous ->next = pointer;
     curr_size--;
+    std::cout<< "ERASE"<< std::endl;
+    std::cout<< k<< std::endl;
     return 1;
+    
   }
   
 
@@ -209,10 +214,12 @@ bool HashTable::insert(const Key& k, const Value& v){
     curr_size++;
     if (curr_size>capacity){
       expandMemoryIfNeeded();
+      curr_size++;
     }
     size_t index = hashFunction(k);
     if(table[index] == nullptr){
       table[index] =new Node(k, v);
+      std::cout<< k<< std::endl;
       return 1;
     }
     if(table[index]->key == k) { 
@@ -228,6 +235,7 @@ bool HashTable::insert(const Key& k, const Value& v){
       tmp = tmp->next;
     }
     tmp->next = new Node(k, v);
+    std::cout<< k<< std::endl;
     return 1;
   }
 
@@ -351,55 +359,3 @@ size_t HashTable::hashFunction(const Key &key) const {
     bucketIndex = sum;
     return bucketIndex;
   }
-
-  
-
-
-
-
-
-
-
-/*int main(void){
-  HashTable a;
-  Value v1 = {19, 58};
-  Key k1 = "Oksana";
-  Value v2 = {22, 67};
-  Key k2 = "Olesya";
-  Value v3 = {29, 51};
-  Key k3 = "Anya";
-  Value v4 = {32, 62};
-  Key k4 = "Katya";
-  Value v5 = {15, 55};
-  Key k5 = "Tonya";
-  Value v6 = {18, 69};
-  Key k6 = "Sasha";
-  Value v7 = {312, 621};
-  Key k7 = "Sonya";
-  Value v8 = {151, 551};
-  Key k8 = "Tanya";
-  Value v9 = {181, 619};
-  Key k9 = "Diana";
-  int res = a.insert(k1,v1);
-  res+= a.insert(k2,v2);
-  res+= a.insert(k3,v3);
-  res+= a.insert(k4,v4);
-  res+= a.insert(k5,v5);
-  res+= a.insert(k6,v6);
-  res+= a.insert(k2,v2);
-  HashTable b;
-  b = a;
-  int res1= a.erase(k1);
-  res-= b.erase(k5);
-  res+= b.insert(k7,v7);
-  res+= b.insert(k8,v8);
-  res+= b.insert(k9,v9);
-  res+= b.insert(k5,v5);
-  res-= b.erase(k7);
-  res-= b.erase(k8);
-  res-= b.erase(k9);
-  if(a==b){
-    std::cout<< 1<< std::endl;
-  }
- return 0;
-}*/

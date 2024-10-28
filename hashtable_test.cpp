@@ -1,7 +1,8 @@
 //#include "hashtable.h"
 #include "hashtable.cpp"
 #include "googletest/googletest/include/gtest/gtest.h"
-using namespace std;
+
+
 
 TEST(HTtest, test_1) {
   HashTable a;
@@ -165,12 +166,7 @@ TEST(HTtest, test_9){
   HashTable a;
   Value v6 = {18, 69};
   EXPECT_TRUE(a.insert("aaa", v6));
-  try {
-    a.at("aa");
-    FAIL() << "Ожидаемое исключение не было брошено";
-  } catch (const std::runtime_error& e) {
-    EXPECT_STREQ("Value is not found", e.what());
-  }
+  EXPECT_THROW(a.at("aa"), std::runtime_error);
 }
 
 
@@ -330,6 +326,62 @@ TEST(HTtest, test_16){
   a.swap(c);
   EXPECT_TRUE(a.empty());
 }
+
+TEST(HTtest, test_17){
+  HashTable a;
+  for(unsigned int i =0;i<5;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+  }
+  for(unsigned int i =0;i<5;i++){
+    Key k = "AAA" + std::to_string(i);
+    EXPECT_TRUE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+  } 
+  HashTable b = a;
+  b = a;
+  EXPECT_TRUE(b.empty());
+}
+
+TEST(HTtest, test_18){
+  HashTable a;
+  for(unsigned int i =0;i<5;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+  }
+  for(unsigned int i =0;i<5;i++){
+    Key k = "AAA" + std::to_string(i);
+    EXPECT_TRUE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+  } 
+  HashTable b(a);
+  a = b;
+  b = a;
+  EXPECT_TRUE(b.empty());
+}
+
+TEST(HTtest, test_19){
+  HashTable a;
+  for(unsigned int i =0;i<5;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+  }
+  for(unsigned int i =0;i<5;i++){
+    Key k = "AAA" + std::to_string(i);
+    EXPECT_TRUE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+  } 
+  HashTable b(std::move(a));
+  b = std::move(b);
+  EXPECT_TRUE(b.empty());
+}
+
 
 int main(int argc, char **argv)
 {
