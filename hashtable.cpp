@@ -187,8 +187,8 @@ bool HashTable::erase(const Key& k){
       delete tmp;
       tmp = nullptr;
       curr_size--;
-      std::cout<< "ERASE"<< std::endl;
-      std::cout<< k<< std::endl;
+      // std::cout<< "ERASE"<< std::endl;
+      // std::cout<< k<< std::endl;
       return 1;
     }
     Node * previous;
@@ -203,8 +203,8 @@ bool HashTable::erase(const Key& k){
     tmp = nullptr;
     previous ->next = pointer;
     curr_size--;
-    std::cout<< "ERASE"<< std::endl;
-    std::cout<< k<< std::endl;
+    // std::cout<< "ERASE"<< std::endl;
+    // std::cout<< k<< std::endl;
     return 1;
     
   }
@@ -219,7 +219,7 @@ bool HashTable::insert(const Key& k, const Value& v){
     size_t index = hashFunction(k);
     if(table[index] == nullptr){
       table[index] =new Node(k, v);
-      std::cout<< k<< std::endl;
+      //std::cout<< k<< std::endl;
       return 1;
     }
     if(table[index]->key == k) { 
@@ -235,7 +235,7 @@ bool HashTable::insert(const Key& k, const Value& v){
       tmp = tmp->next;
     }
     tmp->next = new Node(k, v);
-    std::cout<< k<< std::endl;
+    //std::cout<< k<< std::endl;
     return 1;
   }
 
@@ -301,8 +301,10 @@ Value& HashTable::at(const Key& k){
 
 bool operator==(const HashTable& a, const HashTable& b){
   if(a.curr_size != b.curr_size) return 0;
-  for(int i=0; i<a.capacity;i++){
-    if(b.table[i]== nullptr || b.table[i]->key == "") continue;
+  for(int i=0; i<b.capacity;i++){
+    if(b.table[i]== nullptr) continue;
+    //std::cout<< b.table[i] -> key << std::endl;
+    if(b.table[i]->key == "" && b.table[i]->flag == false) continue;
     try{
       if(b.at(b.table[i]->key) != a.at(b.table[i]->key)) return 1;
     }
@@ -315,7 +317,7 @@ bool operator==(const HashTable& a, const HashTable& b){
 
 bool operator!=(const HashTable& a, const HashTable& b){
   if(a.curr_size != b.curr_size) return 1;
-  for(int i=0; i<a.capacity;i++){
+  for(int i=0; i<b.capacity;i++){
     if(b.table[i]== nullptr || b.table[i]->key == "") continue;
     try{
 
@@ -359,3 +361,22 @@ size_t HashTable::hashFunction(const Key &key) const {
     bucketIndex = sum;
     return bucketIndex;
   }
+
+// int main(void){
+//   HashTable a;
+//   for(unsigned int i =0;i<5;i++){
+//     Key k = "AAA" + std::to_string(i);
+//     Value v = {i, i};
+//     a.insert(k,v);
+//     //EXPECT_FALSE(a.insert(k,v));
+//   }
+//   for(unsigned int i =0;i<4;i++){
+//     Key k = "AAA" + std::to_string(i);
+//     a.erase(k);
+//   } 
+//   HashTable b;
+//   Key k1 = "AAA4";
+//   Value v1 = {4,4};
+//   b.insert(k1,v1);
+//   if (a==b) {}
+// }

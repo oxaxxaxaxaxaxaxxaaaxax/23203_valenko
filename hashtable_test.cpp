@@ -158,8 +158,9 @@ TEST(HTtest, test_8){
   EXPECT_TRUE(a.insert("a", v6 ));
   EXPECT_TRUE(a.erase(""));
   EXPECT_FALSE(a.erase(""));
-  int size = a.size();
-  EXPECT_TRUE(size == 1);
+  a.clear();
+  EXPECT_FALSE(a.erase(""));
+  EXPECT_TRUE(!a.size());
 }
 
 TEST(HTtest, test_9){
@@ -329,12 +330,13 @@ TEST(HTtest, test_16){
 
 TEST(HTtest, test_17){
   HashTable a;
-  for(unsigned int i =0;i<5;i++){
+  for(unsigned int i =0;i<100;i++){
     Key k = "AAA" + std::to_string(i);
     Value v = {i, i};
     EXPECT_TRUE(a.insert(k,v));
+    EXPECT_FALSE(a.insert(k,v));
   }
-  for(unsigned int i =0;i<5;i++){
+  for(unsigned int i =0;i<100;i++){
     Key k = "AAA" + std::to_string(i);
     EXPECT_TRUE(a.erase(k));
     EXPECT_FALSE(a.erase(k));
@@ -347,12 +349,12 @@ TEST(HTtest, test_17){
 
 TEST(HTtest, test_18){
   HashTable a;
-  for(unsigned int i =0;i<5;i++){
+  for(unsigned int i =0;i<10000;i++){
     Key k = "AAA" + std::to_string(i);
     Value v = {i, i};
     EXPECT_TRUE(a.insert(k,v));
   }
-  for(unsigned int i =0;i<5;i++){
+  for(unsigned int i =0;i<10000;i++){
     Key k = "AAA" + std::to_string(i);
     EXPECT_TRUE(a.erase(k));
     EXPECT_FALSE(a.erase(k));
@@ -366,22 +368,64 @@ TEST(HTtest, test_18){
 
 TEST(HTtest, test_19){
   HashTable a;
-  for(unsigned int i =0;i<5;i++){
+  for(unsigned int i =0;i<10000;i++){
     Key k = "AAA" + std::to_string(i);
     Value v = {i, i};
     EXPECT_TRUE(a.insert(k,v));
+    EXPECT_FALSE(a.insert(k,v));
   }
-  for(unsigned int i =0;i<5;i++){
+  for(unsigned int i =0;i<10000;i++){
     Key k = "AAA" + std::to_string(i);
     EXPECT_TRUE(a.erase(k));
     EXPECT_FALSE(a.erase(k));
     EXPECT_FALSE(a.erase(k));
   } 
   HashTable b(std::move(a));
-  b = std::move(b);
+  b = b;
   EXPECT_TRUE(b.empty());
 }
 
+TEST(HTtest, test_20){
+  HashTable a;
+  for(unsigned int i =0;i<10000;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+    //EXPECT_FALSE(a.insert(k,v));
+  }
+  for(unsigned int i =0;i<9999;i++){
+    Key k = "AAA" + std::to_string(i);
+    EXPECT_TRUE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+  } 
+  HashTable b;
+  Key k1 = "AAA9999";
+  Value v1 = {9999,9999};
+  EXPECT_TRUE(b.insert(k1,v1));
+  EXPECT_TRUE(a==b);
+}
+
+TEST(HTtest, test_21){
+  HashTable a;
+  for(unsigned int i =0;i<10000;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+    //EXPECT_FALSE(a.insert(k,v));
+  }
+  for(unsigned int i =0;i<9999;i++){
+    Key k = "AAA" + std::to_string(i);
+    EXPECT_TRUE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+  } 
+  HashTable b;
+  Key k1 = "AAA9999";
+  Value v1 = {9999,9999};
+  EXPECT_TRUE(b.insert(k1,v1));
+  EXPECT_FALSE(a!=b);
+}
 
 int main(int argc, char **argv)
 {
