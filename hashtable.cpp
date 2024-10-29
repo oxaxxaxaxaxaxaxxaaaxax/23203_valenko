@@ -211,31 +211,33 @@ bool HashTable::erase(const Key& k){
   
 
 bool HashTable::insert(const Key& k, const Value& v){
-    curr_size++;
-    if (curr_size>capacity){
+    //curr_size++;
+    if (curr_size >=capacity){
       expandMemoryIfNeeded();
-      curr_size++;
+      //curr_size++;
     }
     size_t index = hashFunction(k);
     if(table[index] == nullptr){
       table[index] =new Node(k, v);
       //std::cout<< k<< std::endl;
+      curr_size++;
       return 1;
     }
     if(table[index]->key == k) { 
-      curr_size--;
+      //curr_size--;
       return 0;
     }
     Node * tmp = table[index];
     while((tmp)->next!= nullptr){
       if(tmp->next->key == k) {
-        curr_size--;
+        //curr_size--;
         return 0;
       }
       tmp = tmp->next;
     }
     tmp->next = new Node(k, v);
     //std::cout<< k<< std::endl;
+    curr_size++;
     return 1;
   }
 

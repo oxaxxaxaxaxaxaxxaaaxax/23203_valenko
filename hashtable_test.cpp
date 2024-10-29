@@ -391,7 +391,7 @@ TEST(HTtest, test_20){
     Key k = "AAA" + std::to_string(i);
     Value v = {i, i};
     EXPECT_TRUE(a.insert(k,v));
-    //EXPECT_FALSE(a.insert(k,v));
+    EXPECT_FALSE(a.insert(k,v));
   }
   for(unsigned int i =0;i<9999;i++){
     Key k = "AAA" + std::to_string(i);
@@ -412,7 +412,7 @@ TEST(HTtest, test_21){
     Key k = "AAA" + std::to_string(i);
     Value v = {i, i};
     EXPECT_TRUE(a.insert(k,v));
-    //EXPECT_FALSE(a.insert(k,v));
+    EXPECT_FALSE(a.insert(k,v));
   }
   for(unsigned int i =0;i<9999;i++){
     Key k = "AAA" + std::to_string(i);
@@ -426,6 +426,8 @@ TEST(HTtest, test_21){
   EXPECT_TRUE(b.insert(k1,v1));
   EXPECT_FALSE(a!=b);
 }
+
+
 
 int main(int argc, char **argv)
 {
