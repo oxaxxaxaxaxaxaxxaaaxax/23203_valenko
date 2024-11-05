@@ -2,7 +2,7 @@
 #include <string>
 
 
-typedef std::string Key;
+using Key = std::string;
 
 struct Value {
 
@@ -10,14 +10,14 @@ struct Value {
   unsigned int weight = 0;
 
   friend bool operator!=(const Value& a, const Value& b){
-    if(a.age != b.age) return 1;
-    if(a.weight != b.weight) return 1;
-    return 0;
+    if(a.age != b.age) return true;
+    if(a.weight != b.weight) return true;
+    return false;
   }
   friend bool operator==(const Value& a, const Value& b){
-    if(a.age != b.age) return 0;
-    if(a.weight != b.weight) return 0;
-    return 1;
+    if(a.age != b.age) return false;
+    if(a.weight != b.weight) return false;
+    return true;
   }
 };
 
@@ -29,25 +29,25 @@ public:
   HashTable();
 
   //Hashtable destructor.
-  ~HashTable();
+  ~HashTable() noexcept;
 
   //Hashtable constructor by size.
-  HashTable(int size);
+  explicit HashTable(size_t size);
 
   //Hashtable copy constructor 
   HashTable(const HashTable& b);
 
   //Hashtable move constructor.
-  HashTable(HashTable&& b);
+  HashTable(HashTable&& b) noexcept;
 
   //Swap two table
-  void swap(HashTable& b);
+  void swap(HashTable& b) noexcept;
 
   //Assign Hashtable by copy.
   HashTable& operator=(const HashTable& b);
 
   //Assign Hashtable by moving.
-  HashTable& operator=(HashTable&& b);
+  HashTable& operator=(HashTable&& b) noexcept;
 
   //Clear the container.
   void clear();
@@ -95,12 +95,13 @@ private:
   Node ** table= nullptr;
 
   //Rehashing the table by value.
-  void Rehash(HashTable &a);
+  void Rehash(HashTable &a) noexcept;
 
   //Extention the table.
-  void expandMemoryIfNeeded();
+  void expandMemoryIfNeeded() noexcept;
 
   //Get an index for hashtanle element.
-  size_t hashFunction(const Key &key) const ;
+  size_t hashFunction(const Key &key) const noexcept;
+
 
 };

@@ -3,72 +3,6 @@
 #include "googletest/googletest/include/gtest/gtest.h"
 
 
-
-TEST(HTtest, test_1) {
-  HashTable a;
-  Value v = {19,58};
-  EXPECT_TRUE(a.insert("Oksana", v));
-  EXPECT_TRUE(v == a.operator[]("Oksana"));
-}
-
-TEST(HTtest, test_2) {
-  HashTable a;
-  Value v1 = {19, 58};
-  Value v2 = {22, 67};
-  EXPECT_TRUE(a.insert("Oksana", v1));
-  EXPECT_FALSE(a.insert("Oksana", v2));
-  EXPECT_TRUE(v1 == a.operator[]("Oksana"));
-}
-
-TEST(HTtest, test_3) {
-  HashTable a;
-  Value v1 = {19, 58};
-  Value v2 = {22, 67};
-  EXPECT_TRUE(a.insert("Oksana", v1));
-  EXPECT_TRUE(a.insert("Olesya", v2));
-  a.clear();
-  EXPECT_TRUE(a.operator[]("Oksana")== a.operator[]("Olesya"));
-}
-
-TEST(HTtest, test_4){
-  HashTable a;
-  Value v5 = {15, 55};
-  Key k5 = "Tonya";
-  Value v6 = {18, 69};
-  Key k6 = "Sasha";
-  EXPECT_TRUE(a.insert(k5,v5));
-  EXPECT_TRUE(a.insert(k6,v6));
-  HashTable b;
-  b = a;
-  EXPECT_TRUE(a.operator[]("Sasha")==b.operator[]("Sasha"));
-}
-
-TEST(HTtest, test_5){
-  HashTable a;
-  Value v1 = {19, 58};
-  Key k1 = "Oksana";
-  Value v2 = {22, 67};
-  Key k2 = "Olesya";
-  Value v3 = {29, 51};
-  Key k3 = "Anya";
-  Value v4 = {32, 62};
-  Key k4 = "Katya";
-  Value v5 = {15, 55};
-  Key k5 = "Tonya";
-  Value v6 = {18, 69};
-  Key k6 = "Sasha";
-  EXPECT_TRUE(a.insert(k1,v1));
-  EXPECT_TRUE(a.insert(k2,v2));
-  EXPECT_TRUE(a.insert(k3,v3));
-  EXPECT_TRUE(a.insert(k4,v4));
-  EXPECT_TRUE(a.insert(k5,v5));
-  EXPECT_TRUE(a.insert(k6,v6));
-  EXPECT_FALSE(a.insert(k2,v2));
-  HashTable b;
-  b = a;
-  EXPECT_TRUE(a.operator[]("Oksana")==b.operator[]("Oksana")&& a.operator[]("Katya")==b.operator[]("Katya"));
-}
-
 TEST(HTtest, test_6){
   HashTable a;
   Value v1 = {19, 58};
@@ -427,6 +361,71 @@ TEST(HTtest, test_21){
   EXPECT_FALSE(a!=b);
 }
 
+
+TEST(HTtest, test_1) {
+  HashTable a;
+  Value v = {19,58};
+  EXPECT_TRUE(a.insert("Oksana", v));
+  EXPECT_TRUE(v == a.operator[]("Oksana"));
+}
+
+TEST(HTtest, test_2) {
+  HashTable a;
+  Value v1 = {19, 58};
+  Value v2 = {22, 67};
+  EXPECT_TRUE(a.insert("Oksana", v1));
+  EXPECT_FALSE(a.insert("Oksana", v2));
+  EXPECT_TRUE(v1 == a.operator[]("Oksana"));
+}
+
+TEST(HTtest, test_3) {
+  HashTable a;
+  Value v1 = {19, 58};
+  Value v2 = {22, 67};
+  EXPECT_TRUE(a.insert("Oksana", v1));
+  EXPECT_TRUE(a.insert("Olesya", v2));
+  a.clear();
+  EXPECT_TRUE(a.operator[]("Oksana")== a.operator[]("Olesya"));
+}
+
+TEST(HTtest, test_4){
+  HashTable a;
+  Value v5 = {15, 55};
+  Key k5 = "Tonya";
+  Value v6 = {18, 69};
+  Key k6 = "Sasha";
+  EXPECT_TRUE(a.insert(k5,v5));
+  EXPECT_TRUE(a.insert(k6,v6));
+  HashTable b;
+  b = a;
+  EXPECT_TRUE(a.operator[]("Sasha")==b.operator[]("Sasha"));
+}
+
+TEST(HTtest, test_5){
+  HashTable a;
+  Value v1 = {19, 58};
+  Key k1 = "Oksana";
+  Value v2 = {22, 67};
+  Key k2 = "Olesya";
+  Value v3 = {29, 51};
+  Key k3 = "Anya";
+  Value v4 = {32, 62};
+  Key k4 = "Katya";
+  Value v5 = {15, 55};
+  Key k5 = "Tonya";
+  Value v6 = {18, 69};
+  Key k6 = "Sasha";
+  EXPECT_TRUE(a.insert(k1,v1));
+  EXPECT_TRUE(a.insert(k2,v2));
+  EXPECT_TRUE(a.insert(k3,v3));
+  EXPECT_TRUE(a.insert(k4,v4));
+  EXPECT_TRUE(a.insert(k5,v5));
+  EXPECT_TRUE(a.insert(k6,v6));
+  EXPECT_FALSE(a.insert(k2,v2));
+  HashTable b;
+  b = a;
+  EXPECT_TRUE(a.operator[]("Oksana")==b.operator[]("Oksana")&& a.operator[]("Katya")==b.operator[]("Katya"));
+}
 
 
 int main(int argc, char **argv)

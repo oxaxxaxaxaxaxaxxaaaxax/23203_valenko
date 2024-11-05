@@ -7,16 +7,18 @@
 
 namespace {
   constexpr int initial_capacity = 4; 
+  constexpr size_t default_factor = 31;
 }
 
 struct HashTable::Node{ 
-    Key key = "";
+    //Key key = "";
+    Key key;
     Value * data;
     bool flag =true;
     Node * next = nullptr;
 
-    Node(): data(new Value){}
-    ~Node(){ 
+    Node() noexcept: data(new Value){}
+    ~Node() noexcept{ 
       delete data;
       if(next != nullptr){
         delete next;
@@ -26,7 +28,6 @@ struct HashTable::Node{
     Node(const Key &k, const Value& v):key(k),data(new Value){
       data->age = v.age;
       data->weight = v.weight;
-      next = nullptr;
     }
 
     Node(Node &b) = delete;
@@ -52,7 +53,7 @@ struct HashTable::Node{
       return *this;
     }
 
-    Node& operator=(Node&& b){
+    Node& operator=(Node&& b) noexcept{
       if(this == &b) return *this;
       key=b.key;
       flag =b.flag;
@@ -75,7 +76,7 @@ HashTable::HashTable():capacity(initial_capacity),
     });
   }
 
-HashTable::~HashTable(){
+HashTable::~HashTable() noexcept{
     if(table == nullptr) return;
     for(int i=0; i< capacity;i++){
       delete table[i];
@@ -83,7 +84,7 @@ HashTable::~HashTable(){
     delete [] table;
   }
 
-HashTable::HashTable(int size):capacity(size),curr_size(0),
+HashTable::HashTable(size_t size):capacity(size),
     table(new Node*[capacity]){
     std::generate(&table[0], &table[capacity], [](){
       return nullptr;
@@ -102,12 +103,12 @@ HashTable::HashTable(const HashTable& b):curr_size(b.curr_size),capacity(b.capac
     }
   }
 
-HashTable::HashTable(HashTable&& b):curr_size(b.curr_size),capacity(b.capacity),table(b.table){
+HashTable::HashTable(HashTable&& b) noexcept :curr_size(b.curr_size),capacity(b.capacity),table(b.table){
     b.table = nullptr;
   }
 
 
-void HashTable::swap(HashTable& b){
+void HashTable::swap(HashTable& b) noexcept{
   std::swap(b, *this);
   }
 
@@ -135,7 +136,7 @@ HashTable& HashTable::operator=(const HashTable& b){
     return *this;
   }
 
-HashTable& HashTable::operator=(HashTable&& b){
+HashTable& HashTable::operator=(HashTable&& b) noexcept{
     if(this == &b) return *this;
     if(table != nullptr){
       for(int i=0;i<capacity;i++){
@@ -176,10 +177,10 @@ void HashTable::clear(){
 
 bool HashTable::erase(const Key& k){
     if(!curr_size) {
-      return 0;
+      return false;
     }
     size_t index = hashFunction(k);
-    if(table[index] ==nullptr) return 0;
+    if(table[index] ==nullptr) return false;
     Node * tmp = table[index];
     if(tmp->key == k){
       table[index] = tmp ->next;
@@ -189,13 +190,13 @@ bool HashTable::erase(const Key& k){
       curr_size--;
       // std::cout<< "ERASE"<< std::endl;
       // std::cout<< k<< std::endl;
-      return 1;
+      return true;
     }
-    Node * previous;
+    Node * previous = nullptr;
     while(tmp->key != k){
       previous = tmp;
       tmp = tmp->next;
-      if(tmp == nullptr) return 0;
+      if(tmp == nullptr) return false;
     }
     Node * pointer = tmp->next;
     tmp->next = nullptr;
@@ -205,7 +206,7 @@ bool HashTable::erase(const Key& k){
     curr_size--;
     // std::cout<< "ERASE"<< std::endl;
     // std::cout<< k<< std::endl;
-    return 1;
+    return true;
     
   }
   
@@ -221,43 +222,43 @@ bool HashTable::insert(const Key& k, const Value& v){
       table[index] =new Node(k, v);
       //std::cout<< k<< std::endl;
       curr_size++;
-      return 1;
+      return true;
     }
     if(table[index]->key == k) { 
       //curr_size--;
-      return 0;
+      return false;
     }
     Node * tmp = table[index];
     while((tmp)->next!= nullptr){
       if(tmp->next->key == k) {
         //curr_size--;
-        return 0;
+        return false;
       }
       tmp = tmp->next;
     }
     tmp->next = new Node(k, v);
     //std::cout<< k<< std::endl;
     curr_size++;
-    return 1;
+    return true;
   }
 
 
 bool HashTable::contains(const Key& k) const{ 
     size_t index = hashFunction(k);
-    if(table[index] == nullptr) return 0;
-    if(k == table[index]->key) return 1;
+    if(table[index] == nullptr) return false;
+    if(k == table[index]->key) return true;
     while(table[index]->next != nullptr){
       if(table[index]->next == nullptr) break;
-      if(k == table[index]->next->key) return 1;
+      if(k == table[index]->next->key) return true;
       table[index] = table[index]->next;
     }
-    return 0;
+    return false;
  }
 
 
 Value& HashTable::operator[](const Key& k){
     if(!contains(k)){ 
-      int res = insert(k, Value());
+      insert(k, Value());//
       return this->operator[](k);
     }
     size_t index = hashFunction(k);
@@ -284,57 +285,43 @@ Value& HashTable::at(const Key& k){
     return *(a->data);
 }
   const Value& HashTable::at(const Key& k) const{
-    size_t index = hashFunction(k);
-    Node *a = table[index];
-    if(a == nullptr){
-      throw std::runtime_error("Value is not found");
-    }
-      while(a->key != k){
-        a = a->next;
-        if(a == nullptr){
-          throw std::runtime_error("Value is not found");
-        }
-
-      }
-    const Value& temp = *(a->data);
-    return temp;
+    return const_cast<HashTable&>(*this).at(k);
   }
-
 
 bool operator==(const HashTable& a, const HashTable& b){
-  if(a.curr_size != b.curr_size) return 0;
+  if(a.curr_size != b.curr_size) return false;
   for(int i=0; i<b.capacity;i++){
     if(b.table[i]== nullptr) continue;
-    //std::cout<< b.table[i] -> key << std::endl;
-    if(b.table[i]->key == "" && b.table[i]->flag == false) continue;
+    if(b.table[i]->key.empty() && !b.table[i]->flag) continue;
     try{
-      if(b.at(b.table[i]->key) != a.at(b.table[i]->key)) return 1;
+      if(b.at(b.table[i]->key) != a.at(b.table[i]->key)) return true;
     }
     catch(const std::runtime_error&e){
-      return 0;
+      return false;
     }
   }
-  return 1;
+  return true;
 }
 
 bool operator!=(const HashTable& a, const HashTable& b){
-  if(a.curr_size != b.curr_size) return 1;
+  if(a.curr_size != b.curr_size) return true;
   for(int i=0; i<b.capacity;i++){
-    if(b.table[i]== nullptr || b.table[i]->key == "") continue;
+    if(b.table[i]== nullptr) continue;
+    if(b.table[i]->key.empty() && !b.table[i]->flag) continue;
     try{
 
-      if(b.at(b.table[i]->key) != a.at(b.table[i]->key)) return 1;
+      if(b.at(b.table[i]->key) != a.at(b.table[i]->key)) return true;
     }
     catch(const std::runtime_error&e){
-      return 1;
+      return true;
     }
     
   }
-  return 0;
+  return false;
 }
 
 
-void HashTable::Rehash(HashTable &a){
+void HashTable::Rehash(HashTable &a) noexcept{
     for(int i=0;i<capacity;i++){
       if(table[i] == nullptr) continue;
       Node * tmp = table[i];
@@ -347,18 +334,18 @@ void HashTable::Rehash(HashTable &a){
     *this = std::move(a);
 }
 
-void HashTable::expandMemoryIfNeeded(){
+void HashTable::expandMemoryIfNeeded() noexcept{
     HashTable a(capacity*2);
     Rehash(a);
   }
 
-size_t HashTable::hashFunction(const Key &key) const {
-    size_t bucketIndex;
+size_t HashTable::hashFunction(const Key &key) const noexcept{
+    size_t bucketIndex =0;
     size_t sum = 0;
-    size_t factor = 31;
-    for (size_t i = 0; i < key.length(); i++) {
-        sum = ((sum % capacity) + (((int)key[i]) * factor) % capacity) % capacity;
-        factor = ((factor % __INT16_MAX__) * (31 % __INT16_MAX__)) % __INT16_MAX__;
+    size_t factor = default_factor;
+    for (char i : key ){
+        sum = ((sum % capacity) + ((static_cast<int>(i)) * factor) % capacity) % capacity;
+        factor = ((factor % __INT16_MAX__) * (default_factor % __INT16_MAX__)) % __INT16_MAX__;
     }
     bucketIndex = sum;
     return bucketIndex;
