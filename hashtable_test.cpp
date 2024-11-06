@@ -362,6 +362,24 @@ TEST(HTtest, test_21){
 }
 
 
+TEST(HTtest, test_22){
+  HashTable a;
+  for(unsigned int i =0;i<10000;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+    EXPECT_FALSE(a.insert(k,v));
+  }
+  a.clear();
+  EXPECT_TRUE(!a.size());
+  for(unsigned int i =0;i<10000;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+    EXPECT_FALSE(a.insert(k,v));
+  }
+}
+
 TEST(HTtest, test_1) {
   HashTable a;
   Value v = {19,58};
