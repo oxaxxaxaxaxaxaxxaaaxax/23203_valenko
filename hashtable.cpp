@@ -164,13 +164,13 @@ void HashTable::clear(){
         tmp->data->age = 0;
         tmp->data->weight = 0;
         tmp=tmp->next;
+        curr_size--;
       }
       tmp->key = "";
       tmp->data->age = 0;
       tmp->data->weight = 0;
-
+      curr_size--;
     }
-    curr_size=0;
   }
 
 
