@@ -59,7 +59,7 @@ public:
   bool insert(const Key& k, const Value& v);
 
   //Checking availability value by key.
-  bool contains(const Key& k) const;
+   [[nodiscard]] bool contains(const Key& k) const;
 
   //Returning the value by a key. Unsafe method.
   Value& operator[](const Key& k);
@@ -71,12 +71,12 @@ public:
   const Value& at(const Key& k) const;
 
   //Return size.
-  size_t size() const{
+  [[nodiscard]] size_t size() const{
     return curr_size;
   }
 
   //Return true if is empty.
-  bool empty() const{
+   [[nodiscard]] bool empty() const{
     return (!curr_size);
   }
 
@@ -86,7 +86,7 @@ public:
   //Return true if not equal.
   friend bool operator!=(const HashTable& a, const HashTable& b);
 
-  
+  void SetTestingMode() {testing_mode = true;}
 
 private:
   size_t curr_size =0;
@@ -101,7 +101,10 @@ private:
   void expandMemoryIfNeeded() noexcept;
 
   //Get an index for hashtanle element.
-  size_t hashFunction(const Key &key) const noexcept;
+    size_t hashFunction(const Key &key) const noexcept;
+  bool testing_mode = false;
+  size_t hashFunctionForTest(const Key &key) const noexcept {return 1;};
+
 
 
 };
