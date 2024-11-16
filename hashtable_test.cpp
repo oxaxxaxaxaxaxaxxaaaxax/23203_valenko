@@ -2,7 +2,7 @@
 #include "googletest/googletest/include/gtest/gtest.h"
 
 
-TEST(HTtest, test_6){
+TEST(INSERT_ERASE, test_copy_small){
   HashTable a;
   a.SetTestingMode();
   Value v1 = {19, 58};
@@ -45,7 +45,7 @@ TEST(HTtest, test_6){
   EXPECT_TRUE(a==b);
 }
 
-TEST(HTtest, test_7){
+TEST(INSERT_ERASE, test_copy_small_2){
   HashTable a;
   a.SetTestingMode();
   Value v1 = {19, 58};
@@ -87,7 +87,7 @@ TEST(HTtest, test_7){
   EXPECT_TRUE(!(a!=b));
 }
 
-TEST(HTtest, test_8){
+TEST(INSERT_ERASE, test_empty_key){
   HashTable a;
   Value v1 = {0,0};
   Value v6 = {18, 69};
@@ -100,7 +100,7 @@ TEST(HTtest, test_8){
   EXPECT_TRUE(!a.size());
 }
 
-TEST(HTtest, test_9){
+TEST(EXCEPTION, test_1){
   HashTable a;
   Value v6 = {18, 69};
   EXPECT_TRUE(a.insert("aaa", v6));
@@ -108,7 +108,7 @@ TEST(HTtest, test_9){
 }
 
 
-TEST(HTtest, test_10){
+TEST(EXCEPTION, test_2){
   HashTable a;
   const Value v6 = {18, 69};
   const Key k6 = "aaa";
@@ -116,18 +116,31 @@ TEST(HTtest, test_10){
   EXPECT_THROW(a.at("aa"), std::runtime_error);
 }
 
-TEST(HTtest, test_11){
+TEST(OPERATION, test_1){
   HashTable a;
-  Value v6 = {18, 69};
-  Value v5 = {16,77};
-  EXPECT_TRUE(a.insert("aaa", v6));
+  a.SetTestingMode();
+  for(unsigned int i =0;i<10000;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(a.insert(k,v));
+  }
+  for(unsigned int i =0;i<9900;i++){
+    Key k = "AAA" + std::to_string(i);
+    EXPECT_TRUE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+    EXPECT_FALSE(a.erase(k));
+  } 
   HashTable b;
-  b=a;
-  b["aaa"] = v5;
-  EXPECT_TRUE(b["aaa"].age == 16);
+  b.SetTestingMode();
+  for(unsigned int i =9900;i<10000;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    b[k] = v;
+  }
+  EXPECT_TRUE(a==b);
 }
 
-TEST(HTtest, test_12){
+TEST(OPERATION, test_move){
   HashTable a;
   Value v6 = {18, 69};
   Value v5 = {16,77};
@@ -141,7 +154,7 @@ TEST(HTtest, test_12){
   EXPECT_TRUE(b["FIT"] == v7);
 }
 
-TEST(HTtest, test_13){
+TEST(OPERATION, test_copy){
   HashTable a;
   Value v6 = {18, 69};
   Value v5 = {16,77};
@@ -155,7 +168,7 @@ TEST(HTtest, test_13){
   EXPECT_TRUE(b["FIT"] == v7);
 }
 
-TEST(HTtest, test_14){
+TEST(INSERT_ERASE, test_move_small){
   HashTable a;
   a.SetTestingMode();
   Value v1 = {19, 58};
@@ -197,7 +210,7 @@ TEST(HTtest, test_14){
   EXPECT_TRUE(b["Tonya"] == v5);
 }
 
-TEST(HTtest, test_15){
+TEST(INSERT_ERASE, test_clear_small){
   HashTable a;
   a.SetTestingMode();
   Value v1 = {19, 58};
@@ -238,7 +251,7 @@ TEST(HTtest, test_15){
   EXPECT_TRUE(b.empty());
 }
 
-TEST(HTtest, test_16){
+TEST(SWAP, test_1){
   HashTable a;
   Value v1 = {19, 58};
   Key k1 = "Oksana";
@@ -269,7 +282,7 @@ TEST(HTtest, test_16){
   EXPECT_TRUE(a.empty());
 }
 
-TEST(HTtest, test_17){
+TEST(INSERT_ERASE, test_copy_large_1){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<100;i++){
@@ -289,7 +302,7 @@ TEST(HTtest, test_17){
   EXPECT_TRUE(b.empty());
 }
 
-TEST(HTtest, test_18){
+TEST(INSERT_ERASE, test_copy_large_2){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
@@ -309,7 +322,7 @@ TEST(HTtest, test_18){
   EXPECT_TRUE(b.empty());
 }
 
-TEST(HTtest, test_19){
+TEST(INSERT_ERASE, test_move_large){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
@@ -329,9 +342,8 @@ TEST(HTtest, test_19){
   EXPECT_TRUE(b.empty());
 }
 
-TEST(HTtest, test_20){
+TEST(INSERT_ERASE, test_equal){
   HashTable a;
-  a.SetTestingMode();
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
     Key k = "AAA" + std::to_string(i);
@@ -353,7 +365,7 @@ TEST(HTtest, test_20){
   EXPECT_TRUE(a==b);
 }
 
-TEST(HTtest, test_21){
+TEST(INSERT_ERASE, test_not_equal){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
@@ -380,7 +392,7 @@ TEST(HTtest, test_21){
 }
 
 
-TEST(HTtest, test_22){
+TEST(INSERT_ERASE, test_clear){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
@@ -397,9 +409,22 @@ TEST(HTtest, test_22){
     EXPECT_TRUE(a.insert(k,v));
     EXPECT_FALSE(a.insert(k,v));
   }
+  a.clear();
+  HashTable b;
+  b.SetTestingMode();
+  EXPECT_TRUE(a==b);
+  for(unsigned int i =0;i<10000;i++){
+    Key k = "AAA" + std::to_string(i);
+    Value v = {i, i};
+    EXPECT_TRUE(b.insert(k,v));
+    EXPECT_FALSE(b.insert(k,v));
+  }
+  EXPECT_FALSE(a==b);
+  b.clear();
+  EXPECT_TRUE(a==b);
 }
 
-TEST(HTtest, test_23){
+TEST(INSERT_ERASE, test_is_empty){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
@@ -418,7 +443,7 @@ TEST(HTtest, test_23){
   EXPECT_TRUE(b.empty());
 }
 
-TEST(HTtest, test_24){
+TEST(INSERT_ERASE, test_not_equal_lt){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
@@ -441,7 +466,7 @@ TEST(HTtest, test_24){
   EXPECT_TRUE(a!=b);
 }
 
-TEST(HTtest, test_25){
+TEST(EXCEPTION, test_3){
   HashTable a;
   a.SetTestingMode();
   for(unsigned int i =0;i<10000;i++){
@@ -456,74 +481,14 @@ TEST(HTtest, test_25){
   EXPECT_THROW(a.at("aAAAAAAAAAAa"), std::runtime_error);
 }
 
-TEST(HTtest, test_1) {
+TEST(OPERATOR, test_5){
   HashTable a;
-  Value v = {19,58};
-  EXPECT_TRUE(a.insert("Oksana", v));
-  EXPECT_TRUE(v == a.operator[]("Oksana"));
+  Value v1 = {33, 55};
+  Value v2 = {44,77};
+  a["hhh"] = v1;
+  a["hhh"] = v2;
+  EXPECT_TRUE(a.at("hhh") == v2);
 }
-
-TEST(HTtest, test_2) {
-  HashTable a;
-  Value v1 = {19, 58};
-  Value v2 = {22, 67};
-  EXPECT_TRUE(a.insert("Oksana", v1));
-  EXPECT_FALSE(a.insert("Oksana", v2));
-  EXPECT_TRUE(v1 == a.operator[]("Oksana"));
-}
-
-TEST(HTtest, test_3) {
-  HashTable a;
-  Value v1 = {19, 58};
-  Value v2 = {22, 67};
-  EXPECT_TRUE(a.insert("Oksana", v1));
-  EXPECT_TRUE(a.insert("Olesya", v2));
-  a.clear();
-  EXPECT_TRUE(!a.size());
-}
-
-TEST(HTtest, test_4){
-  HashTable a;
-  Value v5 = {15, 55};
-  Key k5 = "Tonya";
-  Value v6 = {18, 69};
-  Key k6 = "Sasha";
-  EXPECT_TRUE(a.insert(k5,v5));
-  EXPECT_TRUE(a.insert(k6,v6));
-  HashTable b;
-  b = a;
-  EXPECT_TRUE(a.operator[]("Sasha")==b.operator[]("Sasha"));
-}
-
-TEST(HTtest, test_5){
-  HashTable a;
-  a.SetTestingMode();
-  Value v1 = {19, 58};
-  Key k1 = "Oksana";
-  Value v2 = {22, 67};
-  Key k2 = "Olesya";
-  Value v3 = {29, 51};
-  Key k3 = "Anya";
-  Value v4 = {32, 62};
-  Key k4 = "Katya";
-  Value v5 = {15, 55};
-  Key k5 = "Tonya";
-  Value v6 = {18, 69};
-  Key k6 = "Sasha";
-  EXPECT_TRUE(a.insert(k1,v1));
-  EXPECT_TRUE(a.insert(k2,v2));
-  EXPECT_TRUE(a.insert(k3,v3));
-  EXPECT_TRUE(a.insert(k4,v4));
-  EXPECT_TRUE(a.insert(k5,v5));
-  EXPECT_TRUE(a.insert(k6,v6));
-  EXPECT_FALSE(a.insert(k2,v2));
-  HashTable b;
-  b.SetTestingMode();
-  b = a;
-  EXPECT_TRUE(a.operator[]("Oksana")==b.operator[]("Oksana"));
-  EXPECT_TRUE(a.operator[]("Katya")==b.operator[]("Katya"));
-}
-
 
 int main(int argc, char **argv)
 {

@@ -86,6 +86,7 @@ public:
   //Return true if not equal.
   friend bool operator!=(const HashTable& a, const HashTable& b);
 
+  //Do testing_mode flag truthful
   void SetTestingMode() {testing_mode = true;}
 
 private:
@@ -93,6 +94,7 @@ private:
   size_t capacity=0;
   struct Node;
   Node ** table= nullptr;
+  bool testing_mode = false;
 
   //Rehashing the table by value.
   void Rehash(HashTable &a) noexcept;
@@ -100,11 +102,10 @@ private:
   //Extention the table.
   void expandMemoryIfNeeded() noexcept;
 
-  //Get an index for hashtanle element.
-    size_t hashFunction(const Key &key) const noexcept;
-  bool testing_mode = false;
-  size_t hashFunctionForTest(const Key &key) const noexcept {return 1;};
-
-
+  //Get an index for hashtable element.
+  size_t hashFunction(const Key &key) const noexcept;
+  
+  //Get an index 1 for hashtable element
+  size_t static hashFunctionForTest() noexcept {return 1;};
 
 };
