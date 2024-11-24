@@ -8,7 +8,7 @@
 #include <vector>
 
 
-void Basic_Deck::DeckInit(){
+Basic_Deck::Basic_Deck(){
     for(const auto& suit : Card::suits){
         for(const auto& rank : Card::ranks){
             Card card(suit, rank, Card::RankValue.at(rank));

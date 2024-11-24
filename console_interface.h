@@ -6,7 +6,8 @@ using string = std::string;
 
 class Console_Interface: public Interface{
 public:
-    void print(string output) override{
-        std::cout << output <<std::endl;
+    void ShowResult(string result) override{
+        std::cout << result <<std::endl;
     }
 };
+

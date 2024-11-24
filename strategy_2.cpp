@@ -6,11 +6,7 @@
 
 
 void Strategy_2::hit(Card & card){
-    total_summ+= card.GetValue();
-}
-
-int Strategy_2::GetSumm(){
-    return total_summ;
+    hand_2.SetSum(card.GetValue());
 }
 
 Strategy * CreateStrategy_2(){

@@ -3,14 +3,14 @@
 #include "deck.h"
 #include <cstdlib>
 #include <vector>
-#include <cstdlib>
 
 
 class Basic_Deck : public Deck{
 public:
-    void DeckInit() override;
+    Basic_Deck();
     Card GetCard() override;  
-    void Shuffle();             
+    void Shuffle();  
+    ~Basic_Deck() override;           
     //динамический массив карт
 private:
     std::vector<Card> deck;

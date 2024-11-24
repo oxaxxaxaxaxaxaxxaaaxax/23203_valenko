@@ -7,7 +7,7 @@
 
 class Simple_Deck : public Deck{
 public:
-    void DeckInit() override;
+    Simple_Deck();
     Card GetCard() override;
     //int GetVal();
     ~Simple_Deck() override;

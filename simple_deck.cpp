@@ -7,7 +7,7 @@
 #include <vector>
 
 
-void Simple_Deck::DeckInit(){
+Simple_Deck::Simple_Deck(){
     for(int i=0;i<1000;i++){
         std::srand(std::time(0));
         Card card(std::rand()%9 + 2);

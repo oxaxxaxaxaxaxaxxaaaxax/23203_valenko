@@ -1,7 +1,7 @@
-#include <iostream>
 #include "card.h"
+#include <iostream>
 
-void Card::Show(){
+void Card::Show()const {
     std::cout<< rank << suit << std::endl;
 }
 

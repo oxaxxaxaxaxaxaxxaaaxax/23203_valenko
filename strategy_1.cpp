@@ -1,5 +1,6 @@
 #include "card.h"
 #include "factory.h"
+#include "hand.h"
 #include "strategy.h"
 #include "strategy_1.h"
 #include <iostream>
@@ -7,11 +8,10 @@
 using string = std::string;
 
 void Strategy_1:: hit(Card & card){
-    //static bool b = true;
     if (!stand_mode){
-        total_summ+= card.GetValue();
+        hand_1.SetSum(card.GetValue());
     }
-    if(total_summ >= 17){
+    if(hand_1.GetSumm() >= 17){
         stand_mode = true;
     }
     //std::cout<< "hit:" << total_summ << std::endl;
@@ -21,9 +21,6 @@ void Strategy_1:: hit(Card & card){
 //     std::cout<< "stand" << std::endl;
 // }
 
-int Strategy_1::GetSumm(){
-    return total_summ;
-}
 
 Strategy * CreateStrategy_1(){
     return new Strategy_1();

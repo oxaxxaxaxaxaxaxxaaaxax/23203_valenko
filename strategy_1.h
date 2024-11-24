@@ -1,13 +1,18 @@
 #pragma once
-#include "strategy.h"
 #include "card.h"
+#include "hand.h"
+#include "strategy.h"
+
 
 class Strategy_1 : public Strategy{
 public:
     void hit(Card & card) override;
-    void stand() override;
+    //void stand() override;
+    //int GetSumm() override;
+    Hand hand_1;
+    ~Strategy_1() override;
 private:
-    size_t total_summ = 0;
     bool stand_mode = false;
+    
 };
 
