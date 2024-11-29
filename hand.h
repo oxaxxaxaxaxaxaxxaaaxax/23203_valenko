@@ -1,3 +1,4 @@
+#pragma once
 #include "card.h"
 #include <vector>
 
@@ -5,12 +6,18 @@ class Hand{
 public:
     Hand();
     void ShowHand() const;
-    void HitCard();
+    void HitCard(Card card);
     int GetTotalSum() const;
     void AddToSum(int value);
+    void SetUpBust();
+    void SetUpVictory();
     void UpdateSum();
+    bool GetBustMode(){return bust_mode;}
+    bool GetVicMode(){return victory_mode;}
     ~Hand() = default;
 private:
-    std::vector<Card> hand;
+    std::vector<Card> hand_;
     int total_summ=0;
+    bool bust_mode = false;
+    bool victory_mode = false;
 };

@@ -12,9 +12,20 @@ void Hand::HitCard(Card card){
     hand_.push_back(card);
     AddToSum(card.GetValue());
     if(GetTotalSum() == victory_point){
-        bust_mode = true;
+        SetUpVictory();
+    }  
+    if(GetTotalSum() > victory_point){
+        UpdateSum();
     }
-    UpdateSum();
+    SetUpBust();
+}
+
+void Hand::SetUpVictory(){
+    victory_mode = true;
+} 
+
+void Hand::SetUpBust(){
+    bust_mode = true;
 }
 
 void Hand::ShowHand()const {
@@ -32,13 +43,9 @@ void Hand::AddToSum(int value){
 }
 
 void Hand::UpdateSum(){
-    if(!bust_mode){
-        return;
-    }
     for(const auto& card: hand_){
         if(card.GetValue() == ace_value){
             AddToSum(ace_bust);
-            //total_summ-= ace_bust;
         }
     }
 }

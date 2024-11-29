@@ -1,6 +1,11 @@
+#pragma once
+#include "player.h"
 #include "strategy.h"
+#include <vector>
 
 class Engine{
 public:
-    virtual void Game(string Strat_1, string Strat_2, string CurDeck,string CurInter)=0;
+    virtual void BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck,std::string& CurInter)=0;
+    virtual void Game(Player& player_1, Player& player_2,std::string& CurDeck, std::string& CurInter)=0;
+    virtual ~Engine()=default;
 };

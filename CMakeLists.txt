@@ -1,12 +1,11 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
+project(MyProgram)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project("gtest")
+find_package(Boost REQUIRED COMPONENTS program_options)
 
-enable_testing()
-add_subdirectory(googletest)
-add_executable(hashtable_test hashtable.cpp hashtable_test.cpp)
-target_compile_options(hashtable_test PRIVATE --coverage -fsanitize=address -g)
-target_link_options(hashtable_test PRIVATE -lgcov --coverage -fsanitize=address)
-target_link_libraries(hashtable_test gtest_main gmock_main)
+add_executable(main main.cpp basic_deck.cpp card.cpp console_interface.cpp engine_1.cpp hand.cpp simple_deck.cpp strategy_1.cpp strategy_2.cpp)
+
+target_link_libraries(main Boost::program_options)

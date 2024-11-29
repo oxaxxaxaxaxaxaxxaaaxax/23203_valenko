@@ -1,17 +1,23 @@
-#include "card.h"
-#include "factory.h"
-#include "hand.h"
-#include "strategy.h"
 #include "strategy_1.h"
+
 #include <iostream>
 
-using string = std::string;
+#include "card.h"
+#include "creator.h"
+#include "factory.h"
+#include "hand.h"
+#include "player.h"
+#include "strategy.h"
 
-void Strategy_1:: hit(Card & card){
+
+
+
+
+void Strategy_1:: hit(Card & card, Player & player){
     if (!stand_mode){
-        hand_1.SetSum(card.GetValue());
+        player.GetHand().HitCard(card); 
     }
-    if(hand_1.GetSumm() >= 17){
+    if(player.GetHand().GetTotalSum() >= 17){
         stand_mode = true;
     }
     //std::cout<< "hit:" << total_summ << std::endl;
@@ -22,12 +28,17 @@ void Strategy_1:: hit(Card & card){
 // }
 
 
-Strategy * CreateStrategy_1(){
-    return new Strategy_1();
+
+
+namespace {
+static Creator<Strategy_1> c;
 }
+// Strategy * CreateStrategy_1(){
+//     return new Strategy_1();
+// }
 
 
 
-namespace{
-    bool b = (Factory<string, Strategy, Strategy * (*)()>::GetInstance())->Register("Strategy_1", &CreateStrategy_1);
-}
+// namespace{
+//     bool b = (Factory<string, Strategy, Strategy * (*)()>::GetInstance())->Register("Strategy_1", &CreateStrategy_1);
+// }

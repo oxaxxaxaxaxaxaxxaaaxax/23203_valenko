@@ -10,7 +10,7 @@ template<class Key,class T, class ProductCreator>
 class Factory{
 public:
     static Factory * GetInstance(){
-        static Factory * f;
+        static Factory f;
         return &f; 
     }
     //void RegisterStrategy(Key &name, T * (creator)()){
@@ -20,8 +20,9 @@ public:
     }
     std::unique_ptr<T> CreateByName(const Key &name){
         auto creator = creators_.at(name);
-        std::unique_ptr<T> u = creator();
-        return u;
+        auto* u = creator();
+        std::unique_ptr<T> u_ptr{u};
+        return std::move(u_ptr);
     }
 
 private:

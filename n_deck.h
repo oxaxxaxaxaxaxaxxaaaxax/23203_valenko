@@ -5,11 +5,11 @@
 #include <vector>
 
 
-class Simple_Deck : public Deck{
+class N_Deck : public Deck{
 public:
-    Simple_Deck();
-    Card & GetCard() override;
-    //int GetVal();
+    N_Deck(size_t& n);
+    Card & GetCard() override;  
+    void Shuffle();            
 private:
     std::vector<Card> deck;
 };

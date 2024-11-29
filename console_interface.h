@@ -1,13 +1,14 @@
 #pragma once
-#include "interface.h"
+#include "player.h"
+#include "user_interface.h"
 #include <iostream>
+#include <string_view>
 
-using string = std::string;
 
-class Console_Interface: public Interface{
+class Console_Interface: public User_Interface{
 public:
-    void ShowResult(string result) override{
-        std::cout << result <<std::endl;
-    }
+   // void ShowResult(std::string_view result) override;  ///???????????????????????? const &  / std::string_view
+    void ShowWiner(Player& player) override;
+    //std::ostream& operator<<(std::ostream& os,const Player& player);
 };
 

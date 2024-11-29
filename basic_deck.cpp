@@ -1,6 +1,8 @@
-#pragma once
 #include "basic_deck.h"
+
+#include <assert.h>
 #include "card.h"
+#include "creator.h"
 #include "factory.h"
 #include <algorithm>
 #include <cstdlib>
@@ -11,13 +13,14 @@
 Basic_Deck::Basic_Deck(){
     for(const auto& suit : Card::suits){
         for(const auto& rank : Card::ranks){
-            Card card(suit, rank, Card::RankValue.at(rank));
-            deck.push_back(card);
+            deck.emplace_back(suit, rank, Card::RankValue.at(rank));
         }
     }
+    Shuffle();
 }
 
-Card Basic_Deck::GetCard(){
+const Card Basic_Deck::GetCard(){
+    assert(!deck.empty());
     Card tmp = deck.back();
     deck.pop_back();
     return tmp;
@@ -29,10 +32,15 @@ void Basic_Deck::Shuffle(){
     std::shuffle(deck.begin(), deck.end(), rng);
 }
 
-Deck* CreateBasDeck(){
-    return new Basic_Deck;
-}
 
 namespace{
-    bool b = (Factory<string, Deck, Deck* (*)()>::GetInstance())->Register("Basic_Deck", &CreateBasDeck);
+    Creator<Basic_Deck> c;
 }
+
+// Deck* CreateBasDeck(){
+//     return new Basic_Deck;
+// }
+
+// namespace{
+//     bool b = (Factory<string, Deck, Deck* (*)()>::GetInstance())->Register("Basic_Deck", &CreateBasDeck);
+// }
