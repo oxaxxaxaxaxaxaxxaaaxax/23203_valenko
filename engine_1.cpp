@@ -30,9 +30,8 @@ void Engine_1::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
     player_2.strategy ->hit(deck->GetCard(), player_2);
     player_2.GetHand().ShowHand();
 
-    while(1){
+    while(!(player_1.strategy ->hit(deck->GetCard(), player_1)) && !(player_2.strategy ->hit(deck->GetCard(), player_2))){
 
-        player_1.strategy ->hit(deck->GetCard(), player_1);
         if(player_1.GetHand().GetVicMode() == true){
             interface->ShowWiner(player_1);
             return;
@@ -41,7 +40,6 @@ void Engine_1::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
             interface->ShowWiner(player_2);
             return;
         }
-        player_2.strategy ->hit(deck->GetCard(), player_2);
         if(player_2.GetHand().GetVicMode() == true){
             interface->ShowWiner(player_2);
             return;
@@ -51,7 +49,14 @@ void Engine_1::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
             return;
         }
     }
+    interface->ShowWiner(ChooseWinner(player_1,player_2));
 }
+
+
+Player& ChooseWinner(Player& pl_1, Player& pl_2){
+    return (pl_1.GetHand().GetTotalSum() >= pl_2.GetHand().GetTotalSum()) ? pl_1 : pl_2;
+}
+
 
 namespace{
     Creator<Engine_1> c;
