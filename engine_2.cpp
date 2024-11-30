@@ -13,23 +13,19 @@
 #include <vector>
 
 void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
-    std::vector<size_t> number;
-    std::iota(number.begin(), number.end(), 1);
-    for(const auto& str : strategy_){
-        Player play_ (str);
+    std::vector<Player> players_;
+    std::vector<size_t> numbers_;
+    std::iota(numbers_.begin(), numbers_.end(), 1);
+    for(auto& str : strategy_){
+        players_.emplace_back(str, numbers_.back());
+        numbers_.pop_back();
     }
-
-
-    for(const auto& str_1 : strategy_){
-        for(const auto& str_2 : strategy_){
-            if(str_1 == str_2) continue;
-            Player play_1(str_1);
-            Player play_2(str_2);
-            Game(play_1, play_2, CurDeck, CurInter);
+    for(auto& player_1 : players_){
+        for(auto& player_2 : players_){
+            if(player_1 >= player_2) continue;
+            Game(player_1, player_2, CurDeck, CurInter);
         }
-    }
-    
-    
+    }  
 }
 
 void Engine_2::Game(Player& player_1, Player& player_2, std::string& CurDeck, std::string& CurInter){

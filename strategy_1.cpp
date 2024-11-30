@@ -13,13 +13,14 @@
 
 
 
-void Strategy_1:: hit(Card & card, Player & player){
+bool Strategy_1:: hit(Card & card, Player & player){
     if (!stand_mode){
-        player.GetHand().HitCard(card); 
+        player.GetHand().HitCard(card);
+        if(player.GetHand().GetTotalSum() >= 17){
+            stand_mode = true; 
+        }
     }
-    if(player.GetHand().GetTotalSum() >= 17){
-        stand_mode = true;
-    }
+    return stand_mode;
     //std::cout<< "hit:" << total_summ << std::endl;
 }
 

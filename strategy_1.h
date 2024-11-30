@@ -8,7 +8,7 @@
 class Strategy_1 : public Strategy{
 public:
     Strategy_1();
-    void hit(Card & card, Player & player) override;
+    bool hit(Card & card, Player & player) override;
     //void stand() override;
     //int GetSumm() override;
     //Hand hand_1;
