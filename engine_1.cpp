@@ -14,9 +14,9 @@
 
 void Engine_1::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
     //std::unique_ptr<Strategy> str_1 = (Factory<std::string, Strategy, Strategy* (*)()>::GetInstance())->CreateByName(strategy_[0]);
-    Player player_1(strategy_[0], 1);
+    Player player_1(std::move(strategy_[0]), 1);
     //std::unique_ptr<Strategy> str_2 = (Factory<std::string, Strategy, Strategy* (*)()>::GetInstance())->CreateByName(strategy_[1]);
-    Player player_2(strategy_[1], 2);
+    Player player_2(std::move(strategy_[1]), 2);
     
     Game(player_1, player_2, CurDeck, CurInter);
 }
@@ -59,7 +59,7 @@ Player& ChooseWinner(Player& pl_1, Player& pl_2){
 
 
 namespace{
-    Creator<Engine_1> c;
+    Creator<Engine_1, Engine, std::string> c("fast");
 }
 
 

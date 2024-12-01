@@ -1,3 +1,5 @@
+#pragma once
+
 #include "strategy.h"
 #include "user_interface.h"
 

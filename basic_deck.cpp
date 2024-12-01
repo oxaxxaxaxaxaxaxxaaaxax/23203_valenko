@@ -19,7 +19,7 @@ Basic_Deck::Basic_Deck(){
     Shuffle();
 }
 
-const Card Basic_Deck::GetCard(){
+Card & Basic_Deck::GetCard(){
     assert(!deck.empty());
     Card tmp = deck.back();
     deck.pop_back();
@@ -33,8 +33,9 @@ void Basic_Deck::Shuffle(){
 }
 
 
+
 namespace{
-    Creator<Basic_Deck> c;
+    Creator<Basic_Deck, Deck, std::string> c("basic_deck");
 }
 
 // Deck* CreateBasDeck(){

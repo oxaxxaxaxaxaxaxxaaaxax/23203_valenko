@@ -37,7 +37,7 @@ bool Strategy_1:: hit(Card & card, Player & player){
 
 
 namespace {
-static Creator<Strategy_1> c;
+static Creator<Strategy_1, Strategy, std::string> c("strategy_1");
 }
 // Strategy * CreateStrategy_1(){
 //     return new Strategy_1();

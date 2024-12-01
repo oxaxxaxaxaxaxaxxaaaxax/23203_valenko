@@ -1,12 +1,13 @@
 #pragma once
 
 #include <functional>
+#include "factory.h"
 
-template<class T>
+template<class T, class TParent, class Key>
 struct Creator {
-    Creator() {
+    Creator(Key k) {
          //()- не захватывает аргументов
-        Factory<std::string, Strategy, std::function<Strategy*()>>::GetInstance()->Register("Strategy_1", []() -> auto {return new T();});
+        Factory<std::string, TParent, std::function<TParent*()>>::GetInstance()->Register(k, []() -> auto {return new T();});
         //Factory<std::string, Strategy, Strategy * (*)()>::GetInstance()->Register("Strategy_1", []() -> auto {return new T();});
     }
 };

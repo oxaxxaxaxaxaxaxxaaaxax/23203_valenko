@@ -26,7 +26,7 @@ Card & Simple_Deck::GetCard(){
 
 
 namespace{
-    Creator<Simple_Deck> c;
+    Creator<Simple_Deck, Deck, std::string> c("simple_deck");
 }
 
 // Deck* CreateSimDeck(){

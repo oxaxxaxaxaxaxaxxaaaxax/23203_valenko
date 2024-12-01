@@ -30,8 +30,8 @@ bool Engine_3::IsQuit(std::istream& is){
 
 
 void Engine_3::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
-    Player player_1(strategy_[0], 1);
-    Player player_2(strategy_[1], 2);
+    Player player_1(std::move(strategy_[0]), 1);
+    Player player_2(std::move(strategy_[1]), 2);
     
     Game(player_1, player_2, CurDeck, CurInter);
 }
@@ -89,4 +89,10 @@ void Engine_3::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
 
 Player& Engine_3::ChooseWinner(Player& pl_1, Player& pl_2){
     return (pl_1.GetHand().GetTotalSum() >= pl_2.GetHand().GetTotalSum()) ? pl_1 : pl_2;
+}
+
+
+
+namespace{
+    Creator<Engine_3, Engine, std::string> c("detailed");
 }

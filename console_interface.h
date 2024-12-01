@@ -7,6 +7,7 @@
 
 class Console_Interface: public User_Interface{
 public:
+    Console_Interface();
    // void ShowResult(std::string_view result) override;  ///???????????????????????? const &  / std::string_view
     void ShowWiner(Player& player) override;
     void ShowMethod(bool stand_mode_) override;

@@ -35,3 +35,7 @@ void N_Deck::Shuffle(){
 namespace{
     Creator<N_Deck> c;
 }
+
+namespace{
+    Creator<N_Deck, Deck, std::string> c("simple_deck");
+}
