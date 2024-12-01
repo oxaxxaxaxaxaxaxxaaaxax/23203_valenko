@@ -12,6 +12,9 @@ public:
     void SetUpBust();
     void SetUpVictory();
     void UpdateSum();
+    Card& ShowLastCard(){
+        return hand_.back();
+    }
     bool GetBustMode(){return bust_mode;}
     bool GetVicMode(){return victory_mode;}
     ~Hand() = default;

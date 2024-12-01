@@ -10,7 +10,12 @@
 #include "strategy.h"
 
 
-
+// std::ostream& operator<<(std::ostream& os, std::unique_ptr<Strategy_1> str){
+//     if(str->stand_mode){
+//         os << "stand" ;
+//     }
+//     os << "hit";
+// }
 
 
 bool Strategy_1:: hit(Card & card, Player & player){

@@ -16,9 +16,11 @@
 // }
 
 
+void Console_Interface::ShowMethod(bool stand_mode_){
+    std::cout << stand_mode_;
+}
 
-
-void User_Interface::ShowWiner(Player& player){
+void Console_Interface::ShowWiner(Player& player){
     std::cout << player << std::endl;
 }
 

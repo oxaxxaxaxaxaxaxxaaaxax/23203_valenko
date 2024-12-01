@@ -2,18 +2,19 @@
 #include "card.h"
 #include "hand.h"
 #include "player.h"
-#include "strategy.h"
+#include "strategy_play.h"
 
 
-class Strategy_1 : public Strategy{
+class Strategy_1 : public Strategy_Play{
 public:
     Strategy_1();
     bool hit(Card & card, Player & player) override;
+    //friend std::ostream& operator<<(std::ostream& os, std::unique_ptr<Strategy_1> str);
     //void stand() override;
     //int GetSumm() override;
     //Hand hand_1;
 private:
-    bool stand_mode = false;
+    //bool stand_mode = false;
     
 };
 
