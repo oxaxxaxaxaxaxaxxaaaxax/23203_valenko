@@ -7,7 +7,8 @@
 
 class N_Deck : public Deck{
 public:
-    N_Deck(size_t& n);
+    //N_Deck(size_t& n);
+    N_Deck();
     Card & GetCard() override;  
     void Shuffle();            
 private:

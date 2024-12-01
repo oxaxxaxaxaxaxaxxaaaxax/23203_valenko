@@ -22,8 +22,8 @@ void Engine_1::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
 }
 
 void Engine_1::Game(Player& player_1, Player& player_2, std::string& CurDeck, std::string& CurInter){
-    std::unique_ptr<Deck> deck = (Factory<std::string, Deck, Deck* (*)()>::GetInstance())->CreateByName(CurDeck);
-    std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, User_Interface* (*)()>::GetInstance())->CreateByName(CurInter);
+    std::unique_ptr<Deck> deck = (Factory<std::string, Deck, std::function<Deck*()>>::GetInstance())->CreateByName(CurDeck);
+    std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
     
     player_1.strategy ->hit(deck->GetCard(), player_1);
     player_1.GetHand().ShowHand();

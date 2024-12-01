@@ -9,8 +9,18 @@
 #include <random>
 #include <vector>
 
-N_Deck::N_Deck(size_t& n){
-    for(int i =0;i<n; i++){
+// N_Deck::N_Deck(size_t& n){
+//     for(int i =0;i<n; i++){
+//         for(const auto& suit: Card::suits){
+//             for(const auto& rank: Card::ranks){
+//                 deck.emplace_back(suit, rank, Card::RankValue.at(rank));
+//             }
+//         }    
+//     }
+//}
+
+N_Deck::N_Deck(){
+    for(int i =0;i<4; i++){
         for(const auto& suit: Card::suits){
             for(const auto& rank: Card::ranks){
                 deck.emplace_back(suit, rank, Card::RankValue.at(rank));
@@ -18,6 +28,7 @@ N_Deck::N_Deck(size_t& n){
         }    
     }
 }
+
 
 Card & N_Deck::GetCard(){
     assert(!deck.empty());
@@ -32,10 +43,10 @@ void N_Deck::Shuffle(){
     std::shuffle(deck.begin(), deck.end(), rng);
 }
 
-namespace{
-    Creator<N_Deck> c;
-}
+// namespace{
+//     Creator<N_Deck> c;
+// }
 
 namespace{
-    Creator<N_Deck, Deck, std::string> c("simple_deck");
-}
+    Creator<N_Deck, Deck, std::string> c("n_deck");
+}//&777как сконструкторить n

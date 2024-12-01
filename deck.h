@@ -1,6 +1,7 @@
 #pragma once
 
 #include "card.h"
+#include "factory.h"
 
 class Deck{
 public:

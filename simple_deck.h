@@ -10,6 +10,7 @@ public:
     Simple_Deck();
     Card & GetCard() override;
     //int GetVal();
+    ~Simple_Deck();
 private:
     std::vector<Card> deck;
 };
