@@ -4,7 +4,7 @@
 
 class Hand{
 public:
-    Hand();
+    //Hand();
     void ShowHand() const;
     void HitCard(Card card);
     int GetTotalSum() const;

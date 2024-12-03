@@ -7,7 +7,7 @@
 
 class Console_Interface: public User_Interface{
 public:
-    Console_Interface();
+    //Console_Interface();
    // void ShowResult(std::string_view result) override;  ///???????????????????????? const &  / std::string_view
     void ShowWiner(Player& player) override;
     void ShowMethod(bool stand_mode_) override;
@@ -17,6 +17,7 @@ public:
         stand_mode_ ? os << "stand" : os << "hit";
         return os;
     }
+    ~Console_Interface()= default;
 
     //std::ostream& operator<<(std::ostream& os,const Player& player);
 };

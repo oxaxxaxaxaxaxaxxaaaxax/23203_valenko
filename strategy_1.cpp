@@ -18,7 +18,7 @@
 // }
 
 
-bool Strategy_1:: hit(Card & card, Player & player){
+bool Strategy_1:: hit(Card card, Player & player){
     if (!stand_mode){
         player.GetHand().HitCard(card);
         if(player.GetHand().GetTotalSum() >= 17){

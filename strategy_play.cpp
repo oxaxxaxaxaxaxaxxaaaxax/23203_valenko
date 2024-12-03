@@ -2,9 +2,11 @@
 
 #include <iostream>
 
-std::ostream& operator<<(std::ostream& os, std::unique_ptr<Strategy> str){
-    if(str->stand_mode){
-        os << "stand" ;
-    }
-    os << "hit";
-}
+
+
+// void Strategy_Play::ShowMethod(std::unique_ptr<User_Interface> interface_, std::unique_ptr<Strategy> str_){
+//     if(str_->stand_mode){
+//          os << "stand" ;
+// //     }
+// //     os << "hit";
+// }

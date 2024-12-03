@@ -13,11 +13,11 @@ int main(int argc, char* argv[]){
    po::options_description desc("Allowed options");
     desc.add_options()
     ("help", "produce help message")
-    ("compression", po::value<int>(), "set compression level")
-    ("strategy", po::value<std::vector<std::string>>(), ":)")
-    ("deck", po::value<std::string>(), "deck name")
-    ("game", po::value<std::string>(), ":(")
-    ("interface", po::value<std::string>(), ":(")
+    //("compression", po::value<int>(), "set compression level")
+    ("strategy", po::value<std::vector<std::string>>(), "set --strategy= your strategy name")
+    ("deck", po::value<std::string>(), "set --deck=set count of deck ")
+    ("game", po::value<std::string>(), "set --game= your selected mode for game")
+    ("interface", po::value<std::string>(), "set --interface=selected interface")
 ;
 
     po::variables_map vm;
@@ -29,12 +29,12 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
-    if (vm.count("compression")) {
-        std::cout << "Compression level was set to " 
-    << vm["compression"].as<int>() << ".\n";
-    } else {
-        std::cout << "Compression level was not set.\n";
-    } 
+    // if (vm.count("compression")) {
+    //     std::cout << "Compression level was set to " 
+    // << vm["compression"].as<int>() << ".\n";
+    // } else {
+    //     std::cout << "Compression level was not set.\n";
+    // } 
 
     if(!vm.count("strategy")){
         std::cout << desc << std::endl;
@@ -60,8 +60,6 @@ int main(int argc, char* argv[]){
         std::cout << desc << std::endl;
         return 1;
     }
-    //std::unique_ptr<Deck> deck_ = (Factory<string, Deck, Deck* (*)()>::GetInstance())->CreateByName(deck_name);
-
     std::string interface_ = vm["interface"].as<std::string>();
     if(!vm.count("game")){
         std::cout << desc << std::endl;
@@ -69,6 +67,6 @@ int main(int argc, char* argv[]){
     }
     std::string game_ = vm["game"].as<std::string>();
 
-    std::unique_ptr<Engine> mode = (Factory<std::string, Engine, Engine*(*)()>::GetInstance())->CreateByName(game_);
+    std::unique_ptr<Engine> mode = (Factory<std::string, Engine, std::function<Engine*()>>::GetInstance())->CreateByName(game_);
     mode->BlackJack(strategy_, deck_name, interface_);
 }

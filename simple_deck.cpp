@@ -18,7 +18,7 @@ Simple_Deck::Simple_Deck(){
     }
 }
 
-Card & Simple_Deck::GetCard(){
+Card Simple_Deck::GetCard(){
     Card tmp = deck.back();
     deck.pop_back();
     return tmp;

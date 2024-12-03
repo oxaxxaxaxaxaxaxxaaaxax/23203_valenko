@@ -18,6 +18,3 @@ private:
     std::string quit_mode;
 }; 
 
-namespace{
-    Creator<Engine, Engine_3, std::string> c("tournament");
-}

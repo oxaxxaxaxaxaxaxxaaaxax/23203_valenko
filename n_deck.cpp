@@ -30,7 +30,7 @@ N_Deck::N_Deck(){
 }
 
 
-Card & N_Deck::GetCard(){
+Card N_Deck::GetCard(){
     assert(!deck.empty());
     Card tmp = deck.back();
     deck.pop_back();

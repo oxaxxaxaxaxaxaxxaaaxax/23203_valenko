@@ -8,9 +8,9 @@
 class Simple_Deck : public Deck{
 public:
     Simple_Deck();
-    Card & GetCard() override;
+    Card GetCard() override;
     //int GetVal();
-    ~Simple_Deck();
+    ~Simple_Deck() = default;
 private:
     std::vector<Card> deck;
 };

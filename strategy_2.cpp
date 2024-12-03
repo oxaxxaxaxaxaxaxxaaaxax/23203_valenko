@@ -7,7 +7,7 @@
 #include "strategy.h"
 
 
-bool Strategy_2::hit(Card & card, Player & player){
+bool Strategy_2::hit(Card card, Player & player){
     if(!stand_mode){
         player.GetHand().HitCard(card);
         hit_count++;

@@ -19,7 +19,7 @@ Basic_Deck::Basic_Deck(){
     Shuffle();
 }
 
-Card & Basic_Deck::GetCard(){
+Card Basic_Deck::GetCard(){
     assert(!deck.empty());
     Card tmp = deck.back();
     deck.pop_back();

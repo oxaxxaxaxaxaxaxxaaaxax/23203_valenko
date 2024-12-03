@@ -9,8 +9,9 @@ class N_Deck : public Deck{
 public:
     //N_Deck(size_t& n);
     N_Deck();
-    Card & GetCard() override;  
-    void Shuffle();            
+    Card GetCard() override;  
+    void Shuffle(); 
+    ~N_Deck() = default;           
 private:
     std::vector<Card> deck;
 };

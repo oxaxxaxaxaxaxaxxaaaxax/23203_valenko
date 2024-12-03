@@ -7,6 +7,7 @@
 #include "creator.h"
 #include "deck.h"
 #include "engine.h"
+#include "engine_3.h"
 #include "factory.h"
 #include "hand.h"
 #include "user_interface.h"
@@ -22,12 +23,6 @@ bool Engine_3::IsQuit(std::istream& is){
     }
     return false;
 }
-
-// std::ostream& operator<<(std::ostream& os, bool stand_mode_){
-//     stand_mode_ ? os << "stand" : os << "hit";
-//     return os;
-// }
-
 
 void Engine_3::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
     Player player_1(std::move(strategy_[0]), 1);
@@ -91,7 +86,6 @@ void Engine_3::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
 Player& Engine_3::ChooseWinner(Player& pl_1, Player& pl_2){
     return (pl_1.GetHand().GetTotalSum() >= pl_2.GetHand().GetTotalSum()) ? pl_1 : pl_2;
 }
-
 
 
 namespace{

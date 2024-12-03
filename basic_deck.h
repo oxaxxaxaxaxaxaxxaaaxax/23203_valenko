@@ -8,9 +8,9 @@
 class Basic_Deck : public Deck{
 public:
     Basic_Deck();
-    Card & GetCard() override;  
+    Card GetCard() override;  
     void Shuffle(); 
-    ~Basic_Deck();           
+    ~Basic_Deck() = default;           
     //динамический массив карт
 private:
     std::vector<Card> deck;

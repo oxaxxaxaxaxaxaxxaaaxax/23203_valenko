@@ -53,7 +53,7 @@ void Engine_1::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
 }
 
 
-Player& ChooseWinner(Player& pl_1, Player& pl_2){
+Player& Engine_1::ChooseWinner(Player& pl_1, Player& pl_2){
     return (pl_1.GetHand().GetTotalSum() >= pl_2.GetHand().GetTotalSum()) ? pl_1 : pl_2;
 }
 
@@ -61,6 +61,8 @@ Player& ChooseWinner(Player& pl_1, Player& pl_2){
 namespace{
     Creator<Engine_1, Engine, std::string> c("fast");
 }
+
+
 
 
 

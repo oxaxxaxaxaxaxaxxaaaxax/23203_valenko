@@ -5,6 +5,6 @@
 
 class Deck{
 public:
-    virtual Card & GetCard()=0;  
+    virtual Card GetCard()=0;  
     virtual ~Deck() = default;
 };

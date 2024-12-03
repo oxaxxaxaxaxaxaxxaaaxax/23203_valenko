@@ -9,16 +9,19 @@
 #include "player.h"
 #include "strategy.h"
 #include <memory>
+#include <numeric>
 #include <string>
 #include <vector>
 
 void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
     std::vector<Player> players_;
-    std::vector<size_t> numbers_;
+    std::vector<size_t> numbers_(strategy_.size());
     std::iota(numbers_.begin(), numbers_.end(), 1);
     for(auto& str : strategy_){
+        // Player player_(std::move(str), numbers_.back());
+        // players_.push_back(std::move(player_));
+        // numbers_.pop_back();
         players_.emplace_back(std::move(str), numbers_.back());
-        numbers_.pop_back();
     }
     for(auto& player_1 : players_){
         for(auto& player_2 : players_){

@@ -14,7 +14,12 @@
 // void User_Interface::ShowResult(std::string_view result){
 //         std::cout << result <<std::endl;
 // }
-
+void Console_Interface::ShowCardScore(int card_score_){
+    std::cout << card_score_;
+}
+void Console_Interface::ShowScore(int score_){
+    std::cout << score_;
+}
 
 void Console_Interface::ShowMethod(bool stand_mode_){
     std::cout << stand_mode_;
