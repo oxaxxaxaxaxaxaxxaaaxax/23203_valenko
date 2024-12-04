@@ -10,6 +10,7 @@ public:
     //Console_Interface();
    // void ShowResult(std::string_view result) override;  ///???????????????????????? const &  / std::string_view
     void ShowWiner(Player& player) override;
+    void ShowWiner(size_t player_number) override;
     void ShowMethod(bool stand_mode_) override;
     void ShowCardScore(int card_score_) override;
     void ShowScore(int score_) override;
