@@ -11,21 +11,23 @@ namespace{
 void Hand::HitCard(Card card){
     hand_.push_back(card);
     AddToSum(card.GetValue());
-    if(GetTotalSum() == victory_point){
-        SetUpVictory();
-    }  
+    CheckVictory();
     if(GetTotalSum() > victory_point){
         UpdateSum();
     }
-    SetUpBust();
+    CheckBust();
 }
 
-void Hand::SetUpVictory(){
-    victory_mode = true;
+void Hand::CheckVictory(){
+    if(GetTotalSum() == victory_point){
+        victory_mode = true;
+    }  
 } 
 
-void Hand::SetUpBust(){
-    bust_mode = true;
+void Hand::CheckBust(){
+    if(GetTotalSum() > victory_point){
+        bust_mode = true;
+    }
 }
 
 void Hand::ShowHand()const {
@@ -39,7 +41,8 @@ int Hand::GetTotalSum() const{
 }
 
 void Hand::AddToSum(int value){
-    total_summ+=value;
+    total_summ += value;
+    //std::cout << value << "   " << total_summ << std::endl;
 }
 
 void Hand::UpdateSum(){

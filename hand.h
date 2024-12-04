@@ -9,8 +9,8 @@ public:
     void HitCard(Card card);
     int GetTotalSum() const;
     void AddToSum(int value);
-    void SetUpBust();
-    void SetUpVictory();
+    void CheckBust();
+    void CheckVictory();
     void UpdateSum();
     Card& ShowLastCard(){
         return hand_.back();
@@ -20,7 +20,7 @@ public:
     ~Hand() = default;
 private:
     std::vector<Card> hand_;
-    int total_summ=0;
+    int total_summ = 0;
     bool bust_mode = false;
     bool victory_mode = false;
 };

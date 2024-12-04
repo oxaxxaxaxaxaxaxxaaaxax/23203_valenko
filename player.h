@@ -23,7 +23,7 @@ public:
     friend bool operator>=(Player& player_1, Player& player_2){
         return player_1.number>= player_2.number;
     }
-    Hand GetHand(){return hand;}
+    Hand& GetHand(){return hand;}
     ~Player() = default;
     //size_t GetNumber(){return number;}
 private:

@@ -21,6 +21,7 @@
 bool Strategy_1:: hit(Card card, Player & player){
     if (!stand_mode){
         player.GetHand().HitCard(card);
+        //std::cout << player.GetHand().GetTotalSum() <<std::endl;
         if(player.GetHand().GetTotalSum() >= 17){
             stand_mode = true; 
         }

@@ -30,8 +30,9 @@ void Engine_1::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
     player_2.strategy ->hit(deck->GetCard(), player_2);
     player_2.GetHand().ShowHand();
 
-    while(!(player_1.strategy ->hit(deck->GetCard(), player_1)) || !(player_2.strategy ->hit(deck->GetCard(), player_2))){
+    while((!(player_1.strategy ->hit(deck->GetCard(), player_1))) || (!(player_2.strategy ->hit(deck->GetCard(), player_2)))){
 
+        
         if(player_1.GetHand().GetVicMode() == true){
             interface->ShowWiner(player_1);
             return;

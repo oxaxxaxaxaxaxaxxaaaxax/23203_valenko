@@ -31,7 +31,7 @@ void Console_Interface::ShowWiner(Player& player){
 
 
 namespace{
-    Creator<Console_Interface, User_Interface, std::string> c("consol");
+    Creator<Console_Interface, User_Interface, std::string> c("console");
 }
 
 // namespace{

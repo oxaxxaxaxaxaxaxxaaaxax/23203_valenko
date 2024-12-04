@@ -22,6 +22,7 @@ void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
         // players_.push_back(std::move(player_));
         // numbers_.pop_back();
         players_.emplace_back(std::move(str), numbers_.back());
+        numbers_.pop_back();
     }
     for(auto& player_1 : players_){
         for(auto& player_2 : players_){
@@ -63,6 +64,7 @@ void Engine_2::Game(Player& player_1, Player& player_2, std::string& CurDeck, st
         
     }
 
+// чуз винер !!!!!
 }
 
 namespace{
