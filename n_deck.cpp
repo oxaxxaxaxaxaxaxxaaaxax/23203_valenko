@@ -27,6 +27,7 @@ N_Deck::N_Deck(){
             }
         }    
     }
+    Shuffle();
 }
 
 
@@ -35,6 +36,13 @@ Card N_Deck::GetCard(){
     Card tmp = deck.back();
     deck.pop_back();
     return tmp;
+}
+
+void N_Deck::GetCardBack(std::vector<Card>& cards){
+    for(auto& card : cards){
+        deck.push_back(card);
+    }
+    Shuffle();
 }
 
 void N_Deck::Shuffle(){

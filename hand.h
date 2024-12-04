@@ -15,6 +15,9 @@ public:
     Card& ShowLastCard(){
         return hand_.back();
     }
+    std::vector<Card>& ReturnCards(){return hand_;}
+    void EndGame();
+    //std::vector<Card>& GetHand(){return hand_;}
     bool GetBustMode(){return bust_mode;}
     bool GetVicMode(){return victory_mode;}
     ~Hand() = default;

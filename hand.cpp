@@ -31,9 +31,11 @@ void Hand::CheckBust(){
 }
 
 void Hand::ShowHand()const {
+    std::cout<< "card Hand" << std::endl;
     for(const auto& card : Hand::hand_){
         card.Show();
     }
+    std::cout<< " " << std::endl;
 }
 
 int Hand::GetTotalSum() const{
@@ -42,7 +44,6 @@ int Hand::GetTotalSum() const{
 
 void Hand::AddToSum(int value){
     total_summ += value;
-    //std::cout << value << "   " << total_summ << std::endl;
 }
 
 void Hand::UpdateSum(){
@@ -50,5 +51,11 @@ void Hand::UpdateSum(){
         if(card.GetValue() == ace_value){
             AddToSum(ace_bust);
         }
+    }
+}
+
+void Hand::EndGame(){
+    while(!(hand_.empty())){
+        hand_.pop_back();
     }
 }

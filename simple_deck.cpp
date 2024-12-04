@@ -24,6 +24,18 @@ Card Simple_Deck::GetCard(){
     return tmp;
 }
 
+void Simple_Deck::GetCardBack(std::vector<Card>& cards){
+    for(auto& card : cards){
+        deck.push_back(card);
+    }
+    Shuffle();
+}
+
+void Simple_Deck::Shuffle(){
+    std::random_device rd;
+    std::default_random_engine rng(rd());
+    std::shuffle(deck.begin(), deck.end(), rng);
+}
 
 namespace{
     Creator<Simple_Deck, Deck, std::string> c("simple_deck");

@@ -10,6 +10,7 @@ public:
     //N_Deck(size_t& n);
     N_Deck();
     Card GetCard() override;  
+    void GetCardBack(std::vector<Card>& cards) override;
     void Shuffle(); 
     ~N_Deck() = default;           
 private:

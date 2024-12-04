@@ -26,6 +26,13 @@ Card Basic_Deck::GetCard(){
     return tmp;
 }
 
+void Basic_Deck::GetCardBack(std::vector<Card>& cards){
+    for(auto& card : cards){
+        deck.push_back(card);
+    }
+    Shuffle();
+}
+
 void Basic_Deck::Shuffle(){
     std::random_device rd;
     std::default_random_engine rng(rd());

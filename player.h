@@ -13,8 +13,8 @@ public:
     Player(std::unique_ptr<Strategy> str_ ,const size_t &number_);
     Player(const Player &player) = delete;
     Player& operator=(const Player &other) = delete;
-    Player(Player &&) = default;
-    Player& operator=(Player &&) = default;
+    Player(Player &&player) = default;
+    Player& operator=(Player &&player) = default;
     std::unique_ptr <Strategy> strategy;
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
     friend bool operator==(Player& player_1, Player& player_2){
@@ -24,6 +24,7 @@ public:
         return player_1.number>= player_2.number;
     }
     Hand& GetHand(){return hand;}
+    size_t GetNumber() {return number;}
     ~Player() = default;
     //size_t GetNumber(){return number;}
 private:

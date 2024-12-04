@@ -29,6 +29,9 @@ void Console_Interface::ShowWiner(Player& player){
     std::cout << player << std::endl;
 }
 
+void Console_Interface::ShowWiner(size_t player_number){
+    std::cout << "Player" <<" " << player_number << " " << "is winner!";
+}
 
 namespace{
     Creator<Console_Interface, User_Interface, std::string> c("console");
