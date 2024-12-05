@@ -10,6 +10,7 @@ public:
     // Player& ChooseWinner(Player& pl_1, Player& pl_2) override;
     void Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2, std::string& CurDeck, std::string& CurInter) override;
     std::shared_ptr<Player> ChooseWinner(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2) override;
+    void EndGame(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2) override;
     // friend std::ostream& operator<<(std::ostream& os, bool stand_mode_){
     //     stand_mode_ ? os << "stand" : os << "hit";
     //     return os;

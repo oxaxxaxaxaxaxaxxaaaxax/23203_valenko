@@ -15,14 +15,19 @@
 //         std::cout << result <<std::endl;
 // }
 void Console_Interface::ShowCardScore(int card_score_){
-    std::cout << card_score_;
+    std::cout << "Cost of hitted card:"<< " "<< card_score_ << std::endl;
 }
 void Console_Interface::ShowScore(int score_){
-    std::cout << score_;
+    std::cout << "Score:" <<" "<<score_ << std::endl;
 }
 
 void Console_Interface::ShowMethod(bool stand_mode_){
-    std::cout << stand_mode_;
+
+    //std::cout <<  std::boolalpha << stand_mode_ << std::endl;
+    //std::cout <<  std::boolalpha << (stand_mode_ ? true : false) << std::endl;
+    stand_mode_ ? std::cout<< "stand" : std::cout<< "hit";
+    std::cout << std::endl;
+    
 }
 
 void Console_Interface::ShowWiner(Player& player){

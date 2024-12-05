@@ -31,11 +31,11 @@ void Hand::CheckBust(){
 }
 
 void Hand::ShowHand()const {
+    std::cout<< " " << std::endl;
     std::cout<< "card Hand" << std::endl;
     for(const auto& card : Hand::hand_){
         card.Show();
     }
-    std::cout<< " " << std::endl;
 }
 
 int Hand::GetTotalSum() const{
@@ -54,8 +54,11 @@ void Hand::UpdateSum(){
     }
 }
 
-void Hand::EndGame(){
+void Hand::FreeHand(){
     while(!(hand_.empty())){
         hand_.pop_back();
     }
+    bust_mode = false;
+    victory_mode = false;
+    total_summ =0;
 }

@@ -16,7 +16,7 @@ public:
         return hand_.back();
     }
     std::vector<Card>& ReturnCards(){return hand_;}
-    void EndGame();
+    void FreeHand();
     //std::vector<Card>& GetHand(){return hand_;}
     bool GetBustMode(){return bust_mode;}
     bool GetVicMode(){return victory_mode;}

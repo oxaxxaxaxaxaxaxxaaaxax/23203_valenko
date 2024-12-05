@@ -14,8 +14,12 @@ public:
     void ShowMethod(bool stand_mode_) override;
     void ShowCardScore(int card_score_) override;
     void ShowScore(int score_) override;
-    friend std::ostream& operator<<(std::ostream& os,const bool& stand_mode_){
-        stand_mode_ ? os << "stand" : os << "hit";
+    friend std::ostream& operator<<(std::ostream& os,bool stand_mode_){
+        if (stand_mode_) {
+            os << "stand";
+        } else {
+            os << "hit";
+        }
         return os;
     }
     ~Console_Interface()= default;

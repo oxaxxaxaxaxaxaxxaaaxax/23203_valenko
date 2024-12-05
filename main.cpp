@@ -9,7 +9,7 @@
 
 namespace po = boost::program_options;
 
-int main(int argc, char* argv[]){
+main(int argc, char* argv[]){
     po::options_description desc("Allowed options");
     desc.add_options()
     ("help", "produce help message")
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
     strategy_name.push_back("strategy_2");
     std::string deck_name = "n_deck";
     std::string interface_ = "console";
-    std::string game_ = "tournament";
+    std::string game_ = "detailed";
 
     std::vector<std::unique_ptr<Strategy>> strategy_;
     for(const auto& str : strategy_name){

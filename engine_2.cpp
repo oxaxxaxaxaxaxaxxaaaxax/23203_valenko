@@ -8,6 +8,7 @@
 #include "user_interface.h"
 #include "player.h"
 #include "strategy.h"
+#include "strategy_play.h"
 #include <map>
 #include <memory>
 #include <numeric>
@@ -54,8 +55,7 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             tournament_table[player_1] = ++tournament_table.at(player_1);
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
-            player_1->GetHand().EndGame();
-            player_2->GetHand().EndGame();
+            EndGame(player_1, player_2);
             //interface->ShowWiner(player_1);
             return;
         }
@@ -63,8 +63,7 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             tournament_table[player_2] = ++tournament_table.at(player_2);
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
-            player_1->GetHand().EndGame();
-            player_2->GetHand().EndGame();
+            EndGame(player_1, player_2);
             //interface->ShowWiner(player_2);
             return;
         }
@@ -72,8 +71,7 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             tournament_table[player_2] = ++tournament_table.at(player_2);
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
-            player_1->GetHand().EndGame();
-            player_2->GetHand().EndGame();
+            EndGame(player_1, player_2);
             //interface->ShowWiner(player_2);
             return;
         }
@@ -81,8 +79,7 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             tournament_table[player_1] = ++tournament_table.at(player_1);
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
-            player_1->GetHand().EndGame();
-            player_2->GetHand().EndGame();
+            EndGame(player_1, player_2);
             //interface->ShowWiner(player_1);
             return;
         }
@@ -91,9 +88,7 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     //deck->GetCardBack(player_1->GetHand());
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards());
-    player_1->GetHand().EndGame();
-    player_2->GetHand().EndGame();
-    
+    EndGame(player_1, player_2);
 }
 
 std::shared_ptr<Player> Engine_2::ChooseWinner(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
@@ -112,6 +107,13 @@ size_t Engine_2::ChooseTournamentWinner(){
     return winner_number;
 }
 
+
+void Engine_2::EndGame(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
+    pl_1->GetHand().FreeHand();
+    pl_1->strategy->End();
+    pl_2->GetHand().FreeHand();
+    pl_2->strategy->End();
+}
 
 namespace{
     Creator<Engine_2, Engine, std::string> c("tournament");

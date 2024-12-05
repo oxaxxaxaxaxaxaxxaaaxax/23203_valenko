@@ -21,6 +21,7 @@ void Engine_1::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
     
     Game(player_1, player_2, CurDeck, CurInter);
     interface->ShowWiner(*ChooseWinner(player_1,player_2));
+    EndGame(player_1, player_2);
 }
 
 void Engine_1::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2, std::string& CurDeck, std::string& CurInter){
@@ -37,31 +38,44 @@ void Engine_1::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
         
         if(player_1->GetHand().GetVicMode() == true){
             interface->ShowWiner(*player_1);
+            deck->GetCardBack( player_1->GetHand().ReturnCards());
+            deck->GetCardBack( player_2->GetHand().ReturnCards());
             return;
         }
         if(player_1->GetHand().GetBustMode() == true){
             interface->ShowWiner(*player_2);
+            deck->GetCardBack( player_1->GetHand().ReturnCards());
+            deck->GetCardBack( player_2->GetHand().ReturnCards());
             return;
         }
         if(player_2->GetHand().GetVicMode() == true){
             interface->ShowWiner(*player_2);
+            deck->GetCardBack( player_1->GetHand().ReturnCards());
+            deck->GetCardBack( player_2->GetHand().ReturnCards());
             return;
         }
         if(player_2->GetHand().GetBustMode() == true){
             interface->ShowWiner(*player_1);
+            deck->GetCardBack( player_1->GetHand().ReturnCards());
+            deck->GetCardBack( player_2->GetHand().ReturnCards());
             return;
         }
     }
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards());
-    player_1->GetHand().EndGame();
-    player_2->GetHand().EndGame();
 }
 
 std::shared_ptr<Player> Engine_1::ChooseWinner(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
     return (pl_1->GetHand().GetTotalSum() >= pl_2->GetHand().GetTotalSum()) ? pl_1 : pl_2;
 }
 
+
+void Engine_1::EndGame(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
+    pl_1->GetHand().FreeHand();
+    pl_1->strategy->End();
+    pl_2->GetHand().FreeHand();
+    pl_2->strategy->End();
+}
 
 namespace{
     Creator<Engine_1, Engine, std::string> c("fast");
