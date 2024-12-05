@@ -32,7 +32,6 @@ void Engine_3::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
     std::shared_ptr<Player> player_2(std::make_shared <Player>(std::move(strategy_[1]), 2));
     
     Game(player_1, player_2, CurDeck, CurInter);
-    interface->ShowWiner(*ChooseWinner(player_1,player_2));
     EndGame(player_1, player_2);
 }
 
@@ -93,6 +92,7 @@ void Engine_3::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     }
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards()); 
+    interface->ShowWiner(*ChooseWinner(player_1,player_2));
 }
 
 

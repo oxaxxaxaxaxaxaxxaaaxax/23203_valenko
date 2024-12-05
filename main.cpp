@@ -29,25 +29,23 @@ main(int argc, char* argv[]){
         return 1;
     }
 
-
-
-    // if(!vm.count("strategy")){
-    //     std::cout << desc << std::endl;
-    //     return 1;
-    // }
-    // std::vector<std::string> strategy_name = vm["strategy"].as<std::vector<std::string>>();
-    //     if(strategy_name.size() == 1){
-    //         std::cout << desc << std::endl;
-    //         return 1;
-    //     }
-    std::vector<std::string> strategy_name;
-    strategy_name.push_back("strategy_1");
-    strategy_name.push_back("strategy_2");
-    strategy_name.push_back("strategy_2");
-    strategy_name.push_back("strategy_2");
-    std::string deck_name = "n_deck";
-    std::string interface_ = "console";
-    std::string game_ = "detailed";
+    if(!vm.count("strategy")){
+        std::cout << desc << std::endl;
+        return 1;
+    }
+    std::vector<std::string> strategy_name = vm["strategy"].as<std::vector<std::string>>();
+        if(strategy_name.size() == 1){
+            std::cout << desc << std::endl;
+            return 1;
+        }
+    // std::vector<std::string> strategy_name;
+    // strategy_name.push_back("strategy_1");
+    // strategy_name.push_back("strategy_2");
+    // strategy_name.push_back("strategy_2");
+    // strategy_name.push_back("strategy_2");
+    // std::string deck_name = "n_deck";
+    // std::string interface_ = "console";
+    // std::string game_ = "fast";
 
     std::vector<std::unique_ptr<Strategy>> strategy_;
     for(const auto& str : strategy_name){
@@ -55,22 +53,22 @@ main(int argc, char* argv[]){
         //std::unique_ptr<Strategy> str_ = Factory<std::string, Strategy, std::function<Strategy*()>>::GetInstance()->CreateByName(str);
     }
 
-    // if(!vm.count("deck")){
-    //     std::cout << desc << std::endl;
-    //     return 1;
-    // }
-    // std::string deck_name = vm["deck"].as<std::string>();
-    // if(!vm.count("interface")){
-    //     std::cout << desc << std::endl;
-    //     return 1;
-    // }
-    // std::unique_ptr<Deck> deck = (Factory<std::string, Deck, std::function<Deck*()>>::GetInstance())->CreateByName(deck_name);
-    // std::string interface_ = vm["interface"].as<std::string>();
-    // if(!vm.count("game")){
-    //     std::cout << desc << std::endl;
-    //     return 1;
-    // }
-    // std::string game_ = vm["game"].as<std::string>();
+    if(!vm.count("deck")){
+        std::cout << desc << std::endl;
+        return 1;
+    }
+    std::string deck_name = vm["deck"].as<std::string>();
+    if(!vm.count("interface")){
+        std::cout << desc << std::endl;
+        return 1;
+    }
+    std::unique_ptr<Deck> deck = (Factory<std::string, Deck, std::function<Deck*()>>::GetInstance())->CreateByName(deck_name);
+    std::string interface_ = vm["interface"].as<std::string>();
+    if(!vm.count("game")){
+        std::cout << desc << std::endl;
+        return 1;
+    }
+    std::string game_ = vm["game"].as<std::string>();
 
     std::unique_ptr<Engine> mode = (Factory<std::string, Engine, std::function<Engine*()>>::GetInstance())->CreateByName(game_);
     mode->BlackJack(strategy_, deck_name, interface_);
