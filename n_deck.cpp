@@ -30,6 +30,13 @@ N_Deck::N_Deck(){
     Shuffle();
 }
 
+void N_Deck::ShowDeck(){
+    std::cout<< " " << std::endl;
+    std::cout<< "deck card" << std::endl;
+    for(const auto& card : deck){
+        card.Show();
+    }
+}
 
 Card N_Deck::GetCard(){
     assert(!deck.empty());

@@ -44,7 +44,15 @@ void Engine_3::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     player_2->strategy ->hit(deck->GetCard(), *player_2);
     player_2->GetHand().ShowHand();
 
-    while(!(player_1->strategy ->hit(deck->GetCard(), *player_1)) || !(player_2->strategy ->hit(deck->GetCard(), *player_2))){
+    //while(!(player_1->strategy ->hit(deck->GetCard(), *player_1)) || !(player_2->strategy ->hit(deck->GetCard(), *player_2))){
+    //while(!((player_1->strategy ->hit(deck->GetCard(), *player_1))&&(player_2->strategy ->hit(deck->GetCard(), *player_2))))
+    while (true) {
+        bool player1_stand = player_1->strategy->hit(deck->GetCard(), *player_1);
+        bool player2_stand = player_2->strategy->hit(deck->GetCard(), *player_2);
+
+        if (player1_stand && player2_stand) {
+            break;
+        }
 
         if(IsQuit(std::cin)){
             return;
@@ -91,7 +99,8 @@ void Engine_3::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
         return;
     }
     deck->GetCardBack( player_1->GetHand().ReturnCards());
-    deck->GetCardBack( player_2->GetHand().ReturnCards()); 
+    deck->GetCardBack( player_2->GetHand().ReturnCards());
+    deck-> ShowDeck();
     interface->ShowWiner(*ChooseWinner(player_1,player_2));
 }
 

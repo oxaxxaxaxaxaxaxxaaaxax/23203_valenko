@@ -16,6 +16,7 @@ public:
         suit = suits[distrib(rng)];
         rank = ranks[value_ - 2];
     }
+    Card card(Card& other): suit(other.suit),rank(other.rank),value(other.value)
     size_t GetValue()const{return value;}
     //void ChangeAceScore(Card card){card.value -= ace_bust;}
     void Show() const;

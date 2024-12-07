@@ -10,6 +10,7 @@ public:
     Simple_Deck();
     Card GetCard() override;
     void GetCardBack(std::vector<Card>& cards) override;
+    void ShowDeck() override;
     void Shuffle();
     //int GetVal();
     ~Simple_Deck() = default;

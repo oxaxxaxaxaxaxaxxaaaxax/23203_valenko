@@ -19,6 +19,17 @@ Basic_Deck::Basic_Deck(){
     Shuffle();
 }
 
+void Basic_Deck::ShowDeck(){
+    std::cout<< " " << std::endl;
+    std::cout<< "deck card" << std::endl;
+    int count =0;
+    for(const auto& card : deck){
+        card.Show();
+        count++;
+    }
+    std::cout<< count << std::endl;
+}
+
 Card Basic_Deck::GetCard(){
     assert(!deck.empty());
     Card tmp = deck.back();

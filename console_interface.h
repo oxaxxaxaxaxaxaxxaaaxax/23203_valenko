@@ -14,6 +14,7 @@ public:
     void ShowMethod(bool stand_mode_) override;
     void ShowCardScore(int card_score_) override;
     void ShowScore(int score_) override;
+    void ShowRound(size_t round) override;
     friend std::ostream& operator<<(std::ostream& os,bool stand_mode_){
         if (stand_mode_) {
             os << "stand";

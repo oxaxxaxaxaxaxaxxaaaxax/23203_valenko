@@ -7,13 +7,7 @@
 #include "factory.h"
 #include "user_interface.h"
 
-// User_Interface* CreateConsInt(){
-//     return new Console_Interface;
-// }
 
-// void User_Interface::ShowResult(std::string_view result){
-//         std::cout << result <<std::endl;
-// }
 void Console_Interface::ShowCardScore(int card_score_){
     std::cout << "Cost of hitted card:"<< " "<< card_score_ << std::endl;
 }
@@ -22,9 +16,6 @@ void Console_Interface::ShowScore(int score_){
 }
 
 void Console_Interface::ShowMethod(bool stand_mode_){
-
-    //std::cout <<  std::boolalpha << stand_mode_ << std::endl;
-    //std::cout <<  std::boolalpha << (stand_mode_ ? true : false) << std::endl;
     stand_mode_ ? std::cout<< "stand" : std::cout<< "hit";
     std::cout << std::endl;
     
@@ -32,6 +23,11 @@ void Console_Interface::ShowMethod(bool stand_mode_){
 
 void Console_Interface::ShowWiner(Player& player){
     std::cout << player << std::endl;
+}
+
+void Console_Interface::ShowRound(size_t round){
+    std::cout << " " << std::endl;
+    std::cout << "Round: "<< round << std::endl;
 }
 
 void Console_Interface::ShowWiner(size_t player_number){

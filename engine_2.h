@@ -15,4 +15,5 @@ public:
 private:
     std::map<std::shared_ptr<Player>, size_t> tournament_table;
     std::vector<std::shared_ptr<Player>> players_;
+    size_t round = 0;
 }; 

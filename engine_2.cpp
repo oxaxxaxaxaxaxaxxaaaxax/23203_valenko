@@ -35,6 +35,7 @@ void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
         for(auto& player_2 : players_){
             if(player_1 >= player_2) continue;
             Game(player_1, player_2, CurDeck, CurInter);
+
         }
     } 
     interface->ShowWiner(ChooseTournamentWinner());
@@ -44,12 +45,21 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     std::unique_ptr<Deck> deck = (Factory<std::string, Deck, std::function<Deck*()>>::GetInstance())->CreateByName(CurDeck);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
     
+    round++;
+    interface->ShowRound(round);
     player_1->strategy ->hit(deck->GetCard(), *player_1);
     player_1->GetHand().ShowHand();
     player_2->strategy ->hit(deck->GetCard(), *player_2);
     player_2->GetHand().ShowHand();
 
-    while((!(player_1->strategy ->hit(deck->GetCard(), *player_1))) || (!(player_2->strategy ->hit(deck->GetCard(), *player_2)))){
+
+    while (true) {
+        //Card card = deck->GetCard();
+        bool player1_stand = player_1->strategy->hit(deck->GetCard(), *player_1);
+        bool player2_stand = player_2->strategy->hit(deck->GetCard(), *player_2);
+        if (player1_stand && player2_stand) {
+            break;
+        }
 
         if(player_1->GetHand().GetVicMode() == true){
             tournament_table[player_1] = ++tournament_table.at(player_1);

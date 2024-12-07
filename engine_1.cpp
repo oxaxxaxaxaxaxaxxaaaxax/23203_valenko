@@ -32,8 +32,14 @@ void Engine_1::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     player_2->strategy ->hit(deck->GetCard(), *player_2);
     player_2->GetHand().ShowHand();
 
-    while((!(player_1->strategy ->hit(deck->GetCard(), *player_1))) || (!(player_2->strategy ->hit(deck->GetCard(), *player_2)))){
+    
+    while (true) {
+        bool player1_stand= player_1->strategy->hit(deck->GetCard(), *player_1);
+        bool player2_stand = player_2->strategy->hit(deck->GetCard(), *player_2);
 
+        if (player1_stand && player2_stand) {
+            break;
+        }
         
         if(player_1->GetHand().GetVicMode() == true){
             interface->ShowWiner(*player_1);

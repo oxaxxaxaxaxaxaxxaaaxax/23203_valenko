@@ -18,6 +18,14 @@ Simple_Deck::Simple_Deck(){
     }
 }
 
+void Simple_Deck::ShowDeck(){
+    std::cout<< " " << std::endl;
+    std::cout<< "deck card" << std::endl;
+    for(const auto& card : deck){
+        card.Show();
+    }
+}
+
 Card Simple_Deck::GetCard(){
     Card tmp = deck.back();
     deck.pop_back();
