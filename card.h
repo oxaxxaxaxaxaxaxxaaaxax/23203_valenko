@@ -16,9 +16,7 @@ public:
         suit = suits[distrib(rng)];
         rank = ranks[value_ - 2];
     }
-    Card card(Card& other): suit(other.suit),rank(other.rank),value(other.value)
     size_t GetValue()const{return value;}
-    //void ChangeAceScore(Card card){card.value -= ace_bust;}
     void Show() const;
     inline static const std::vector<std::string> suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
     inline static const std::vector<std::string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
@@ -41,8 +39,6 @@ public:
     ~Card() = default;
 
 private:
-//??????????????????????????????????
-// enum enum enum
     std::string suit;
     std::string rank;
     size_t value;

@@ -1,15 +1,37 @@
-#include "deck.h"
-#include "engine.h"
-#include "factory.h"
+#include <boost/program_options.hpp>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <memory>
 #include <vector>
-#include <boost/program_options.hpp>
+#include "deck.h"
+#include "engine.h"
+#include "factory.h"
 
 namespace po = boost::program_options;
 
-int main(int argc, char* argv[]){
+//struct Str_Data{};
+
+int main(int argc, char* argv[]){ 
+
+    // std::ifstream file("strategy_config.txt");
+    // if (!file.is_open()) {
+    //     std::cerr << "Ошибка при открытии файла" << std::endl;
+    //     return 1;
+    // }
+    // std::vector <std::string> for_strategy;
+    // std::string line;
+    // while (std::getline(file, line)) {
+    //     if(line.empty()){
+    //         continue;
+    //     }
+    //     std::istringstream iss(line);
+    //     std::string key, value;
+    //     if (std::getline(iss, key, '=') && std::getline(iss, value)) {
+    //         for_strategy.push_back(value);
+    //     }
+    // }
+
     po::options_description desc("Allowed options");
     desc.add_options()
     ("help", "produce help message")
@@ -22,6 +44,8 @@ int main(int argc, char* argv[]){
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);    
+
+
 
     if (vm.count("help")) {
         std::cout << desc << "\n";
@@ -37,7 +61,12 @@ int main(int argc, char* argv[]){
             std::cout << desc << std::endl;
             return 1;
         }
-    // std::vector<std::string> strategy_name;
+    //std::vector<std::string> strategy_name;
+    // strategy_name.push_back("strategy_1");
+    // strategy_name.push_back("strategy_2");
+    // strategy_name.push_back("strategy_2");
+    // strategy_name.push_back("strategy_2");
+    // strategy_name.push_back("strategy_1");
     // strategy_name.push_back("strategy_1");
     // strategy_name.push_back("strategy_2");
     // strategy_name.push_back("strategy_2");

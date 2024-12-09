@@ -1,0 +1,7 @@
+hit_limit=17
+special_first_card=10
+opponent_first_min_card_for2st=2
+opponent_first_max_card_for2st=9
+opponent_first_min_card_for3st=10
+for2st=strategy_2
+for3st=strategy_3

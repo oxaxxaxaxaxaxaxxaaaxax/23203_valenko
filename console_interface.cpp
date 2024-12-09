@@ -38,6 +38,3 @@ namespace{
     Creator<Console_Interface, User_Interface, std::string> c("console");
 }
 
-// namespace{
-//     bool b = (Factory<string, User_Interface, User_Interface * (*)()>::GetInstance())->Register("ConsoleInterface", &CreateConsInt);
-// }

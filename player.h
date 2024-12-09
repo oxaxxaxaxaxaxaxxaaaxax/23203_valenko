@@ -26,7 +26,6 @@ public:
     Hand& GetHand(){return hand;}
     size_t GetNumber() {return number;}
     ~Player() = default;
-    //size_t GetNumber(){return number;}
 private:
     size_t number;
     Hand hand;

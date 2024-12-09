@@ -1,22 +1,23 @@
+#include "engine_1.h"
+
+#include <memory>
+#include <vector>
+
 #include "card.h"
 #include "creator.h"
 #include "deck.h"
 #include "engine.h"
-#include "engine_1.h"
 #include "factory.h"
 #include "hand.h"
 #include "user_interface.h"
 #include "player.h"
 #include "strategy.h"
-#include <memory>
-#include <vector>
+
 
 
 void Engine_1::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
-    //std::unique_ptr<Strategy> str_1 = (Factory<std::string, Strategy, Strategy* (*)()>::GetInstance())->CreateByName(strategy_[0]);
     std::shared_ptr<Player> player_1(std::make_shared <Player>(std::move(strategy_[0]), 1));
-    //std::unique_ptr<Strategy> str_2 = (Factory<std::string, Strategy, Strategy* (*)()>::GetInstance())->CreateByName(strategy_[1]);
     std::shared_ptr<Player> player_2(std::make_shared <Player>(std::move(strategy_[1]), 2));
     
     Game(player_1, player_2, CurDeck, CurInter);
@@ -87,14 +88,3 @@ namespace{
     Creator<Engine_1, Engine, std::string> c("fast");
 }
 
-
-
-
-
-// Engine * CreateEngine(){
-//     return new Engine_1;
-// }
-
-// namespace{
-//     bool b = (Factory<string, Engine, Engine*(*)()>::GetInstance())->Register("mode_1", &CreateEngine);
-// }

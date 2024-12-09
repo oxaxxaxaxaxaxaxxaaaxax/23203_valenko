@@ -1,30 +1,28 @@
-#include "card.h"
-#include "creator.h"
-#include "deck.h"
-#include "engine.h"
 #include "engine_2.h"
-#include "factory.h"
-#include "hand.h"
-#include "user_interface.h"
-#include "player.h"
-#include "strategy.h"
-#include "strategy_play.h"
+
 #include <map>
 #include <memory>
 #include <numeric>
 #include <string>
 #include <vector>
 
+#include "card.h"
+#include "creator.h"
+#include "deck.h"
+#include "engine.h"
+#include "factory.h"
+#include "hand.h"
+#include "user_interface.h"
+#include "player.h"
+#include "strategy.h"
+#include "strategy_play.h"
+
+
 void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
-    //std::vector<Player> players_;
     std::vector<size_t> numbers_(strategy_.size());
     std::iota(numbers_.begin(), numbers_.end(), 1);
     for(auto& str : strategy_){
-        // Player player_(std::move(str), numbers_.back());
-        // players_.push_back(std::move(player_));
-        // numbers_.pop_back();
-        //players_.emplace(std::make_shared<Player>()б);
         players_.emplace_back(std::make_shared<Player>(std::move(str), numbers_.back()));
         numbers_.pop_back();
     }
@@ -46,6 +44,7 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
     
     round++;
+
     interface->ShowRound(round);
     player_1->strategy ->hit(deck->GetCard(), *player_1);
     player_1->GetHand().ShowHand();
@@ -54,7 +53,6 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
 
 
     while (true) {
-        //Card card = deck->GetCard();
         bool player1_stand = player_1->strategy->hit(deck->GetCard(), *player_1);
         bool player2_stand = player_2->strategy->hit(deck->GetCard(), *player_2);
         if (player1_stand && player2_stand) {
@@ -66,7 +64,6 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
-            //interface->ShowWiner(player_1);
             return;
         }
         if(player_1->GetHand().GetBustMode() == true){
@@ -74,7 +71,6 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
-            //interface->ShowWiner(player_2);
             return;
         }
         if(player_2->GetHand().GetVicMode() == true){
@@ -82,7 +78,6 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
-            //interface->ShowWiner(player_2);
             return;
         }
         if(player_2->GetHand().GetBustMode() == true){
@@ -90,12 +85,10 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
-            //interface->ShowWiner(player_1);
             return;
         }
     }
     tournament_table[ChooseWinner(player_1,player_2)] = ++tournament_table.at(ChooseWinner(player_1,player_2));
-    //deck->GetCardBack(player_1->GetHand());
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards());
     EndGame(player_1, player_2);

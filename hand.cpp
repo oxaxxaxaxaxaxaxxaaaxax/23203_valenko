@@ -1,6 +1,7 @@
+#include "hand.h"
 #include "card.h"
 #include "deck.h"
-#include "hand.h"
+
 
 namespace{
     constexpr size_t ace_value = 11;

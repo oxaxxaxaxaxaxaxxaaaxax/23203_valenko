@@ -1,13 +1,14 @@
-#include "card.h"
-#include "creator.h"
 #include "simple_deck.h"
-#include "factory.h"
+
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <random>
 #include <vector>
 
+#include "card.h"
+#include "creator.h"
+#include "factory.h"
 
 Simple_Deck::Simple_Deck(){
     std::random_device rd;
@@ -49,10 +50,3 @@ namespace{
     Creator<Simple_Deck, Deck, std::string> c("simple_deck");
 }
 
-// Deck* CreateSimDeck(){
-//     return new Simple_Deck;
-// }
-
-// namespace{
-//     bool b = (Factory<string, Deck, Deck* (*)()>::GetInstance())->Register("Simple_Deck", &CreateSimDeck);
-// }

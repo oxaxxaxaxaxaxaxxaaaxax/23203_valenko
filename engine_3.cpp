@@ -25,8 +25,6 @@ bool Engine_3::IsQuit(std::istream& is){
 }
 
 void Engine_3::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
-    // Player player_1(std::move(strategy_[0]), 1);
-    // Player player_2(std::move(strategy_[1]), 2);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
     std::shared_ptr<Player> player_1(std::make_shared <Player>(std::move(strategy_[0]), 1));
     std::shared_ptr<Player> player_2(std::make_shared <Player>(std::move(strategy_[1]), 2));
@@ -44,8 +42,6 @@ void Engine_3::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     player_2->strategy ->hit(deck->GetCard(), *player_2);
     player_2->GetHand().ShowHand();
 
-    //while(!(player_1->strategy ->hit(deck->GetCard(), *player_1)) || !(player_2->strategy ->hit(deck->GetCard(), *player_2))){
-    //while(!((player_1->strategy ->hit(deck->GetCard(), *player_1))&&(player_2->strategy ->hit(deck->GetCard(), *player_2))))
     while (true) {
         bool player1_stand = player_1->strategy->hit(deck->GetCard(), *player_1);
         bool player2_stand = player_2->strategy->hit(deck->GetCard(), *player_2);
@@ -100,7 +96,6 @@ void Engine_3::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     }
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards());
-    deck-> ShowDeck();
     interface->ShowWiner(*ChooseWinner(player_1,player_2));
 }
 

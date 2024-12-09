@@ -1,13 +1,15 @@
 #include "basic_deck.h"
 
-#include <assert.h>
-#include "card.h"
-#include "creator.h"
-#include "factory.h"
 #include <algorithm>
+#include <assert.h>
 #include <cstdlib>
 #include <random>
 #include <vector>
+
+#include "card.h"
+#include "creator.h"
+#include "factory.h"
+
 
 
 Basic_Deck::Basic_Deck(){
@@ -31,6 +33,12 @@ void Basic_Deck::ShowDeck(){
 }
 
 Card Basic_Deck::GetCard(){
+    // if(deck.empty()){
+    //     Basic_Deck A;
+    //     while(!A.GetDeck().empty()){
+    //         deck.push_back(A.GetDeck())
+    //     }
+    // }
     assert(!deck.empty());
     Card tmp = deck.back();
     deck.pop_back();

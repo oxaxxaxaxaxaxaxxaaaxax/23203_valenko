@@ -11,4 +11,3 @@ struct Creator {
         //Factory<std::string, Strategy, Strategy * (*)()>::GetInstance()->Register("Strategy_1", []() -> auto {return new T();});
     }
 };
-//key std::string
