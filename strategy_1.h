@@ -7,7 +7,7 @@
 
 class Strategy_1 : public Strategy_Play{
 public:
-    Strategy_1() = default;
+    //Strategy_1(){}
     bool hit(Card card, Player & player) override;
 private:    
 };

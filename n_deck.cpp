@@ -1,16 +1,20 @@
 #include "n_deck.h"
 #include <algorithm>
+#include <assert.h>
 #include <cstdlib>
+#include <iostream>
 #include <random>
 #include <vector>
-#include <assert.h>
 #include "card.h"
 #include "creator.h"
 #include "factory.h"
 
 
-N_Deck::N_Deck(){
-    for(int i =0;i<4; i++){
+N_Deck::N_Deck(std::vector<int> data){
+    int n = data.back();
+    //int n = std::any_cast<int>(data.back());
+    //auto n = data.back();
+    for(int i =0;i < n; i++){
         for(const auto& suit: Card::suits){
             for(const auto& rank: Card::ranks){
                 deck.emplace_back(suit, rank, Card::RankValue.at(rank));
@@ -50,5 +54,7 @@ void N_Deck::Shuffle(){
 
 
 namespace{
-    Creator<N_Deck, Deck, std::string> c("n_deck");
+    Creator<N_Deck, Deck, std::string, std::vector<int>> c("n_deck");
 }//&777как сконструкторить n
+//СПРОСИТЬ КАК ЭТО ПОДАВАТЬ
+

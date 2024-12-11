@@ -1,11 +1,13 @@
 #pragma once
+#include <any>
+#include <functional>
 #include <map>
 #include <memory>
 #include <string>
-#include "strategy.h"
+//#include "strategy.h"
 
 
-template<class Key,class T, class ProductCreator>
+template<class Key,class T>
 
 class Factory{
 public:
@@ -14,18 +16,21 @@ public:
         return &f; 
     }
     //void RegisterStrategy(Key &name, T * (creator)()){
-    bool Register(const Key &name, ProductCreator creator){
+    template<class... Types>
+    bool Register(const Key &name, std::any creator){
         creators_[name] = creator;
         return true;
     }
-    std::unique_ptr<T> CreateByName(const Key &name){
-        auto creator = creators_.at(name);
-        auto* u = creator();  //creator() не найдено
+    template<class... Types>
+    std::unique_ptr<T> CreateByName(const Key &name, Types...args){
+        auto creator = std::any_cast<std::function<T*(Types ...)>>(creators_.at(name));
+        auto* u = creator(args...);  //creator() не найдено
         std::unique_ptr<T> u_ptr{u};
         return std::move(u_ptr);
     }
+    //std::function<int(int, int)> 
 
 private:
     //std::map <Key, T * (*)()> creators_; 
-    std::map <Key, ProductCreator> creators_;
+    std::map <Key, std::any> creators_;
 };

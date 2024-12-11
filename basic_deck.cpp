@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <cstdlib>
+#include <iostream>
 #include <random>
 #include <vector>
 
@@ -12,7 +13,7 @@
 
 
 
-Basic_Deck::Basic_Deck(){
+Basic_Deck::Basic_Deck(std::vector<int>){
     for(const auto& suit : Card::suits){
         for(const auto& rank : Card::ranks){
             deck.emplace_back(suit, rank, Card::RankValue.at(rank));
@@ -33,12 +34,6 @@ void Basic_Deck::ShowDeck(){
 }
 
 Card Basic_Deck::GetCard(){
-    // if(deck.empty()){
-    //     Basic_Deck A;
-    //     while(!A.GetDeck().empty()){
-    //         deck.push_back(A.GetDeck())
-    //     }
-    // }
     assert(!deck.empty());
     Card tmp = deck.back();
     deck.pop_back();
@@ -61,13 +56,13 @@ void Basic_Deck::Shuffle(){
 
 
 namespace{
-    Creator<Basic_Deck, Deck, std::string> c("basic_deck");
+    Creator<Basic_Deck, Deck, std::string, std::vector<int>> c("basic_deck");
 }
 
-// Deck* CreateBasDeck(){
-//     return new Basic_Deck;
+// Deck* CreateBasDeck(std::vector<std::any> data){
+//     return new Basic_Deck(data);
 // }
 
 // namespace{
-//     bool b = (Factory<string, Deck, Deck* (*)()>::GetInstance())->Register("Basic_Deck", &CreateBasDeck);
+//     bool b = (Factory<std::string, Deck, Deck* (*)(std::vector<std::any>)>::GetInstance())->Register("basic_deck", &CreateBasDeck);
 // }

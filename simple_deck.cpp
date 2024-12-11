@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 #include <random>
 #include <vector>
 
@@ -10,7 +11,7 @@
 #include "creator.h"
 #include "factory.h"
 
-Simple_Deck::Simple_Deck(){
+Simple_Deck::Simple_Deck(std::vector<int>){
     std::random_device rd;
     std::default_random_engine rng(rd());
     std::uniform_int_distribution<> distrib(2,11);
@@ -47,6 +48,6 @@ void Simple_Deck::Shuffle(){
 }
 
 namespace{
-    Creator<Simple_Deck, Deck, std::string> c("simple_deck");
+    Creator<Simple_Deck, Deck, std::string, std::vector<int>> c("simple_deck");
 }
 

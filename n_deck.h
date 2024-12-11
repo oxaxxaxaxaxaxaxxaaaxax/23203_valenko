@@ -7,7 +7,8 @@
 
 class N_Deck : public Deck{
 public:
-    N_Deck();
+    //N_Deck(std::vector<int> data);
+    N_Deck(std::vector<int> data);
     Card GetCard() override;  
     void GetCardBack(std::vector<Card>& cards) override;
     void ShowDeck() override;

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "hand.h"
 #include "card.h"
 #include "deck.h"
@@ -33,7 +34,7 @@ void Hand::CheckBust(){
 
 void Hand::ShowHand()const {
     std::cout<< " " << std::endl;
-    std::cout<< "card Hand" << std::endl;
+    std::cout<< "Cards: ";
     for(const auto& card : Hand::hand_){
         card.Show();
     }

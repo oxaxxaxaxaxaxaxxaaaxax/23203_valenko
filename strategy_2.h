@@ -6,7 +6,7 @@
 
 class Strategy_2 : public Strategy_Play{
 public:
-    Strategy_2() = default;
+    //Strategy_2(){}
     bool hit(Card card, Player & player) override;
     //void stand() override;
     //int GetSumm() override;

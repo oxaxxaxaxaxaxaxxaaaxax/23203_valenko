@@ -18,8 +18,8 @@
 #include "strategy_play.h"
 
 
-void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::string& CurInter){
-    std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
+void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, std::vector<int> deck_data, std::string& CurInter){
+    std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     std::vector<size_t> numbers_(strategy_.size());
     std::iota(numbers_.begin(), numbers_.end(), 1);
     for(auto& str : strategy_){
@@ -32,16 +32,16 @@ void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
     for(auto& player_1 : players_){
         for(auto& player_2 : players_){
             if(player_1 >= player_2) continue;
-            Game(player_1, player_2, CurDeck, CurInter);
+            Game(player_1, player_2, CurDeck,deck_data,CurInter);
 
         }
     } 
     interface->ShowWiner(ChooseTournamentWinner());
 }
 
-void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2, std::string& CurDeck, std::string& CurInter){
-    std::unique_ptr<Deck> deck = (Factory<std::string, Deck, std::function<Deck*()>>::GetInstance())->CreateByName(CurDeck);
-    std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
+void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2, std::string& CurDeck,std::vector<int> deck_data, std::string& CurInter){
+    std::unique_ptr<Deck> deck = (Factory<std::string, Deck>::GetInstance())->CreateByName(CurDeck,deck_data);
+    std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     
     round++;
 
@@ -91,6 +91,7 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     tournament_table[ChooseWinner(player_1,player_2)] = ++tournament_table.at(ChooseWinner(player_1,player_2));
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards());
+    //deck->ShowDeck();
     EndGame(player_1, player_2);
 }
 

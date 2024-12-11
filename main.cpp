@@ -1,3 +1,4 @@
+#include <any>
 #include <boost/program_options.hpp>
 #include <fstream>
 #include <functional>
@@ -9,9 +10,6 @@
 #include "factory.h"
 
 namespace po = boost::program_options;
-
-//struct Str_Data{};
-
 int main(int argc, char* argv[]){ 
 
     // std::ifstream file("strategy_config.txt");
@@ -36,7 +34,8 @@ int main(int argc, char* argv[]){
     desc.add_options()
     ("help", "produce help message")
     ("strategy", po::value<std::vector<std::string>>()->multitoken(), "set --strategy= your strategy name")
-    ("deck", po::value<std::string>()->default_value("basic_deck"), "set --deck=set count of deck ")
+    ("deck", po::value<std::string>()->default_value("basic_deck"), "set --deck=set kind of deck ")
+    ("count", po::value<int>()->default_value(1), "set --count=set count of deck, if count==1 skip")
     ("game", po::value<std::string>(), "set --game= your selected mode for game")
     ("interface", po::value<std::string>(), "set --interface=selected interface")
 ;
@@ -61,7 +60,7 @@ int main(int argc, char* argv[]){
             std::cout << desc << std::endl;
             return 1;
         }
-    //std::vector<std::string> strategy_name;
+    // std::vector<std::string> strategy_name;
     // strategy_name.push_back("strategy_1");
     // strategy_name.push_back("strategy_2");
     // strategy_name.push_back("strategy_2");
@@ -74,27 +73,33 @@ int main(int argc, char* argv[]){
     // strategy_name.push_back("strategy_1");
     // std::string deck_name = "basic_deck";
     // std::string interface_ = "console";
-    // std::string game_ = "tournament";
+    // std::string game_ = "fast";
 
     std::vector<std::unique_ptr<Strategy>> strategy_;
     for(const auto& str : strategy_name){
-        strategy_.emplace_back(Factory<std::string, Strategy, std::function<Strategy*()>>::GetInstance()->CreateByName(str));
+        strategy_.emplace_back(Factory<std::string, Strategy>::GetInstance()->CreateByName(str));
         //std::unique_ptr<Strategy> str_ = Factory<std::string, Strategy, std::function<Strategy*()>>::GetInstance()->CreateByName(str);
     }
+    //std::any deck;
+    std::vector<int> deck_data;
+    int count_deck = vm["count"].as<int>();
+    //deck = count_deck;
+    deck_data.push_back(count_deck);
     std::string deck_name = vm["deck"].as<std::string>();
-    std::unique_ptr<Deck> deck = (Factory<std::string, Deck, std::function<Deck*()>>::GetInstance())->CreateByName(deck_name);
+    
     if(!vm.count("interface")){
         std::cout << desc << std::endl;
         return 1;
     }
+    std::any interface;
+    std::vector<std::any> interface_data;
     std::string interface_ = vm["interface"].as<std::string>();
     if(!vm.count("game")){
         std::cout << desc << std::endl;
         return 1;
     }
     std::string game_ = vm["game"].as<std::string>();
-
-    std::unique_ptr<Engine> mode = (Factory<std::string, Engine, std::function<Engine*()>>::GetInstance())->CreateByName(game_);
-    mode->BlackJack(strategy_, deck_name, interface_);
+    std::unique_ptr<Engine> mode = (Factory<std::string, Engine>::GetInstance()->CreateByName(game_));
+    mode->BlackJack(strategy_, deck_name, deck_data, interface_);
     return 0;
 }

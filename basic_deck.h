@@ -9,7 +9,7 @@
 
 class Basic_Deck : public Deck{
 public:
-    Basic_Deck();
+    Basic_Deck(std::vector<int>);
     Basic_Deck(Basic_Deck&& other):deck(std::move(other.deck)){}
     Card GetCard() override;  
     void GetCardBack(std::vector<Card>& cards) override;

@@ -8,6 +8,7 @@
 
 class Console_Interface: public User_Interface{
 public:
+    Console_Interface(){}
     void ShowWiner(Player& player) override;
     void ShowWiner(size_t player_number) override;
     void ShowMethod(bool stand_mode_) override;

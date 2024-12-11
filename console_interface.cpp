@@ -16,6 +16,7 @@ void Console_Interface::ShowScore(int score_){
 }
 
 void Console_Interface::ShowMethod(bool stand_mode_){
+    std::cout << "Current action: ";
     stand_mode_ ? std::cout<< "stand" : std::cout<< "hit";
     std::cout << std::endl;
     
