@@ -6,7 +6,7 @@
 
 class Simple_Deck : public Deck{
 public:
-    Simple_Deck(std::vector<int>);
+    Simple_Deck(int);
     Card GetCard() override;
     void GetCardBack(std::vector<Card>& cards) override;
     void ShowDeck() override;

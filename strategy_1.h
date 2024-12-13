@@ -7,8 +7,9 @@
 
 class Strategy_1 : public Strategy_Play{
 public:
-    //Strategy_1(){}
-    bool hit(Card card, Player & player) override;
-private:    
+    Strategy_1(std::vector<int> strategy_data){}
+    bool hit(Card card, Player & player, Card& opponent_card) override;
+private:  
+    int hit_limit=17;
 };
 

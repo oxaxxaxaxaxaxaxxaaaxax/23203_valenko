@@ -6,12 +6,15 @@
 #include "factory.h"
 #include "strategy.h"
 
+namespace{
+    static constexpr int hit_count_lim = 3;
+}
 
-bool Strategy_2::hit(Card card, Player & player){
+bool Strategy_2::hit(Card card, Player & player, Card& opponent_card){
     if(!stand_mode){
         player.GetHand().HitCard(card);
         hit_count++;
-        if(hit_count == 3){
+        if(hit_count == hit_count_lim){
             stand_mode = true;
         }
     }
@@ -20,7 +23,7 @@ bool Strategy_2::hit(Card card, Player & player){
 
 
 namespace{
-    static Creator<Strategy_2,Strategy, std::string> c("strategy_2");
+    static Creator<Strategy_2,Strategy, std::string,std::vector<int>> c("strategy_2");
 }
 
 // Strategy * CreateStrategy_2(){

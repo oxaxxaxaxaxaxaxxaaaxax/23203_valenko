@@ -9,11 +9,14 @@
 #include "player.h"
 #include "strategy.h"
 
+namespace{
+    constexpr int hit_limit = 17;
+}
 
-bool Strategy_1:: hit(Card card, Player & player){
+bool Strategy_1:: hit(Card card, Player & player, Card& opponent_card){
     if (!stand_mode){
         player.GetHand().HitCard(card);
-        if(player.GetHand().GetTotalSum() >= 17){
+        if(player.GetHand().GetTotalSum() >= hit_limit){
             stand_mode = true; 
         }
     }
@@ -21,5 +24,5 @@ bool Strategy_1:: hit(Card card, Player & player){
 }
 
 namespace {
-static Creator<Strategy_1, Strategy, std::string> c("strategy_1");
+static Creator<Strategy_1, Strategy, std::string,std::vector<int>> c("strategy_1");
 }

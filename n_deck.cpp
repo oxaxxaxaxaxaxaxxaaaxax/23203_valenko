@@ -10,8 +10,7 @@
 #include "factory.h"
 
 
-N_Deck::N_Deck(std::vector<int> data){
-    int n = data.back();
+N_Deck::N_Deck(int n){
     //int n = std::any_cast<int>(data.back());
     //auto n = data.back();
     for(int i =0;i < n; i++){
@@ -54,7 +53,7 @@ void N_Deck::Shuffle(){
 
 
 namespace{
-    Creator<N_Deck, Deck, std::string, std::vector<int>> c("n_deck");
+    Creator<N_Deck, Deck, std::string, int> c("n_deck");
 }//&777как сконструкторить n
 //СПРОСИТЬ КАК ЭТО ПОДАВАТЬ
 

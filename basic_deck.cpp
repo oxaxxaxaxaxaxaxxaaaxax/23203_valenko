@@ -13,7 +13,7 @@
 
 
 
-Basic_Deck::Basic_Deck(std::vector<int>){
+Basic_Deck::Basic_Deck(int){
     for(const auto& suit : Card::suits){
         for(const auto& rank : Card::ranks){
             deck.emplace_back(suit, rank, Card::RankValue.at(rank));
@@ -56,7 +56,7 @@ void Basic_Deck::Shuffle(){
 
 
 namespace{
-    Creator<Basic_Deck, Deck, std::string, std::vector<int>> c("basic_deck");
+    Creator<Basic_Deck, Deck, std::string, int> c("basic_deck");
 }
 
 // Deck* CreateBasDeck(std::vector<std::any> data){

@@ -4,36 +4,53 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <sstream>
+#include <string>
 #include <vector>
 #include "deck.h"
 #include "engine.h"
 #include "factory.h"
 
+std::vector<int> GetDataStr(std::string config_name){
+    std::ifstream file(config_name);
+    file.exceptions(std::ios::failbit | std::ios::badbit);
+    std::vector <int> for_strategy;
+    std::string line, key, value;
+    while (true) {
+        if(file.eof()){
+            break;
+        }
+        std::getline(file, line);
+        // if(line.empty()){
+        //     continue;
+        // }
+        std::istringstream iss(line);
+        iss.exceptions(std::ios::failbit | std::ios::badbit);
+        if (std::getline(iss, key, '=')){
+            std::getline(iss, value);
+            for_strategy.push_back(std::stoi(value));
+        }
+    }
+    file.close();
+    return for_strategy;
+}
+
+void EditConfigs(std::vector<std::string>& configs_name, std::string& dir_path, std::vector<std::unique_ptr<Strategy>>& strategy_){
+    for(const auto& conf : configs_name){
+        std::string file_path = dir_path + "/" + conf;
+        strategy_.emplace_back(Factory<std::string, Strategy>::GetInstance()->CreateByName("strategy_config", GetDataStr(file_path)));
+    }
+}
+
 namespace po = boost::program_options;
 int main(int argc, char* argv[]){ 
-
-    // std::ifstream file("strategy_config.txt");
-    // if (!file.is_open()) {
-    //     std::cerr << "Ошибка при открытии файла" << std::endl;
-    //     return 1;
-    // }
-    // std::vector <std::string> for_strategy;
-    // std::string line;
-    // while (std::getline(file, line)) {
-    //     if(line.empty()){
-    //         continue;
-    //     }
-    //     std::istringstream iss(line);
-    //     std::string key, value;
-    //     if (std::getline(iss, key, '=') && std::getline(iss, value)) {
-    //         for_strategy.push_back(value);
-    //     }
-    // }
 
     po::options_description desc("Allowed options");
     desc.add_options()
     ("help", "produce help message")
     ("strategy", po::value<std::vector<std::string>>()->multitoken(), "set --strategy= your strategy name")
+    ("configs", po::value<std::vector<std::string>>()->multitoken(), "set filename to your strategy")
+    ("dir_path", po::value<std::string>(), "set path to directory which contains configs file")
     ("deck", po::value<std::string>()->default_value("basic_deck"), "set --deck=set kind of deck ")
     ("count", po::value<int>()->default_value(1), "set --count=set count of deck, if count==1 skip")
     ("game", po::value<std::string>(), "set --game= your selected mode for game")
@@ -51,15 +68,30 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
+    std::vector<std::unique_ptr<Strategy>> strategy_;
+    
+    if(vm.count("configs")){
+        std::string dir_path = vm["dir_path"].as<std::string>();
+        std::vector<std::string> configs_name = vm["configs"].as<std::vector<std::string>>();
+        if(!configs_name.empty()){
+            try{
+                EditConfigs(configs_name, dir_path, strategy_);
+            }
+            catch(const std::ios_base::failure& e){
+                std::cerr << "Error while reading a file " << e.what() << std::endl;
+                return 1;
+            }
+        }        
+    }
+    //std::string dir_path = "/home/oksana/programm/23203_valenko/lab_2";
+    //std::vector<std::string> configs_name;
+    //configs_name.push_back("strategy_4.txt");
+
     if(!vm.count("strategy")){
         std::cout << desc << std::endl;
         return 1;
     }
     std::vector<std::string> strategy_name = vm["strategy"].as<std::vector<std::string>>();
-        if(strategy_name.size() == 1){
-            std::cout << desc << std::endl;
-            return 1;
-        }
     // std::vector<std::string> strategy_name;
     // strategy_name.push_back("strategy_1");
     // strategy_name.push_back("strategy_2");
@@ -71,28 +103,22 @@ int main(int argc, char* argv[]){
     // strategy_name.push_back("strategy_2");
     // strategy_name.push_back("strategy_2");
     // strategy_name.push_back("strategy_1");
-    // std::string deck_name = "basic_deck";
+    // int count_deck = 6;
+    // std::string deck_name = "n_deck";
     // std::string interface_ = "console";
-    // std::string game_ = "fast";
-
-    std::vector<std::unique_ptr<Strategy>> strategy_;
+    // std::string game_ = "tournament";
+    std::vector<int> data;
     for(const auto& str : strategy_name){
-        strategy_.emplace_back(Factory<std::string, Strategy>::GetInstance()->CreateByName(str));
-        //std::unique_ptr<Strategy> str_ = Factory<std::string, Strategy, std::function<Strategy*()>>::GetInstance()->CreateByName(str);
+        strategy_.emplace_back(Factory<std::string, Strategy>::GetInstance()->CreateByName(str, data));
     }
-    //std::any deck;
-    std::vector<int> deck_data;
     int count_deck = vm["count"].as<int>();
-    //deck = count_deck;
-    deck_data.push_back(count_deck);
     std::string deck_name = vm["deck"].as<std::string>();
     
     if(!vm.count("interface")){
         std::cout << desc << std::endl;
         return 1;
     }
-    std::any interface;
-    std::vector<std::any> interface_data;
+    
     std::string interface_ = vm["interface"].as<std::string>();
     if(!vm.count("game")){
         std::cout << desc << std::endl;
@@ -100,6 +126,6 @@ int main(int argc, char* argv[]){
     }
     std::string game_ = vm["game"].as<std::string>();
     std::unique_ptr<Engine> mode = (Factory<std::string, Engine>::GetInstance()->CreateByName(game_));
-    mode->BlackJack(strategy_, deck_name, deck_data, interface_);
+    mode->BlackJack(strategy_, deck_name, count_deck, interface_);
     return 0;
 }

@@ -15,7 +15,7 @@
 
 
 
-void Engine_1::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck,  std::vector<int> deck_data, std::string& CurInter){
+void Engine_1::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck,  int deck_data, std::string& CurInter){
     //std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface, std::function<User_Interface*()>>::GetInstance())->CreateByName(CurInter);
     std::shared_ptr<Player> player_1(std::make_shared <Player>(std::move(strategy_[0]), 1));
     std::shared_ptr<Player> player_2(std::make_shared <Player>(std::move(strategy_[1]), 2));
@@ -24,19 +24,25 @@ void Engine_1::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
     EndGame(player_1, player_2);
 }
 
-void Engine_1::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2, std::string& CurDeck,std::vector<int> deck_data, std::string& CurInter){
+void Engine_1::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2, std::string& CurDeck,int deck_data, std::string& CurInter){
     std::unique_ptr<Deck> deck = (Factory<std::string, Deck>::GetInstance())->CreateByName(CurDeck,deck_data);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     
-    player_1->strategy ->hit(deck->GetCard(), *player_1);
+    Card card_to_first = deck->GetCard();
+    Card card_to_second = deck->GetCard();
+
+    player_1->strategy ->hit(card_to_first, *player_1, card_to_second);
     player_1->GetHand().ShowHand();
-    player_2->strategy ->hit(deck->GetCard(), *player_2);
+    player_2->strategy ->hit(card_to_second, *player_2, card_to_first);
     player_2->GetHand().ShowHand();
 
     
     while (true) {
-        bool player1_stand= player_1->strategy->hit(deck->GetCard(), *player_1);
-        bool player2_stand = player_2->strategy->hit(deck->GetCard(), *player_2);
+        Card card_to_first = deck->GetCard();
+        Card card_to_second = deck->GetCard();
+
+        bool player1_stand= player_1->strategy->hit(card_to_first, *player_1,card_to_second);
+        bool player2_stand = player_2->strategy->hit(card_to_second, *player_2,card_to_first);
 
         if (player1_stand && player2_stand) {
             break;

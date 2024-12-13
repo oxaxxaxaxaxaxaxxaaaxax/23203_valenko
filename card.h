@@ -21,6 +21,12 @@ public:
     inline static const std::vector<std::string> suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
     inline static const std::vector<std::string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
     static void FillRankValue();
+    bool friend operator>=(Card& card_1, Card& card_2){
+        return card_1.value >= card_2.value;
+    }
+    bool friend operator<=(Card& card_1, Card& card_2){
+        return !(card_1>=card_2);
+    }
     inline static const std::map<std::string, size_t> RankValue ={
         {"2", 2},
         {"3", 3},

@@ -12,10 +12,11 @@
 namespace{
     constexpr size_t picture_value = 10;
     constexpr size_t ace_value = 11;
+    constexpr size_t hit_count_lim = 3;
 }
 
 
-bool Strategy_3:: hit(Card card, Player & player){
+bool Strategy_3:: hit(Card card, Player & player, Card& opponent_card){
     if (!stand_mode){
         player.GetHand().HitCard(card);
         hit_count++;
@@ -25,7 +26,7 @@ bool Strategy_3:: hit(Card card, Player & player){
         if(card.GetValue() == ace_value){
             hit_count --;
         }
-        if(hit_count == 3){
+        if(hit_count == hit_count_lim){
             stand_mode = true;
         }
     }
@@ -35,5 +36,5 @@ bool Strategy_3:: hit(Card card, Player & player){
 
 
 namespace {
-static Creator<Strategy_3, Strategy, std::string> c("strategy_3");
+static Creator<Strategy_3, Strategy, std::string, std::vector<int>> c("strategy_3");
 }

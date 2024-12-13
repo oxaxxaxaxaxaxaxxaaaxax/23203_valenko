@@ -15,6 +15,9 @@ public:
     Card& ShowLastCard(){
         return hand_.back();
     }
+    size_t GetFirstCard() const{
+       return hand_.front().GetValue();
+    }
     std::vector<Card>& ReturnCards(){return hand_;}
     void FreeHand();
     bool GetBustMode(){return bust_mode;}
