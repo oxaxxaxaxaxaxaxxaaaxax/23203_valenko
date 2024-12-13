@@ -87,11 +87,13 @@ int main(int argc, char* argv[]){
     //std::vector<std::string> configs_name;
     //configs_name.push_back("strategy_4.txt");
 
-    if(!vm.count("strategy")){
-        std::cout << desc << std::endl;
-        return 1;
+    if(vm.count("strategy")){
+        std::vector<std::string> strategy_name = vm["strategy"].as<std::vector<std::string>>();
+        std::vector<int> data;
+        for(const auto& str : strategy_name){
+            strategy_.emplace_back(Factory<std::string, Strategy>::GetInstance()->CreateByName(str, data));
+        }
     }
-    std::vector<std::string> strategy_name = vm["strategy"].as<std::vector<std::string>>();
     // std::vector<std::string> strategy_name;
     // strategy_name.push_back("strategy_1");
     // strategy_name.push_back("strategy_2");
@@ -107,10 +109,7 @@ int main(int argc, char* argv[]){
     // std::string deck_name = "n_deck";
     // std::string interface_ = "console";
     // std::string game_ = "tournament";
-    std::vector<int> data;
-    for(const auto& str : strategy_name){
-        strategy_.emplace_back(Factory<std::string, Strategy>::GetInstance()->CreateByName(str, data));
-    }
+    
     int count_deck = vm["count"].as<int>();
     std::string deck_name = vm["deck"].as<std::string>();
     
