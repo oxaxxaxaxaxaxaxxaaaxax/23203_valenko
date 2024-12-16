@@ -13,10 +13,11 @@ namespace{
     constexpr int hit_limit = 17;
 }
 
-bool Strategy_1:: hit(Card card, Player & player, Card& opponent_card){
-    if (!stand_mode){
-        player.GetHand().HitCard(card);
-        if(player.GetHand().GetTotalSum() >= hit_limit){
+bool Strategy_1::hit(Card card,int total_summ){
+    if (!stand_mode){ 
+        //player.GetHand().HitCard(card);
+        //if(player.GetHand().GetTotalSum() >= hit_limit){
+        if(total_summ >= hit_limit){
             stand_mode = true; 
         }
     }

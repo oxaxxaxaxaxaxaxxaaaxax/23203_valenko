@@ -21,9 +21,6 @@ std::vector<int> GetDataStr(std::string config_name){
             break;
         }
         std::getline(file, line);
-        // if(line.empty()){
-        //     continue;
-        // }
         std::istringstream iss(line);
         iss.exceptions(std::ios::failbit | std::ios::badbit);
         if (std::getline(iss, key, '=')){
@@ -53,7 +50,7 @@ int main(int argc, char* argv[]){
     ("dir_path", po::value<std::string>(), "set path to directory which contains configs file")
     ("deck", po::value<std::string>()->default_value("basic_deck"), "set --deck=set kind of deck ")
     ("count", po::value<int>()->default_value(1), "set --count=set count of deck, if count==1 skip")
-    ("game", po::value<std::string>(), "set --game= your selected mode for game")
+    ("game", po::value<std::string>()->default_value("tournament"), "set --game= your selected mode for game")
     ("interface", po::value<std::string>(), "set --interface=selected interface")
 ;
 
@@ -83,9 +80,7 @@ int main(int argc, char* argv[]){
             }
         }        
     }
-    //std::string dir_path = "/home/oksana/programm/23203_valenko/lab_2";
-    //std::vector<std::string> configs_name;
-    //configs_name.push_back("strategy_4.txt");
+
 
     if(vm.count("strategy")){
         std::vector<std::string> strategy_name = vm["strategy"].as<std::vector<std::string>>();
@@ -94,21 +89,6 @@ int main(int argc, char* argv[]){
             strategy_.emplace_back(Factory<std::string, Strategy>::GetInstance()->CreateByName(str, data));
         }
     }
-    // std::vector<std::string> strategy_name;
-    // strategy_name.push_back("strategy_1");
-    // strategy_name.push_back("strategy_2");
-    // strategy_name.push_back("strategy_2");
-    // strategy_name.push_back("strategy_2");
-    // strategy_name.push_back("strategy_1");
-    // strategy_name.push_back("strategy_1");
-    // strategy_name.push_back("strategy_2");
-    // strategy_name.push_back("strategy_2");
-    // strategy_name.push_back("strategy_2");
-    // strategy_name.push_back("strategy_1");
-    // int count_deck = 6;
-    // std::string deck_name = "n_deck";
-    // std::string interface_ = "console";
-    // std::string game_ = "tournament";
     
     int count_deck = vm["count"].as<int>();
     std::string deck_name = vm["deck"].as<std::string>();
@@ -119,11 +99,13 @@ int main(int argc, char* argv[]){
     }
     
     std::string interface_ = vm["interface"].as<std::string>();
-    if(!vm.count("game")){
-        std::cout << desc << std::endl;
-        return 1;
-    }
+    
     std::string game_ = vm["game"].as<std::string>();
+    if(game_ != "tournament"&& game_!="detailed" && game_!= "fast"){
+        std::cout<< "Bad game name"<< std::endl;
+        std::cout << desc << std::endl;
+        return 0;
+    }
     std::unique_ptr<Engine> mode = (Factory<std::string, Engine>::GetInstance()->CreateByName(game_));
     mode->BlackJack(strategy_, deck_name, count_deck, interface_);
     return 0;

@@ -1,4 +1,4 @@
-#pragma once
+    #pragma once
 #include <cstdlib>
 #include <vector>
 
@@ -9,17 +9,13 @@
 
 class Basic_Deck : public Deck{
 public:
-    Basic_Deck(int);
+    Basic_Deck(const int& n);
     Basic_Deck(Basic_Deck&& other):deck(std::move(other.deck)){}
-    Card GetCard() override;  
-    void GetCardBack(std::vector<Card>& cards) override;
-    std::vector <Card>& GetDeck(){
-        return deck;
-    }
+    Card GetCard()override;  
+    void GetCardBack(const std::vector<Card>& cards) override;
     void Shuffle(); 
-    void ShowDeck() override;
-    ~Basic_Deck() = default;           
-    //динамический массив карт
+    void ShowDeck() const override;
+    ~Basic_Deck() = default; 
 private:
     std::vector<Card> deck;
 };

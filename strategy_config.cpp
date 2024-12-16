@@ -17,29 +17,24 @@ Strategy_Config::Strategy_Config(std::vector<int> data){
         !data.at(4) ? max_opp_card =default_max : max_opp_card = data.at(4);
     }
 
-bool Strategy_Config::hit(Card card, Player & player, Card& opponent_card) {
-        if (!stand_mode){
+bool Strategy_Config::hit(Card card, int total_summ) {
+    if (!stand_mode){
+        hit_count++;
+        //player.GetHand().HitCard(card);
+        if(card.GetValue() > last_card){
             hit_count++;
-            if(opponent_card.GetValue() >= max_opp_card){
-                hit_count++;
-            }
-            if(opponent_card.GetValue() <= min_opp_card){
-                hit_count--;
-            }
-            player.GetHand().HitCard(card);
-            if(card.GetValue() > last_card){
-                hit_count++;
-                last_card = card.GetValue();
-            }
-            if(player.GetHand().GetTotalSum() >= hit_limit){
-                stand_mode = true; 
-            }
-            if(hit_count == hit_count_lim){
-                stand_mode = true;
-            }
+            last_card = card.GetValue();
         }
-        return stand_mode;
+        //if(player.GetHand().GetTotalSum() >= hit_limit){
+        if(total_summ >= hit_limit){
+            stand_mode = true; 
+        }
+        if(hit_count == hit_count_lim){
+            stand_mode = true;
+        }
     }
+    return stand_mode;
+}
 
 namespace {
 static Creator<Strategy_Config, Strategy, std::string, std::vector<int>> c("strategy_config");

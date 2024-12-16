@@ -1,5 +1,7 @@
-#include <iostream>
 #include "hand.h"
+
+#include <iostream>
+
 #include "card.h"
 #include "deck.h"
 
@@ -10,7 +12,7 @@ namespace{
     constexpr size_t victory_point = 21;
 }
 
-void Hand::HitCard(Card card){
+void Hand::HitCard(const Card card){
     hand_.push_back(card);
     AddToSum(card.GetValue());
     CheckVictory();
@@ -20,7 +22,7 @@ void Hand::HitCard(Card card){
     CheckBust();
 }
 
-void Hand::CheckVictory(){
+void Hand::CheckVictory() {
     if(GetTotalSum() == victory_point){
         victory_mode = true;
     }  
@@ -33,7 +35,7 @@ void Hand::CheckBust(){
 }
 
 
-void Hand::ShowHand()const {
+void Hand::Show()const {
     std::cout<< " " << std::endl;
     std::cout<< "Cards: ";
     for(const auto& card : Hand::hand_){
@@ -45,7 +47,7 @@ int Hand::GetTotalSum() const{
     return total_summ;
 }
 
-void Hand::AddToSum(int value){
+void Hand::AddToSum(const int& value){
     total_summ += value;
 }
 

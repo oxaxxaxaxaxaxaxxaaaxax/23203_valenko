@@ -5,9 +5,9 @@
 
 
 
-class Console_Interface: public User_Interface{
+class Test_Interface: public User_Interface{
 public:
-    Console_Interface(){}
+    Test_Interface(){}
     void ShowWiner(const Player& player) const override;
     void ShowWiner(const size_t& player_number) const override;
     void ShowMethod(const bool& stand_mode_) const override;
@@ -22,6 +22,5 @@ public:
         }
         return os;
     }
-    ~Console_Interface()= default;
+    ~Test_Interface()= default;
 };
-

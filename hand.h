@@ -5,10 +5,10 @@
 
 class Hand{
 public:
-    void ShowHand() const;
+    void Show() const;
     void HitCard(Card card);
     int GetTotalSum() const;
-    void AddToSum(int value);
+    void AddToSum(const int& value);
     void CheckBust();
     void CheckVictory();
     void UpdateSum();
@@ -20,8 +20,12 @@ public:
     }
     std::vector<Card>& ReturnCards(){return hand_;}
     void FreeHand();
-    bool GetBustMode(){return bust_mode;}
-    bool GetVicMode(){return victory_mode;}
+    bool GetBustMode()const {
+        return bust_mode;
+    }
+    bool GetVicMode() const {
+        return victory_mode;
+    }
     ~Hand() = default;
 private:
     std::vector<Card> hand_;

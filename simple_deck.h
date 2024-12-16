@@ -6,10 +6,10 @@
 
 class Simple_Deck : public Deck{
 public:
-    Simple_Deck(int);
+    Simple_Deck(const int& n);
     Card GetCard() override;
-    void GetCardBack(std::vector<Card>& cards) override;
-    void ShowDeck() override;
+    void GetCardBack(const std::vector<Card>& cards) override;
+    void ShowDeck() const override;
     void Shuffle();
     ~Simple_Deck() = default;
 private:

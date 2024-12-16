@@ -23,8 +23,14 @@ public:
     friend bool operator>=(Player& player_1, Player& player_2){
         return player_1.number>= player_2.number;
     }
-    Hand& GetHand(){return hand;}
-    size_t GetNumber() {return number;}
+    bool PlayerHit(Card card);
+    size_t GetNumber() const {
+        return number;
+    }
+    Hand& GetHand(){
+        return hand;
+    }
+    void ShowHand() const;
     ~Player() = default;
 private:
     size_t number;

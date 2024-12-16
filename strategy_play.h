@@ -10,6 +10,7 @@ public:
         return stand_mode;
     }
     void End() override;
+    virtual ~Strategy_Play()=default;
 protected:
     bool stand_mode = false;
 };

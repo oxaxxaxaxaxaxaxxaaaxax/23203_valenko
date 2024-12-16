@@ -13,7 +13,7 @@
 
 
 
-Basic_Deck::Basic_Deck(int){
+Basic_Deck::Basic_Deck(const int& n){
     for(const auto& suit : Card::suits){
         for(const auto& rank : Card::ranks){
             deck.emplace_back(suit, rank, Card::RankValue.at(rank));
@@ -22,7 +22,7 @@ Basic_Deck::Basic_Deck(int){
     Shuffle();
 }
 
-void Basic_Deck::ShowDeck(){
+void Basic_Deck::ShowDeck() const {
     std::cout<< " " << std::endl;
     std::cout<< "deck card" << std::endl;
     int count =0;
@@ -40,7 +40,7 @@ Card Basic_Deck::GetCard(){
     return tmp;
 }
 
-void Basic_Deck::GetCardBack(std::vector<Card>& cards){
+void Basic_Deck::GetCardBack(const std::vector<Card>& cards){
     for(auto& card : cards){
         deck.push_back(card);
     }
@@ -59,10 +59,3 @@ namespace{
     Creator<Basic_Deck, Deck, std::string, int> c("basic_deck");
 }
 
-// Deck* CreateBasDeck(std::vector<std::any> data){
-//     return new Basic_Deck(data);
-// }
-
-// namespace{
-//     bool b = (Factory<std::string, Deck, Deck* (*)(std::vector<std::any>)>::GetInstance())->Register("basic_deck", &CreateBasDeck);
-// }

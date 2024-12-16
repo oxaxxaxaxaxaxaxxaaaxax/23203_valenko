@@ -5,7 +5,7 @@
 class Strategy_Config : public Strategy_Play{
 public:
     Strategy_Config(std::vector<int> strategy_data);
-    bool hit(Card card, Player & player, Card& opponent_card) override;
+    bool hit(Card card, int total_summ) override;
 
 private:
     int hit_limit;

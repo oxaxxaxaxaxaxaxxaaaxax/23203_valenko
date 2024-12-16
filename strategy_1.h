@@ -8,7 +8,7 @@
 class Strategy_1 : public Strategy_Play{
 public:
     Strategy_1(std::vector<int> strategy_data){}
-    bool hit(Card card, Player & player, Card& opponent_card) override;
+    bool hit(Card card,int total_summ) override;
 private:  
     int hit_limit=17;
 };

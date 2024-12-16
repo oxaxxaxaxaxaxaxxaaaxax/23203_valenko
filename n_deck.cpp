@@ -1,4 +1,5 @@
 #include "n_deck.h"
+
 #include <algorithm>
 #include <assert.h>
 #include <cstdlib>
@@ -10,9 +11,7 @@
 #include "factory.h"
 
 
-N_Deck::N_Deck(int n){
-    //int n = std::any_cast<int>(data.back());
-    //auto n = data.back();
+N_Deck::N_Deck(const int& n){
     for(int i =0;i < n; i++){
         for(const auto& suit: Card::suits){
             for(const auto& rank: Card::ranks){
@@ -23,7 +22,7 @@ N_Deck::N_Deck(int n){
     Shuffle();
 }
 
-void N_Deck::ShowDeck(){
+void N_Deck::ShowDeck() const{
     std::cout<< " " << std::endl;
     std::cout<< "deck card" << std::endl;
     for(const auto& card : deck){
@@ -38,7 +37,7 @@ Card N_Deck::GetCard(){
     return tmp;
 }
 
-void N_Deck::GetCardBack(std::vector<Card>& cards){
+void N_Deck::GetCardBack(const std::vector<Card>& cards){
     for(auto& card : cards){
         deck.push_back(card);
     }
@@ -54,6 +53,5 @@ void N_Deck::Shuffle(){
 
 namespace{
     Creator<N_Deck, Deck, std::string, int> c("n_deck");
-}//&777как сконструкторить n
-//СПРОСИТЬ КАК ЭТО ПОДАВАТЬ
+}
 

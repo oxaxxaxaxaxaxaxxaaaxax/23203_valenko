@@ -1,6 +1,7 @@
 #include "simple_deck.h"
 
 #include <algorithm>
+#include <assert.h>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -11,7 +12,7 @@
 #include "creator.h"
 #include "factory.h"
 
-Simple_Deck::Simple_Deck(int){
+Simple_Deck::Simple_Deck(const int& n){
     std::random_device rd;
     std::default_random_engine rng(rd());
     std::uniform_int_distribution<> distrib(2,11);
@@ -20,7 +21,7 @@ Simple_Deck::Simple_Deck(int){
     }
 }
 
-void Simple_Deck::ShowDeck(){
+void Simple_Deck::ShowDeck() const{
     std::cout<< " " << std::endl;
     std::cout<< "deck card" << std::endl;
     for(const auto& card : deck){
@@ -29,12 +30,13 @@ void Simple_Deck::ShowDeck(){
 }
 
 Card Simple_Deck::GetCard(){
+    assert(!deck.empty());
     Card tmp = deck.back();
     deck.pop_back();
     return tmp;
 }
 
-void Simple_Deck::GetCardBack(std::vector<Card>& cards){
+void Simple_Deck::GetCardBack(const std::vector<Card>& cards){
     for(auto& card : cards){
         deck.push_back(card);
     }

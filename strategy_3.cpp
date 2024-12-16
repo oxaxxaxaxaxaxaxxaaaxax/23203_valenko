@@ -16,9 +16,9 @@ namespace{
 }
 
 
-bool Strategy_3:: hit(Card card, Player & player, Card& opponent_card){
+bool Strategy_3:: hit(Card card,int total_summ){
     if (!stand_mode){
-        player.GetHand().HitCard(card);
+        //player.GetHand().HitCard(card);
         hit_count++;
         if(card.GetValue()<picture_value){
             hit_count --;

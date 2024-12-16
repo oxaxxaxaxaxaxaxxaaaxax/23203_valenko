@@ -18,7 +18,7 @@
 #include "strategy_play.h"
 
 
-void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std::string& CurDeck, int deck_data, std::string& CurInter){
+void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     std::vector<size_t> numbers_(strategy_.size());
     std::iota(numbers_.begin(), numbers_.end(), 1);
@@ -39,29 +39,24 @@ void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_, std:
     interface->ShowWiner(ChooseTournamentWinner());
 }
 
-void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2, std::string& CurDeck,int deck_data, std::string& CurInter){
+void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
     std::unique_ptr<Deck> deck = (Factory<std::string, Deck>::GetInstance())->CreateByName(CurDeck,deck_data);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     
     round++;
 
     interface->ShowRound(round);
-
-    Card card_to_first = deck->GetCard();
-    Card card_to_second = deck->GetCard();
     
-    player_1->strategy ->hit(card_to_first, *player_1, card_to_second);
-    player_1->GetHand().ShowHand();
-    player_2->strategy ->hit(card_to_second, *player_2, card_to_first);
-    player_2->GetHand().ShowHand();
+    player_1->PlayerHit(deck->GetCard());
+    player_1->ShowHand();
+    player_2->PlayerHit(deck->GetCard());
+    player_2->ShowHand();
 
 
     while (true) {
-        Card card_to_first = deck->GetCard();
-        Card card_to_second = deck->GetCard();
-        
-        bool player1_stand = player_1->strategy->hit(card_to_first, *player_1, card_to_second);
-        bool player2_stand = player_2->strategy->hit(card_to_second, *player_2,card_to_first);
+
+        bool player1_stand = player_1->PlayerHit(deck->GetCard());
+        bool player2_stand = player_2->PlayerHit(deck->GetCard());
         if (player1_stand && player2_stand) {
             break;
         }
@@ -98,7 +93,6 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
     tournament_table[ChooseWinner(player_1,player_2)] = ++tournament_table.at(ChooseWinner(player_1,player_2));
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards());
-    //deck->ShowDeck();
     EndGame(player_1, player_2);
 }
 

@@ -10,9 +10,9 @@ namespace{
     static constexpr int hit_count_lim = 3;
 }
 
-bool Strategy_2::hit(Card card, Player & player, Card& opponent_card){
+bool Strategy_2::hit(Card card,int total_summ){
     if(!stand_mode){
-        player.GetHand().HitCard(card);
+        //player.GetHand().HitCard(card);
         hit_count++;
         if(hit_count == hit_count_lim){
             stand_mode = true;
@@ -26,10 +26,3 @@ namespace{
     static Creator<Strategy_2,Strategy, std::string,std::vector<int>> c("strategy_2");
 }
 
-// Strategy * CreateStrategy_2(){
-//     return new Strategy_2();
-// }
-
-// namespace{
-//     bool b = (Factory<string, Strategy, Strategy * (*)()>::GetInstance())->Register("Strategy_2", &CreateStrategy_2);
-// }
