@@ -19,6 +19,9 @@ public:
     size_t GetValue()const{
         return value;
     }
+    bool friend operator==(const Card&a, const Card& b){
+        return (a.rank==b.rank) && (a.suit == b.suit) && (a.value == a.value);
+    }
     void Show() const;
     inline static const std::vector<std::string> suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
     inline static const std::vector<std::string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};

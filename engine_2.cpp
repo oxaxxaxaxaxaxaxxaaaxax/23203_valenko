@@ -23,11 +23,12 @@ void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_,const
     std::vector<size_t> numbers_(strategy_.size());
     std::iota(numbers_.begin(), numbers_.end(), 1);
     for(auto& str : strategy_){
-        players_.emplace_back(std::make_shared<Player>(std::move(str), numbers_.back()));
+        players_.push_back(std::move(std::make_unique<Player>(std::move(str), numbers_.back())));
+        //players_.emplace_back(std::make_shared<Player>(std::move(str), numbers_.back()));
         numbers_.pop_back();
     }
     for(auto& player : players_){
-        tournament_table[player] = 0; 
+        tournament_table[player->GetNumber()] = 0; 
     }
     for(auto& player_1 : players_){
         for(auto& player_2 : players_){
@@ -39,7 +40,7 @@ void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_,const
     interface->ShowWiner(ChooseTournamentWinner());
 }
 
-void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
+void Engine_2::Game(const std::unique_ptr<Player>& player_1,const std::unique_ptr<Player>& player_2,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
     std::unique_ptr<Deck> deck = (Factory<std::string, Deck>::GetInstance())->CreateByName(CurDeck,deck_data);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     
@@ -62,41 +63,41 @@ void Engine_2::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
         }
 
         if(player_1->GetHand().GetVicMode() == true){
-            tournament_table[player_1] = ++tournament_table.at(player_1);
+            tournament_table[player_1->GetNumber()] = ++tournament_table.at(player_1->GetNumber());
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
             return;
         }
         if(player_1->GetHand().GetBustMode() == true){
-            tournament_table[player_2] = ++tournament_table.at(player_2);
+            tournament_table[player_2->GetNumber()] = ++tournament_table.at(player_2->GetNumber());
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
             return;
         }
         if(player_2->GetHand().GetVicMode() == true){
-            tournament_table[player_2] = ++tournament_table.at(player_2);
+            tournament_table[player_2->GetNumber()] = ++tournament_table.at(player_2->GetNumber());
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
             return;
         }
         if(player_2->GetHand().GetBustMode() == true){
-            tournament_table[player_1] = ++tournament_table.at(player_1);
+            tournament_table[player_1->GetNumber()] = ++tournament_table.at(player_1->GetNumber());
             deck->GetCardBack( player_1->GetHand().ReturnCards());
             deck->GetCardBack( player_2->GetHand().ReturnCards());
             EndGame(player_1, player_2);
             return;
         }
     }
-    tournament_table[ChooseWinner(player_1,player_2)] = ++tournament_table.at(ChooseWinner(player_1,player_2));
+    tournament_table[ChooseWinner(player_1,player_2)->GetNumber()] = ++tournament_table.at(ChooseWinner(player_1,player_2)->GetNumber());
     deck->GetCardBack( player_1->GetHand().ReturnCards());
     deck->GetCardBack( player_2->GetHand().ReturnCards());
     EndGame(player_1, player_2);
 }
 
-std::shared_ptr<Player> Engine_2::ChooseWinner(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
+const std::unique_ptr<Player>& Engine_2::ChooseWinner(const std::unique_ptr<Player>& pl_1,const std::unique_ptr<Player>& pl_2){
     return (pl_1->GetHand().GetTotalSum() >= pl_2->GetHand().GetTotalSum()) ? pl_1 : pl_2;
 }
 
@@ -104,8 +105,8 @@ size_t Engine_2::ChooseTournamentWinner(){
     size_t winner_score = 0;
     size_t winner_number = 0;
     for(auto& player : players_){
-        if(winner_score < tournament_table[player]){
-            winner_score = tournament_table[player];
+        if(winner_score < tournament_table[player->GetNumber()]){
+            winner_score = tournament_table[player->GetNumber()];
             winner_number = (*player).GetNumber();
         }
     }
@@ -113,7 +114,7 @@ size_t Engine_2::ChooseTournamentWinner(){
 }
 
 
-void Engine_2::EndGame(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
+void Engine_2::EndGame(const std::unique_ptr<Player>& pl_1,const std::unique_ptr<Player>& pl_2){
     pl_1->GetHand().FreeHand();
     pl_1->strategy->End();
     pl_2->GetHand().FreeHand();

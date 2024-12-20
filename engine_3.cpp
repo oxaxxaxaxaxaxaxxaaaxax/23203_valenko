@@ -26,14 +26,14 @@ bool Engine_3::IsQuit(std::istream& is){
 
 void Engine_3::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
-    std::shared_ptr<Player> player_1(std::make_shared <Player>(std::move(strategy_[0]), 1));
-    std::shared_ptr<Player> player_2(std::make_shared <Player>(std::move(strategy_[1]), 2));
+    std::unique_ptr<Player> player_1(std::make_unique <Player>(std::move(strategy_[0]), 1));
+    std::unique_ptr<Player> player_2(std::make_unique <Player>(std::move(strategy_[1]), 2));
     
     Game(player_1, player_2, CurDeck, deck_data,CurInter);
     EndGame(player_1, player_2);
 }
 
-void Engine_3::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> player_2,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
+void Engine_3::Game(const std::unique_ptr<Player>& player_1,const std::unique_ptr<Player>& player_2,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
     std::unique_ptr<Deck> deck = (Factory<std::string, Deck>::GetInstance())->CreateByName(CurDeck, deck_data);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
 
@@ -101,11 +101,11 @@ void Engine_3::Game(std::shared_ptr<Player> player_1, std::shared_ptr<Player> pl
 }
 
 
-std::shared_ptr<Player> Engine_3::ChooseWinner(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
+const std::unique_ptr<Player>& Engine_3::ChooseWinner(const std::unique_ptr<Player>& pl_1,const std::unique_ptr<Player>& pl_2){
     return (pl_1->GetHand().GetTotalSum() >= pl_2->GetHand().GetTotalSum()) ? pl_1 : pl_2;
 }
 
-void Engine_3::EndGame(std::shared_ptr<Player> pl_1, std::shared_ptr<Player> pl_2){
+void Engine_3::EndGame(const std::unique_ptr<Player>& pl_1,const std::unique_ptr<Player>& pl_2){
     pl_1->GetHand().FreeHand();
     pl_1->strategy->End();
     pl_2->GetHand().FreeHand();

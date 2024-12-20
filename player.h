@@ -1,4 +1,5 @@
 #pragma once
+//#include "player_interface.h"
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -8,7 +9,7 @@
 
 class Strategy;
 
-class Player {
+class Player{
 public:
     Player(std::unique_ptr<Strategy> str_ ,const size_t &number_);
     Player(const Player &player) = delete;
