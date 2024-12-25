@@ -1,0 +1,82 @@
+[
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/main.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/main.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/main.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/basic_deck.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/basic_deck.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/basic_deck.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/card.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/card.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/card.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/console_interface.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/console_interface.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/console_interface.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/engine_1.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/engine_1.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/engine_1.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/hand.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/hand.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/hand.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/player.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/player.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/player.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/simple_deck.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/simple_deck.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/simple_deck.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/strategy_1.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/strategy_1.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/strategy_1.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/strategy_2.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/strategy_2.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/strategy_2.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/strategy_3.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/strategy_3.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/strategy_3.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/engine_2.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/engine_2.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/engine_2.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/engine_3.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/engine_3.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/engine_3.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/n_deck.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/n_deck.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/n_deck.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/strategy_play.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/strategy_play.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/strategy_play.cpp"
+},
+{
+  "directory": "/home/oksana/programm/labs/23203_valenko/lab_2/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK  -g -std=gnu++20 -o CMakeFiles/blackjack.dir/strategy_config.cpp.o -c /home/oksana/programm/labs/23203_valenko/lab_2/strategy_config.cpp",
+  "file": "/home/oksana/programm/labs/23203_valenko/lab_2/strategy_config.cpp"
+}
+]

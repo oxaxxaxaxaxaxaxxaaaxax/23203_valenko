@@ -18,13 +18,12 @@
 #include "strategy_play.h"
 
 
-void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
+void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_){
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     std::vector<size_t> numbers_(strategy_.size());
     std::iota(numbers_.begin(), numbers_.end(), 1);
     for(auto& str : strategy_){
         players_.push_back(std::move(std::make_unique<Player>(std::move(str), numbers_.back())));
-        //players_.emplace_back(std::make_shared<Player>(std::move(str), numbers_.back()));
         numbers_.pop_back();
     }
     for(auto& player : players_){
@@ -33,14 +32,14 @@ void Engine_2::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_,const
     for(auto& player_1 : players_){
         for(auto& player_2 : players_){
             if(player_1 >= player_2) continue;
-            Game(player_1, player_2, CurDeck,deck_data,CurInter);
+            Game(player_1, player_2);
 
         }
     } 
     interface->ShowWiner(ChooseTournamentWinner());
 }
 
-void Engine_2::Game(const std::unique_ptr<Player>& player_1,const std::unique_ptr<Player>& player_2,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
+void Engine_2::Game(const std::unique_ptr<Player>& player_1,const std::unique_ptr<Player>& player_2){
     std::unique_ptr<Deck> deck = (Factory<std::string, Deck>::GetInstance())->CreateByName(CurDeck,deck_data);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     
@@ -122,7 +121,7 @@ void Engine_2::EndGame(const std::unique_ptr<Player>& pl_1,const std::unique_ptr
 }
 
 namespace{
-    Creator<Engine_2, Engine, std::string> c("tournament");
+    Creator<Engine_2, Engine,std::string,std::string, int,std::string> c("tournament");
 }
 
 

@@ -106,7 +106,7 @@ int main(int argc, char* argv[]){
         std::cout << desc << std::endl;
         return 0;
     }
-    std::unique_ptr<Engine> mode = (Factory<std::string, Engine>::GetInstance()->CreateByName(game_));
-    mode->BlackJack(strategy_, deck_name, count_deck, interface_);
+    std::unique_ptr<Engine> mode = (Factory<std::string, Engine>::GetInstance()->CreateByName(game_, deck_name, count_deck, interface_));
+    mode->BlackJack(strategy_);
     return 0;
 }

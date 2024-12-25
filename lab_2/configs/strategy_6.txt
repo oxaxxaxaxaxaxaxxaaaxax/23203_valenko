@@ -1,0 +1,5 @@
+hit_limit=17
+first_card=0
+hit_count=0
+min_opp_first_card=4
+max_opp_first_card=0

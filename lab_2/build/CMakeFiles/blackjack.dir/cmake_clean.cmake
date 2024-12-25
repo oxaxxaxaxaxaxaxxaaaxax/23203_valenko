@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/blackjack.dir/basic_deck.cpp.o"
+  "CMakeFiles/blackjack.dir/basic_deck.cpp.o.d"
+  "CMakeFiles/blackjack.dir/card.cpp.o"
+  "CMakeFiles/blackjack.dir/card.cpp.o.d"
+  "CMakeFiles/blackjack.dir/console_interface.cpp.o"
+  "CMakeFiles/blackjack.dir/console_interface.cpp.o.d"
+  "CMakeFiles/blackjack.dir/engine_1.cpp.o"
+  "CMakeFiles/blackjack.dir/engine_1.cpp.o.d"
+  "CMakeFiles/blackjack.dir/engine_2.cpp.o"
+  "CMakeFiles/blackjack.dir/engine_2.cpp.o.d"
+  "CMakeFiles/blackjack.dir/engine_3.cpp.o"
+  "CMakeFiles/blackjack.dir/engine_3.cpp.o.d"
+  "CMakeFiles/blackjack.dir/hand.cpp.o"
+  "CMakeFiles/blackjack.dir/hand.cpp.o.d"
+  "CMakeFiles/blackjack.dir/main.cpp.o"
+  "CMakeFiles/blackjack.dir/main.cpp.o.d"
+  "CMakeFiles/blackjack.dir/n_deck.cpp.o"
+  "CMakeFiles/blackjack.dir/n_deck.cpp.o.d"
+  "CMakeFiles/blackjack.dir/player.cpp.o"
+  "CMakeFiles/blackjack.dir/player.cpp.o.d"
+  "CMakeFiles/blackjack.dir/simple_deck.cpp.o"
+  "CMakeFiles/blackjack.dir/simple_deck.cpp.o.d"
+  "CMakeFiles/blackjack.dir/strategy_1.cpp.o"
+  "CMakeFiles/blackjack.dir/strategy_1.cpp.o.d"
+  "CMakeFiles/blackjack.dir/strategy_2.cpp.o"
+  "CMakeFiles/blackjack.dir/strategy_2.cpp.o.d"
+  "CMakeFiles/blackjack.dir/strategy_3.cpp.o"
+  "CMakeFiles/blackjack.dir/strategy_3.cpp.o.d"
+  "CMakeFiles/blackjack.dir/strategy_config.cpp.o"
+  "CMakeFiles/blackjack.dir/strategy_config.cpp.o.d"
+  "CMakeFiles/blackjack.dir/strategy_play.cpp.o"
+  "CMakeFiles/blackjack.dir/strategy_play.cpp.o.d"
+  "blackjack"
+  "blackjack.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/blackjack.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

@@ -1,0 +1,3 @@
+/home/oksana/programm/labs/23203_valenko/lab_2/build/CMakeFiles/blackjack.dir
+/home/oksana/programm/labs/23203_valenko/lab_2/build/CMakeFiles/edit_cache.dir
+/home/oksana/programm/labs/23203_valenko/lab_2/build/CMakeFiles/rebuild_cache.dir

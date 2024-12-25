@@ -24,16 +24,16 @@ bool Engine_3::IsQuit(std::istream& is){
     return false;
 }
 
-void Engine_3::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
+void Engine_3::BlackJack(std::vector<std::unique_ptr<Strategy>>& strategy_){
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
     std::unique_ptr<Player> player_1(std::make_unique <Player>(std::move(strategy_[0]), 1));
     std::unique_ptr<Player> player_2(std::make_unique <Player>(std::move(strategy_[1]), 2));
     
-    Game(player_1, player_2, CurDeck, deck_data,CurInter);
+    Game(player_1, player_2);
     EndGame(player_1, player_2);
 }
 
-void Engine_3::Game(const std::unique_ptr<Player>& player_1,const std::unique_ptr<Player>& player_2,const std::string& CurDeck,const int& deck_data,const std::string& CurInter){
+void Engine_3::Game(const std::unique_ptr<Player>& player_1,const std::unique_ptr<Player>& player_2){
     std::unique_ptr<Deck> deck = (Factory<std::string, Deck>::GetInstance())->CreateByName(CurDeck, deck_data);
     std::unique_ptr<User_Interface> interface = (Factory<std::string, User_Interface>::GetInstance())->CreateByName(CurInter);
 
@@ -113,5 +113,5 @@ void Engine_3::EndGame(const std::unique_ptr<Player>& pl_1,const std::unique_ptr
 }
 
 namespace{
-    Creator<Engine_3, Engine, std::string> c("detailed");
+    Creator<Engine_3, Engine,std::string, std::string, int,std::string> c("detailed");
 }
