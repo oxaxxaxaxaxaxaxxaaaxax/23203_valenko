@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>plus_button</class>
- <widget class="QMainWindow" name="plus_button">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -54,6 +54,32 @@
     </property>
     <property name="text">
      <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="min_button">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>760</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Minus</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="plus_button">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>760</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Plus</string>
     </property>
    </widget>
   </widget>

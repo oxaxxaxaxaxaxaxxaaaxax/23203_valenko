@@ -19,6 +19,7 @@ public:
     void StopGame();
     void RepaintField();
     void UpdateCellState(int x,int y);
+    Game_Of_Life *game = nullptr;
 public slots:
     void SetCellColor(int x,int y);
 protected:
@@ -27,8 +28,9 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
 private:
     QGraphicsScene *scene= nullptr;
-    Game_Of_Life *game = nullptr;
     QTimer *timer = nullptr;
     bool isScaling = false;
+    int lastStateX;
+    int lastStateY;
 };
 

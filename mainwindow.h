@@ -17,6 +17,8 @@ private slots:
     void SetInitialState(bool checked);
     void RunSlot(bool checked);
     void Clear();
+    void IncreaseNeighbours();
+    void ReduceNeighbours();
 
 private:
     Ui::MainWindow *ui;
