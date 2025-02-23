@@ -25,9 +25,10 @@ public:
     void SetState(State newState){
         state = newState;
     }
-    Cell CalculateCellState(int neigbors) const;
+    Cell CalculateCellState(int neigbors,size_t customVal) const;
 private:
     State state = State::dead;
+    State lastState = State::dead;
 };
 
 class Field : public QObject {
@@ -39,19 +40,30 @@ public:
     void UpdateFieldState();
     void PrintField();
     State GetCellState(int x, int y);
-
+    void AddVal(){
+        if(customVal == 8){
+            return;
+        }
+        customVal++;
+    }
+    void SubVal(){
+        if(customVal == 1){
+            return;
+        }
+        customVal--;
+    }
 signals:
     void ChangeState(int x, int y);
     void ChangeField();
 private:
     std::vector<Cell> field;
     std::vector<Cell> next_field;
+    size_t customVal = 3;
 };
 
 class Game_Of_Life {
 public:
     Game_Of_Life();
-    ~Game_Of_Life();
-    //Field* universe;
+    ~Game_Of_Life()= default;
     std::unique_ptr<Field> universe;
 };

@@ -78,6 +78,8 @@ void Engine::mousePressEvent(QMouseEvent *event){
         }
         QPointF coordPoint = mapToScene(x,y);
         QPoint point = coordPoint.toPoint();
+        lastStateX =(point.x()/cellSize);
+        lastStateY = (point.y()/cellSize);
         game->universe->UpdateCellState((point.x()/cellSize),(point.y()/cellSize));
     }
 }
@@ -93,6 +95,14 @@ void Engine::mouseMoveEvent(QMouseEvent *event){
         }
         QPointF coordPoint = mapToScene(x,y);
         QPoint point = coordPoint.toPoint();
+
+        int curStateX = (point.x()/cellSize);
+        int curStateY = (point.y()/cellSize);
+        if(lastStateX == curStateX && lastStateY == curStateY){
+            return;
+        }
+        lastStateX = curStateX;
+        lastStateY = curStateY;
         game->universe->UpdateCellState((point.x()/cellSize),(point.y()/cellSize));
     //}
 

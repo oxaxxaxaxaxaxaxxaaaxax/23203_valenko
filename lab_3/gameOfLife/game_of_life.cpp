@@ -12,12 +12,7 @@ namespace{
     constexpr size_t field_size = 70;
     constexpr size_t cellSize = 10;
 }
-Game_Of_Life::Game_Of_Life():universe(new Field){}
-    //universe = new Field();
-
-Game_Of_Life::~Game_Of_Life(){}
-//    delete universe;
-//}
+Game_Of_Life::Game_Of_Life():universe(std::make_unique<Field>()){}
 
 Field::Field():field(field_size*field_size, Cell()), next_field(field_size*field_size, Cell()){}
 
@@ -34,6 +29,7 @@ int Field::GetCountNeighbors(int x, int y){
                 count++;
             }
         }
+
     }
     return count;
 }
@@ -48,14 +44,14 @@ void Field::UpdateCellState(int x,int y){
     emit ChangeState((x)*cellSize,(y)*cellSize);
 }
 
-Cell Cell::CalculateCellState(int neigbors) const {
+Cell Cell::CalculateCellState(int neigbors,size_t customVal) const {
     if (state == State::alive) {
-        if((neigbors < 2) || (neigbors > 3)) {
+        if((neigbors < customVal-1) || (neigbors > customVal)) {
             return Cell(State::dead);
         }
     }
     else {
-        if(neigbors == 3) {
+        if(neigbors == customVal) {
             return Cell(State::alive);
         }
     }
@@ -66,7 +62,7 @@ void Field::UpdateFieldState(){
     for(int i=0;i<field_size;i++){
         for(int j=0;j<field_size;j++){
             int count_neighbors = GetCountNeighbors(i,j);
-            next_field[i*field_size+j] = field[i*field_size+j].CalculateCellState(count_neighbors);
+            next_field[i*field_size+j] = field[i*field_size+j].CalculateCellState(count_neighbors,customVal);
         }
     }
 

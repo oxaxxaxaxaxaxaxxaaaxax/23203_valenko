@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->button_, &QPushButton::clicked, this, &MainWindow::SetInitialState);
     connect(ui->run_button, &QPushButton::clicked, this, &MainWindow::RunSlot);
     connect(ui->clear_button, &QPushButton::clicked, this, &MainWindow::Clear);
+    connect(ui->min_button, &QPushButton::clicked, this, &MainWindow::IncreaseNeighbours);
+    connect(ui->plus_button, &QPushButton::clicked, this, &MainWindow::ReduceNeighbours);
 
     setWindowTitle("Game Of Life");
     resize(950, 850);
@@ -24,6 +26,20 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::IncreaseNeighbours(){
+    if(!gameOfLife){
+        return;
+    }
+    gameOfLife->game->universe->AddVal();
+}
+
+void MainWindow::ReduceNeighbours(){
+    if(!gameOfLife){
+        return;
+    }
+    gameOfLife->game->universe->SubVal();
 }
 
 void MainWindow::SetInitialState(bool checked)
@@ -62,6 +78,9 @@ void MainWindow::Clear(){
     if(!gameOfLife){
         return;
     }
+    ui->run_button->setText("Run");
+    ui->run_button->setChecked(false);
+    gameOfLife->StopGame();
     gameOfLife->close();
     delete gameOfLife;
     gameOfLife=nullptr;

@@ -1,0 +1,4 @@
+/home/oksana/programm/labs/23203_valenko/lab_3/build-gameOfLife-Desktop-Debug/CMakeFiles/gameOfLife.dir
+/home/oksana/programm/labs/23203_valenko/lab_3/build-gameOfLife-Desktop-Debug/CMakeFiles/edit_cache.dir
+/home/oksana/programm/labs/23203_valenko/lab_3/build-gameOfLife-Desktop-Debug/CMakeFiles/rebuild_cache.dir
+/home/oksana/programm/labs/23203_valenko/lab_3/build-gameOfLife-Desktop-Debug/CMakeFiles/gameOfLife_autogen.dir
