@@ -24,13 +24,13 @@ public class Main {
         String sequence = args[0];
         Brainfuck.setCommandSequence(sequence);
         if(args.length >1){
-            String inputText = args[1];
+            Brainfuck.inputString = args[1];
         }
 
         while(Brainfuck.commandPointer< sequence.length()) {
             try{
                 String s = properties.getProperty(String.valueOf(sequence.charAt(Brainfuck.commandPointer)));
-                Brainfuck.commandPointer++;
+
                 if (!Factory.commands.containsKey((s))) {
                     try {
                         Class<?> c = Class.forName(s);
@@ -65,9 +65,7 @@ public class Main {
             catch(NullPointerException e){
                 System.out.println("\nSymbol not found");
             }
-
+            Brainfuck.commandPointer++;
         }
-        //System.out.println("");
     }
-
 }

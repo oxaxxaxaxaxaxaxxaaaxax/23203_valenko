@@ -4,7 +4,15 @@ import nsu.Brainfuck;
 import nsu.Command;
 import nsu.StackError;
 
+/**
+ * Class for "]" command in brainfuck.
+ * Handle brainfuck's cycle.
+ */
 public class EndLoop implements Command {
+    /**
+     * End brainfuck's cycle.
+     * @throws StackError Error in cycle's stack
+     */
     @Override
     public void execute() throws StackError{
         if(Brainfuck.brackets.peek().equals("]") || Brainfuck.brackets.empty()){

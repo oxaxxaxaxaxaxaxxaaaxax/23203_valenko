@@ -1,6 +1,9 @@
 package nsu;
 
+/**
+ * Command interface.
+ */
 public interface Command {
-    void execute() throws StackError;
+    void execute() throws Exception;
 
 }

@@ -1,5 +1,9 @@
 package nsu;
 import java.util.Stack;
+
+/**
+ * Utility-class for brainfuck's functional.
+ */
 public class Brainfuck {
     public static void setCommandSequence(String sequence){
         commands = sequence;
@@ -11,4 +15,5 @@ public class Brainfuck {
     public static int commandPointer=0;
     public static Stack<String> brackets = new Stack<String>();
     public static Stack<Integer> pointers = new Stack<Integer>();
+    public static String inputString;
 }

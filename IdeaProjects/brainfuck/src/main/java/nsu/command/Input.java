@@ -3,15 +3,18 @@ package nsu.command;
 import nsu.Brainfuck;
 import nsu.Command;
 
+/**
+ * Class for "," command in brainfuck.
+ * Read and set a value in memory array from the console.
+ */
 public class Input implements Command {
+    /**
+     * Set input value in current node in memory array.
+     */
     @Override
     public void execute(){
-        Brainfuck.memory[Brainfuck.dataPointer] = (byte)data.toCharArray()[counter];
+        Brainfuck.memory[Brainfuck.dataPointer] = (byte)Brainfuck.inputString.toCharArray()[counter];
         counter++;
     }
-    public Input(String ...args){ //тут не переменное колво
-        data = args[0];
-    }
-    String data;
     static int counter=0;
 }
