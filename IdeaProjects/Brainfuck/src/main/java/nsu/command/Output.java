@@ -1,6 +1,6 @@
 package nsu.command;
 
-import nsu.Brainfuck;
+import nsu.Context;
 import nsu.Command;
 
 import java.io.PrintStream;
@@ -10,7 +10,7 @@ import java.io.PrintStream;
  * Print a value to the console.
  */
 public class Output implements Command {
-    public Output(Brainfuck brainfuckCopy){
+    public Output(Context brainfuckCopy){
         //outputStream = System.out;
         brainfuck=brainfuckCopy;
     }
@@ -22,6 +22,6 @@ public class Output implements Command {
         //System.out.print((char) brainfuck.memory[brainfuck.dataPointer]);
         brainfuck.Output();
     }
-    Brainfuck brainfuck;
+    Context brainfuck;
     //public PrintStream outputStream;
 }

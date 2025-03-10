@@ -1,6 +1,6 @@
 package nsu.command;
 
-import nsu.Brainfuck;
+import nsu.Context;
 import nsu.Command;
 
 
@@ -9,7 +9,7 @@ import nsu.Command;
  * Moves the data pointer one step backwards in the memory array.
  */
 public class BackPointer implements Command {
-    public BackPointer(Brainfuck brainfuckCopy){
+    public BackPointer(Context brainfuckCopy){
         brainfuck=brainfuckCopy;
     }
     /**
@@ -24,6 +24,6 @@ public class BackPointer implements Command {
 //        brainfuck.dataPointer--;
         brainfuck.BackPtr();
     }
-    Brainfuck brainfuck;
+    Context brainfuck;
 }
 

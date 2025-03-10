@@ -1,14 +1,14 @@
 package nsu.command;
 
-import nsu.Brainfuck;
+import nsu.Context;
 import nsu.Command;
 
 /**
- * Class for ">" command in brainfuck.
+ * Class for ">" command in Context.
  * Moves the data pointer one step forwards in the memory array.
  */
 public class ForwardPointer implements Command {
-    public ForwardPointer(Brainfuck brainfuckCopy){
+    public ForwardPointer(Context brainfuckCopy){
         brainfuck=brainfuckCopy;
     }
     /**
@@ -19,5 +19,5 @@ public class ForwardPointer implements Command {
         brainfuck.ForwardPtr();
         //brainfuck.dataPointer++;
     }
-    Brainfuck brainfuck;
+    Context brainfuck;
 }

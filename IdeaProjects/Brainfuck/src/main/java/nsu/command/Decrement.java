@@ -1,6 +1,6 @@
 package nsu.command;
 
-import nsu.Brainfuck;
+import nsu.Context;
 import nsu.Command;
 
 /**
@@ -8,7 +8,7 @@ import nsu.Command;
  * Decrement a value in the memory array.
  */
 public class Decrement implements Command {
-    public Decrement(Brainfuck brainfuckCopy){
+    public Decrement(Context brainfuckCopy){
         brainfuck=brainfuckCopy;
     }
     /**
@@ -19,6 +19,6 @@ public class Decrement implements Command {
         brainfuck.DecrMemoryCell();
         //brainfuck.memory[brainfuck.dataPointer]--;
     }
-    Brainfuck brainfuck;
+    Context brainfuck;
 }
 

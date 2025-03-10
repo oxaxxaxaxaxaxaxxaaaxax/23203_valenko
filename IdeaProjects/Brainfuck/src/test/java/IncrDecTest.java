@@ -1,11 +1,11 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import nsu.Brainfuck;
+import nsu.Context;
 import nsu.command.Increment;
 
 public class IncrDecTest {
     void SimpleTest(){
-        Brainfuck brainTest = new Brainfuck();
+        Context brainTest = new Context();
         Increment incr = new Increment(brainTest);
         for(int i=0;i<65;i++){
             incr.execute();

@@ -1,6 +1,6 @@
 package nsu.command;
 
-import nsu.Brainfuck;
+import nsu.Context;
 import nsu.Command;
 import nsu.LoopError;
 
@@ -9,7 +9,7 @@ import nsu.LoopError;
  * Handle brainfuck's cycle.
  */
 public class StartLoop implements Command {
-    public StartLoop(Brainfuck brainfuckCopy){
+    public StartLoop(Context brainfuckCopy){
         brainfuck=brainfuckCopy;
     }
     /**
@@ -38,7 +38,7 @@ public class StartLoop implements Command {
 //            //brainfuck.symbolCounter = brainfuck.pointers.peek();
 //        }
     }
-    Brainfuck brainfuck;
+    Context brainfuck;
     //symb counter не должна быть глобальной
     //public StartLoop(String inputData){}
     int startPointer = 0;

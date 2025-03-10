@@ -1,6 +1,6 @@
 package nsu.command;
 
-import nsu.Brainfuck;
+import nsu.Context;
 import nsu.Command;
 import nsu.LoopError;
 
@@ -9,7 +9,7 @@ import nsu.LoopError;
  * Handle brainfuck's cycle.
  */
 public class EndLoop implements Command {
-    public EndLoop(Brainfuck brainfuckCopy){
+    public EndLoop(Context brainfuckCopy){
         brainfuck=brainfuckCopy;
     }
     /**
@@ -18,7 +18,7 @@ public class EndLoop implements Command {
      */
     @Override
     public void execute() throws LoopError{
-        brainfuck.EndLoop();
+            brainfuck.EndLoop();
 //        if(brainfuck.brackets.peek().equals("]") || brainfuck.brackets.empty()){
 //            throw new LoopError("]");
 //        }
@@ -43,5 +43,5 @@ public class EndLoop implements Command {
 //            //Brainfuck.symbolCounter = Brainfuck.pointers.peek();
 //        }
     }
-    Brainfuck brainfuck;
+    Context brainfuck;
 }

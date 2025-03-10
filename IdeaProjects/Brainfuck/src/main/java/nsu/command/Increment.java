@@ -1,14 +1,14 @@
 package nsu.command;
 
 import nsu.Command;
-import nsu.Brainfuck;
+import nsu.Context;
 
 /**
  * Class for "+" command in brainfuck.
  * Increment a value in the memory array.
  */
 public class Increment implements Command{
-    public Increment(Brainfuck brainfuckCopy){
+    public Increment(Context brainfuckCopy){
         brainfuck=brainfuckCopy;
     }
     /**
@@ -19,6 +19,6 @@ public class Increment implements Command{
         brainfuck.IncrMemoryCell();
         //brainfuck.memory[brainfuck.dataPointer]++;
     }
-    Brainfuck brainfuck;
+    Context brainfuck;
 }
 
