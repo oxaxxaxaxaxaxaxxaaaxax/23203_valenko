@@ -8,12 +8,16 @@ import nsu.Command;
  * Decrement a value in the memory array.
  */
 public class Decrement implements Command {
+    public Decrement(Brainfuck brainfuckCopy){
+        brainfuck=brainfuckCopy;
+    }
     /**
      * Decrement current node.
      */
     @Override
     public void execute(){
-        Brainfuck.memory[Brainfuck.dataPointer]--;
+        brainfuck.memory[brainfuck.dataPointer]--;
     }
+    Brainfuck brainfuck;
     //public Decrement(String ...args){}
 }

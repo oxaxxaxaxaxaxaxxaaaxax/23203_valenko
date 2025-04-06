@@ -8,14 +8,15 @@ import nsu.Brainfuck;
  * Increment a value in the memory array.
  */
 public class Increment implements Command{
+    public Increment(Brainfuck brainfuckCopy){
+        brainfuck=brainfuckCopy;
+    }
     /**
      * Increment current node.
      */
     @Override
     public void execute(){
-        Brainfuck.memory[Brainfuck.dataPointer]++;
+        brainfuck.memory[brainfuck.dataPointer]++;
     }
-    //public Increment(String ...args){}
-
-
+    Brainfuck brainfuck;
 }

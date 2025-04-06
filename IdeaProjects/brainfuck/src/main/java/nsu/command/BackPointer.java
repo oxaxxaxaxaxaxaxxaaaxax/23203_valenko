@@ -9,16 +9,20 @@ import java.lang.Exception;
  * Moves the data pointer one step backwards in the memory array.
  */
 public class BackPointer implements Command {
+    public BackPointer(Brainfuck brainfuckCopy){
+        brainfuck=brainfuckCopy;
+    }
     /**
      * Decrement the data pointer.
      * @throws Exception Wrong pointer's value
      */
     @Override
     public void execute() throws Exception{
-        if(Brainfuck.dataPointer == 0){
+        if(brainfuck.dataPointer == 0){
             throw new Exception("Error in brainfuck's code");
         }
-        Brainfuck.dataPointer--;
+        brainfuck.dataPointer--;
     }
+    Brainfuck brainfuck;
     //public BackPointer(String ...args){}
 }

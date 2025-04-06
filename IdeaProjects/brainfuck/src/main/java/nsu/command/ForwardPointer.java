@@ -8,12 +8,16 @@ import nsu.Command;
  * Moves the data pointer one step forwards in the memory array.
  */
 public class ForwardPointer implements Command {
+    public ForwardPointer(Brainfuck brainfuckCopy){
+        brainfuck=brainfuckCopy;
+    }
     /**
      * Increment the data pointer.
      */
     @Override
     public void execute(){
-        Brainfuck.dataPointer++;
+        brainfuck.dataPointer++;
     }
+    Brainfuck brainfuck;
     //public ForwardPointer(String ...args){}
 }

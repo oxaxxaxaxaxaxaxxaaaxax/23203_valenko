@@ -7,10 +7,13 @@ import java.util.Properties;
 import java.lang.reflect.Method;
 import java.io.FileInputStream;
 import java.lang.Class;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 
 public class Main {
     public static void main(String[] args) {
+        //public static Logger logger = LogManager.get();
         Properties properties = new Properties();
         ClassLoader classLoader = Main.class.getClassLoader();
         InputStream inp = classLoader.getResourceAsStream("nsu/config.properties");
@@ -21,15 +24,16 @@ public class Main {
             System.out.println("Read error" + e.getMessage());
         }
 
+        Brainfuck brainfuck = new Brainfuck();
         String sequence = args[0];
-        Brainfuck.setCommandSequence(sequence);
+        brainfuck.setCommandSequence(sequence);
         if(args.length >1){
-            Brainfuck.inputString = args[1];
+            brainfuck.inputString = args[1];
         }
 
-        while(Brainfuck.commandPointer< sequence.length()) {
+        while(brainfuck.commandPointer< sequence.length()) {
             try{
-                String s = properties.getProperty(String.valueOf(sequence.charAt(Brainfuck.commandPointer)));
+                String s = properties.getProperty(String.valueOf(sequence.charAt(brainfuck.commandPointer)));
 
                 if (!Factory.commands.containsKey((s))) {
                     try {
@@ -43,7 +47,7 @@ public class Main {
                 //Class<?>[] parameterTypes = {String.class};
                 Class<?> c = Factory.getInstance().createByName(s);
                 try{
-                    Object o = c.getConstructor().newInstance();
+                    Object o = c.getConstructor(Brainfuck.class).newInstance(brainfuck);
                     Method m = c.getMethod("execute");
                     m.invoke(o);
                 }
@@ -65,7 +69,7 @@ public class Main {
             catch(NullPointerException e){
                 System.out.println("\nSymbol not found");
             }
-            Brainfuck.commandPointer++;
+            brainfuck.commandPointer++;
         }
     }
 }

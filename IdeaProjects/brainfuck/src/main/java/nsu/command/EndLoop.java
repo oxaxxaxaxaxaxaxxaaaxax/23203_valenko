@@ -9,35 +9,39 @@ import nsu.StackError;
  * Handle brainfuck's cycle.
  */
 public class EndLoop implements Command {
+    public EndLoop(Brainfuck brainfuckCopy){
+        brainfuck=brainfuckCopy;
+    }
     /**
      * End brainfuck's cycle.
      * @throws StackError Error in cycle's stack
      */
     @Override
     public void execute() throws StackError{
-        if(Brainfuck.brackets.peek().equals("]") || Brainfuck.brackets.empty()){
+        if(brainfuck.brackets.peek().equals("]") || brainfuck.brackets.empty()){
             throw new StackError("]");
         }
-        if(Brainfuck.memory[Brainfuck.dataPointer] != 0){
+        if(brainfuck.memory[brainfuck.dataPointer] != 0){
             //System.out.println(Brainfuck.commandPointer);
             //Brainfuck.commandPointer = Brainfuck.symbolCounter;//&&&&&&&&&&&&&&&&&&&&&&&
-            if(Brainfuck.commandPointer ==  Brainfuck.pointers.peek() +1){
+            if(brainfuck.commandPointer ==  brainfuck.pointers.peek() +1){
                 throw new StackError("Wrong cycle");
             }
-            Brainfuck.commandPointer =  Brainfuck.pointers.peek();
+            brainfuck.commandPointer =  brainfuck.pointers.peek();
         }
         else{
-            Brainfuck.brackets.push("]");
-            if(!Brainfuck.brackets.pop().equals("]")){
+            brainfuck.brackets.push("]");
+            if(!brainfuck.brackets.pop().equals("]")){
                 throw new StackError("]");
             }
-            if(!Brainfuck.brackets.pop().equals("[")){
+            if(!brainfuck.brackets.pop().equals("[")){
                 throw new StackError("]");
             }
-            Integer prevPtr = Brainfuck.pointers.pop();
+            Integer prevPtr = brainfuck.pointers.pop();
 
             //Brainfuck.symbolCounter = Brainfuck.pointers.peek();
         }
     }
+    Brainfuck brainfuck;
     //public EndLoop(String ...args){}
 }

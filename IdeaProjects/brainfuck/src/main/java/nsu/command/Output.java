@@ -10,17 +10,18 @@ import java.io.PrintStream;
  * Print a value to the console.
  */
 public class Output implements Command {
-    public Output(){
+    public Output(Brainfuck brainfuckCopy){
         outputStream = System.out;
+        brainfuck=brainfuckCopy;
     }
     /**
      * Print the current node.
      */
     @Override
     public void execute(){
-        outputStream.print((char) Brainfuck.memory[Brainfuck.dataPointer]);
+        outputStream.print((char) brainfuck.memory[brainfuck.dataPointer]);
     }
-
-    private PrintStream outputStream;
+    Brainfuck brainfuck;
+    public PrintStream outputStream;
     //public Output(String ...args){}
 }

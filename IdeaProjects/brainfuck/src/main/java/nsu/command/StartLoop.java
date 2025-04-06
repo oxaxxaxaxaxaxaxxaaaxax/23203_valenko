@@ -9,6 +9,9 @@ import nsu.StackError;
  * Handle brainfuck's cycle.
  */
 public class StartLoop implements Command {
+    public StartLoop(Brainfuck brainfuckCopy){
+        brainfuck=brainfuckCopy;
+    }
     /**
      * Begin brainfuck's cycle.
      * @throws StackError Error in cycle's stack
@@ -17,23 +20,24 @@ public class StartLoop implements Command {
     public void execute() throws StackError{
         //Brainfuck.symbolCounter = Brainfuck.commandPointer;//на один меньше
         //System.out.println(Brainfuck.commandPointer);
-        Brainfuck.brackets.push("[");
-        Brainfuck.pointers.push(Brainfuck.commandPointer);
-        if(Brainfuck.memory[Brainfuck.dataPointer] == 0) {
-            while(Brainfuck.commands.toCharArray()[Brainfuck.commandPointer] != ']'){
-                Brainfuck.commandPointer++;
+        brainfuck.brackets.push("[");
+        brainfuck.pointers.push(brainfuck.commandPointer);
+        if(brainfuck.memory[brainfuck.dataPointer] == 0) {
+            while(brainfuck.commands.toCharArray()[brainfuck.commandPointer] != ']'){
+                brainfuck.commandPointer++;
             }
-            Brainfuck.commandPointer++;
-            if(!Brainfuck.brackets.pop().equals("[")){
+            brainfuck.commandPointer++;
+            if(!brainfuck.brackets.pop().equals("[")){
                 throw new StackError("[");
             }
-            Integer prevPtr = Brainfuck.pointers.pop();
-            if(Brainfuck.pointers.empty()){
+            Integer prevPtr = brainfuck.pointers.pop();
+            if(brainfuck.pointers.empty()){
                 throw new StackError("Wrong cycle");
             }
-            Brainfuck.symbolCounter = Brainfuck.pointers.peek();
+            brainfuck.symbolCounter = brainfuck.pointers.peek();
         }
     }
+    Brainfuck brainfuck;
     //symb counter не должна быть глобальной
     //public StartLoop(String inputData){}
     int startPointer = 0;
