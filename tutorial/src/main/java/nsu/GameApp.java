@@ -45,6 +45,7 @@ public class GameApp extends GameApplication{
         Entity platform1 = FXGL.spawn("platform", new SpawnData(200,300).put("width", 250).put("height", 50));
         Entity platform2 = FXGL.spawn("platform", new SpawnData(400,190).put("width", 100).put("height", 50));
         Entity platform3 = FXGL.spawn("platform", new SpawnData(100,400).put("width", 100).put("height", 50));
+        Entity platform4 = FXGL.spawn("platform", new SpawnData(50,550).put("width", 300).put("height", 50));
         //FXGL.spawn("platform", new SpawnData(100, 500).put("width", 200).put("height", 20));
         player = FXGL.spawn("player");
         Entity coin1 = FXGL.spawn("coin", new SpawnData(220,90).put("radius", 15));
@@ -79,7 +80,7 @@ public class GameApp extends GameApplication{
             }
         });
         FXGL.getWorldProperties().<Integer>addListener("score", (oldValue, newValue)->{
-            if(newValue == 3){
+            if(newValue == 43){
                 showWinPage();
             }
         });
@@ -92,6 +93,7 @@ public class GameApp extends GameApplication{
             @Override
             protected void onAction() {
                 player.getComponent(PlayerComponent.class).right();
+                player.getComponent(PlayerComponent.class).setOrientation(BulletOrientation.RIGHT);
             }
             @Override
             protected void onActionEnd() {
@@ -102,6 +104,7 @@ public class GameApp extends GameApplication{
             @Override
             protected void onAction() {
                 player.getComponent(PlayerComponent.class).left();
+                player.getComponent(PlayerComponent.class).setOrientation(BulletOrientation.LEFT);
             }
             @Override
             protected void onActionEnd() {
@@ -114,6 +117,11 @@ public class GameApp extends GameApplication{
                 player.getComponent(PlayerComponent.class).jump();
             }
         }, KeyCode.W);
+        FXGL.getInput().addAction(new UserAction("Shot"){
+            @Override
+            protected void onActionBegin(){
+                player.getComponent(PlayerComponent.class).shot();}
+        },KeyCode.SPACE);
     }
     @Override
     protected void initGameVars(Map<String, Object> vars){

@@ -5,9 +5,9 @@ import com.almasb.fxgl.entity.component.Component;
 
 public class CollisionComponent extends Component {
     public boolean isCollision(Entity other){
-        return (entity.getX() <= other.getX()+ other.getWidth()) &&
-                (entity.getX() + entity.getWidth() >= other.getX()) &&
-                (entity.getY() <= other.getY()+ other.getHeight()) &&
-                (entity.getY() + entity.getHeight() >= other.getY()) ;
+        return (entity.getX() <= other.getX()+ other.getWidth()+1) &&
+        (entity.getX() + entity.getWidth()+1 >= other.getX()) &&
+        (entity.getY() <= other.getY()+ other.getHeight() +1) &&
+        (entity.getY() + entity.getHeight()+1 >= other.getY()) ;
     }
 }

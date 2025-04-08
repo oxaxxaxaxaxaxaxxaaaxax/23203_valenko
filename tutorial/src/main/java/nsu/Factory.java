@@ -27,7 +27,7 @@ public class Factory implements EntityFactory {
         Texture texture = FXGL.getAssetLoader().loadTexture("player.png");
         Entity player = FXGL.entityBuilder().view(new Rectangle(25,25, Color.WHITE)).at(100,200).type(EntityType.PLAYER).bbox(new HitBox(BoundingShape.box(25,25)))
                 .with(new PhysicsComponent()).with(new CollidableComponent(true)).with(new CollisionComponent())
-                .with(new PlayerComponent()).build();
+                .with(new PlayerComponent(handler)).build();
         handler.addEntity(player);
         return player;
     }
@@ -66,5 +66,13 @@ public class Factory implements EntityFactory {
         handler.addEntity(smartEnemy);
         return smartEnemy;
     }
-
+    @Spawns("bullet")
+    public Entity bullet(SpawnData data){
+        Entity bullet = FXGL.entityBuilder(data).view(new Rectangle(data.<Integer>get("width"),data.<Integer>get("height"),Color.DARKORANGE)).type(EntityType.BULLET)
+                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"),data.<Integer>get("height"))))
+                .with(new PhysicsComponent()).with(new CollidableComponent(true)).with(new CollisionComponent()).build();
+        bullet.getComponent(PhysicsComponent.class).setBodyType(BodyType.KINEMATIC);
+        handler.addEntity(bullet);
+        return bullet;
+    }
 }
