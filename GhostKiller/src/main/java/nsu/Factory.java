@@ -88,7 +88,8 @@ public class Factory implements EntityFactory {
     public Entity smartEnemy(SpawnData data){
         Entity smartEnemy = FXGL.entityBuilder(data).view("right_smart_enemy.png").type(EntityType.ENEMY)
                 .bbox(new HitBox(BoundingShape.box(44,28))).with(new PhysicsComponent()).with(new CollidableComponent(true))
-                .with(new CollisionComponent()).with(new ViewEntityComponent(new Texture(new Image("assets/textures/left_smart_enemy.png")), new Texture(new Image("assets/textures/right_smart_enemy.png"))))
+                .with(new CollisionComponent())
+                .with(new ViewEntityComponent(new Texture(new Image("assets/textures/left_smart_enemy.png")), new Texture(new Image("assets/textures/right_smart_enemy.png"))))
                 .with(new SmartEnemyComponent(data.getX(), data.<Integer>get("width")+data.getX(), handler)).build();
         handler.addEntity(smartEnemy);
         Entity healthbar = FXGL.spawn("healthbar", new SpawnData(data.getX(), data.getY()));
@@ -104,7 +105,8 @@ public class Factory implements EntityFactory {
     public Entity bullet(SpawnData data){
         Entity bullet = FXGL.entityBuilder(data).view(data.get("view").toString()).type(EntityType.BULLET)
                 .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"),data.<Integer>get("height"))))
-                .with(new PhysicsComponent()).with(new CollidableComponent(true)).with(new CollisionComponent()).build();
+                .with(new PhysicsComponent()).with(new CollidableComponent(true))
+                .with(new CollisionComponent()).build();
         bullet.getComponent(PhysicsComponent.class).setBodyType(BodyType.KINEMATIC);
         handler.addEntity(bullet);
         return bullet;

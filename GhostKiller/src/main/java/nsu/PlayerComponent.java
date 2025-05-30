@@ -67,16 +67,18 @@ public class PlayerComponent extends Component {
     public void stop() {
         physics.setVelocityX(0);
     }
-    public void jump(){
-        if(jumpCount ==2){
+
+    public void jump() {
+
+        if (jumpCount == 2) {
             jumpCount--;
             physics.setVelocityY(-300);
-        }else if(jumpCount ==1){
+        } else if (jumpCount == 1) {
             jumpCount--;
             physics.setVelocityY(-300);
         }
-    }
-
+    }/*
+     */
     public void shot() {
         if (orient == Orientation.RIGHT) {
             Entity bullet = FXGL.spawn("bullet", new SpawnData(entity.getX() + entity.getWidth(), entity.getY() +entity.getHeight() / 3)
@@ -88,6 +90,7 @@ public class PlayerComponent extends Component {
                     .put("width", 20).put("height", 15).put("view", "bullet_left.png"));
             bullet.getComponent(PhysicsComponent.class).setVelocityX(-200);
             handler.addEntity(bullet);
+
         }
     }
     public void collectCoin(){
@@ -107,7 +110,6 @@ public class PlayerComponent extends Component {
         }
         if(health < healthIndicator && !LowhpFlag){
             LowhpFlag =true;
-            System.out.println(":LKJHGF");
             entity.getComponent(ViewEntityComponent.class).setNewTexture();
         }
         healthText.setTextValue(health);

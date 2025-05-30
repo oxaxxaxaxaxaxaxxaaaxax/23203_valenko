@@ -51,9 +51,10 @@ public class SmartEnemyComponent extends Component {
         }else if(newX <= minX){
             newX = minX;
             currentSpeed = Math.abs(currentSpeed);
-            setOrientation(Orientation.RIGHT);
+            //setOrientation(Orientation.RIGHT);
         }
         physics.setVelocityX(currentSpeed);
+        //physics.setVelocityX(0);
     }
 
     public int getDamage() {

@@ -4,34 +4,42 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 
-public class SmartEnemyComponent extends Component {
+public class EnemyComponent extends Component {
     private double minX;
     private double maxX;
     private PhysicsComponent physics;
     private Orientation orient;
-    protected int damage = 500;
-    protected int health = 500;
     private double currentSpeed = 100;
-    private final int bulletDamage =100;
+    private int damage = 5;
+    private int health = 200;
+    private final int bulletDamage = 20;
     private CollisionManager handler;
-
-    SmartEnemyComponent(double beginX, double endX, CollisionManager handler) {
+    EnemyComponent(double beginX, double endX, CollisionManager handler){
         minX = beginX;
         maxX = endX;
         orient = Orientation.RIGHT;
         this.handler = handler;
     }
-
-    @Override
-    public void onAdded(){
-        physics = entity.getComponent(PhysicsComponent.class);
-        physics.setBodyType(BodyType.DYNAMIC);
+    public void setVelocity(int velocity){
+        physics.setVelocityX(velocity);
     }
     public void setOrientation(Orientation newOrient){
         orient = newOrient;
     }
     public Orientation getOrientation(){
         return orient;
+    }
+    public int getDamage(){
+        return damage;
+    }
+    public int getHealth(){return health;}
+    public double getMinX(){return minX;}
+    public double getMaxX(){return maxX;}
+    public double getSpeed(){return currentSpeed;}
+    @Override
+    public void onAdded(){
+        physics = entity.getComponent(PhysicsComponent.class);
+        physics.setBodyType(BodyType.DYNAMIC);
     }
     @Override
     public void onUpdate(double tpf){
@@ -47,19 +55,15 @@ public class SmartEnemyComponent extends Component {
             setOrientation(Orientation.RIGHT);
         }
         physics.setVelocityX(currentSpeed);
+        //physics.setVelocityX(0);
     }
-
-    public int getDamage() {
-        return damage;
+    public void collisionWithBullet(){
+        health-=bulletDamage;
     }
-
-    public void collisionWithBullet() {
-        health -= bulletDamage;
-    }
-
-    public void hitEnemy() {
+    public void hitEnemy(){
         collisionWithBullet();
-        if (health <= 0) {
+        entity.getComponent(HealthComponent.class).setHealthView(health);
+        if(health<=0){
             getEntity().removeFromWorld();
             handler.remEntity(getEntity());
         }

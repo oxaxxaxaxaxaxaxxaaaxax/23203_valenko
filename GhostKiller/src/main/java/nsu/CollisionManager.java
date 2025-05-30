@@ -1,16 +1,17 @@
 package nsu;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-
-import java.awt.*;
 import java.util.ArrayList;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 
 public class CollisionManager {
     private final Pair pairCoinPlayer = new Pair(EntityType.COIN,EntityType.PLAYER);
     private final Pair pairEnemyPlayer = new Pair(EntityType.ENEMY,EntityType.PLAYER);
     private final Pair pairPlayerPlatform = new Pair(EntityType.PLAYER,EntityType.PLATFORM);
     private final Pair pairBulletEnemy = new Pair(EntityType.BULLET,EntityType.ENEMY);
+    private final Pair pairBulletPlatform = new Pair(EntityType.BULLET,EntityType.PLATFORM);
     private ArrayList<Entity> entities = new ArrayList<>();
 
     public void addEntity(Entity entity){
@@ -28,6 +29,20 @@ public class CollisionManager {
             remEntity(entity);
         }
     }
+
+    public void checkBulletPosition(){
+        for(int i=0;i<entities.size();i++){
+            Entity entity = entities.get(i);
+            if(entity.getType() == EntityType.BULLET){
+                if(entity.getX() > getAppWidth() || entity.getX() + entity.getWidth()< 0 || entity.getY() + entity.getHeight() < 0 || entity.getY() > getAppHeight() ){
+                    System.out.println("remove");
+                    entity.removeFromWorld();
+                    remEntity(entity);
+                }
+            }
+        }
+    }
+
     public void handCollision(Entity entity1, Entity entity2){
         Pair pair = new Pair((EntityType) entity1.getType(),(EntityType)entity2.getType());
         switch (pair){
@@ -40,6 +55,17 @@ public class CollisionManager {
                     entity2.removeFromWorld();
                     entity1.getComponent(PlayerComponent.class).collectCoin();
                     entities.remove(entity2);
+                }
+            }
+            case Pair p when p.equals(pairBulletPlatform) -> {
+                if(p.getFirstType() == EntityType.BULLET){
+                    entity1.removeFromWorld();
+                    entities.remove(entity1);
+                    entity1.setPosition(0,0);
+                }else{
+                    entity2.removeFromWorld();
+                    entities.remove(entity2);
+                    entity2.setPosition(0,0);
                 }
             }
             case Pair p when p.equals(pairEnemyPlayer)->{

@@ -4,18 +4,9 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.texture.Texture;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-
 import java.util.ArrayList;
-import java.util.Map;
-import com.almasb.fxgl.texture.Texture;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
@@ -30,7 +21,7 @@ public class GameApp extends GameApplication{
     protected void initSettings(GameSettings settings){
         settings.setHeight(580);
         settings.setWidth(600);
-        settings.setTitle("Game");
+        settings.setTitle("Ghost killer");
     }
     @Override
     protected void initPhysics(){
@@ -41,27 +32,31 @@ public class GameApp extends GameApplication{
         if(!EndLevel){
             handler.findCollision();
         }
+        if(!EndLevel){
+            handler.checkBulletPosition();
+        }
         if(player == null){
             return;
         }
         player.getComponent(ViewEntityComponent.class).setView(player.getComponent(PlayerComponent.class).getOrientation());
         if(player.getComponent(PlayerComponent.class).getScore() == winScore){
-            if(levelManager.isLastLevel()){
+             if(levelManager.isLastLevel()){
                 showGameWinPage();
+            }else{
+                showWinPage();
+                EndLevel = true;
+                player.getComponent(PlayerComponent.class).setScore(0);
+                handler.remAllEntities();
+                ArrayList<Entity> entitiesCopy = new ArrayList<>(FXGL.getGameWorld().getEntities());
+                FXGL.getGameWorld().removeEntities(entitiesCopy);
+                levelManager.EndLevel();
+                EndLevel = false;
             }
-            showWinPage();
-            EndLevel = true;
-            player.getComponent(PlayerComponent.class).setScore(0);
-            handler.remAllEntities();
-            ArrayList<Entity> entitiesCopy = new ArrayList<>(FXGL.getGameWorld().getEntities());
-            FXGL.getGameWorld().removeEntities(entitiesCopy);
-            levelManager.EndLevel();
-            EndLevel = false;
         }
         if(player.getComponent(PlayerComponent.class).getHealth() <= loseHealth){
             showGameOver();
         }
-        if(player.getX() > getAppWidth() || player.getX() < 0 || player.getY() < 0 || player.getY() > getAppHeight() ){
+        if(player.getX() > getAppWidth() || player.getX() + player.getWidth()< 0 || player.getY() + player.getHeight() < 0 || player.getY() > getAppHeight() ){
             showGameOver();
         }
     }
@@ -73,10 +68,10 @@ public class GameApp extends GameApplication{
     }
 
     void showWinPage(){
-        FXGL.getDialogService().showMessageBox("You completed the level!:)", () -> {});
+        FXGL.getDialogService().showMessageBox("You completed the level!", () -> {});
     }
     void showGameOver(){
-        FXGL.getDialogService().showMessageBox("You lose:(", getGameController()::exit);
+        FXGL.getDialogService().showMessageBox("You lose", getGameController()::exit);
     }
     void showGameWinPage(){FXGL.getDialogService().showMessageBox("You WON", getGameController()::exit);}
 
@@ -84,7 +79,6 @@ public class GameApp extends GameApplication{
     protected void initGame(){
         getGameWorld().addEntityFactory(new Factory(handler));
         initEntities();
-        //initWalls();
     }
     @Override
     protected void initInput(){
