@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id ("application")
 }
 //plugins {
 //    java
@@ -12,6 +13,9 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass.set("nsu.TorrentClient") // Укажи свой главный класс
+}
 //repositories {
 //    maven { url = uri("https://jitpack.io ") }
 //}
@@ -19,11 +23,9 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    //implementation("com.turn.torrent:jlibtorrent:1.2.0")
-    //implementation("io.github.arnaudmorin:bencode:1.0")
-    //implementation("com.dampcake:bencode:1.4.2")
     implementation("com.dampcake:bencode:1.3")
-    //implementation("com.github.arnaudmorin:bencode-java:master-SNAPSHOT")
+    implementation("org.apache.logging.log4j:log4j-api:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
 }
 
 tasks.test {
