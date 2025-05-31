@@ -56,6 +56,7 @@ public class ConnectOperation {
     private final TorrentPeers torrentPeers;
     private BitSet downloadedPieces;
     private Handler handler= new Handler();
+    PieceManager manager;
     private Map<Integer, Piece> notDownloadedPieces = new ConcurrentHashMap<>();
     private final int countPieces;
     private final int partSize = 16* 1024;
@@ -75,27 +76,30 @@ public class ConnectOperation {
         }
         countPieces = downloadedPieces.size();
         pieceSize = metadata.getPieceSize();
-        setNeedPieces(downloadedPieces,(int)(pieceSize+partSize - 1)/partSize,notDownloadedPieces);//должно делиться нацело
+        manager = new PieceManager(countPieces);
+        manager.setNeedPieces(downloadedPieces,(int)(pieceSize+partSize - 1)/partSize,notDownloadedPieces);//должно делиться нацело
         fillHandshakes(torrentPeers);
     }
 
     public void fillHandshakes(TorrentPeers torrentPeers){
         List<Peer> peers = torrentPeers.getPeers();
         int peerCount = torrentPeers.getCountPeers();
-        for(int i=0;i< peerCount;i++){
+        logger.trace("count torrent peers "+ peerCount + peers.size());
+        for(int i=0;i< peerCount -1 ;i++){
+            logger.trace("current peer: "+ i);
             Peer peer = peers.get(i);
             peerHandshakes.put(peer.getServerPort(),HandShake.INITIAL_HANDSHAKE);
         }
     }
 
-    public void setNeedPieces(BitSet downloadedPieces,int countParts, Map<Integer, Piece> pieces){
-        for(int i=0;i< countPieces;i++){
-            if(!downloadedPieces.get(i)){
-                logger.trace("set piece");
-                pieces.put(i,new Piece(countParts,i));
-            }
-        }
-    }
+//    public void setNeedPieces(BitSet downloadedPieces,int countParts, Map<Integer, Piece> pieces){
+//        for(int i=0;i< countPieces;i++){
+//            if(!downloadedPieces.get(i)){
+//                logger.trace("set piece");
+//                pieces.put(i,new Piece(countParts,i));
+//            }
+//        }
+//    }
 
     public void setWaitHandshake(InetSocketAddress peerAddres){
         peerHandshakes.put(peerAddres.getPort(),HandShake.WAIT_HANDSHAKE);
@@ -312,8 +316,11 @@ public class ConnectOperation {
         HandShake handshakeState = peerHandshakes.get(peerPort);
         buffer.flip();
         switch (handshakeState){
-            case HandShake.COMPLETE_HANDSHAKE: break;
+            case HandShake.COMPLETE_HANDSHAKE:
+                logger.debug("complete handshake with: " + peerPort);
+                break;
             case HandShake.INITIAL_HANDSHAKE:
+                logger.debug("initial handshake with: " + peerPort);
                 if(!handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
                     return Id.END_CONNECT;
                 }
@@ -323,6 +330,7 @@ public class ConnectOperation {
                     peerHandshakes.put(peerPort,HandShake.COMPLETE_HANDSHAKE);
                     return Id.BITFIELD;
             case HandShake.WAIT_HANDSHAKE:
+                logger.debug("I wait handshake with: " + peerPort);
                 if(handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
                     peerHandshakes.put(peerPort,HandShake.COMPLETE_HANDSHAKE);
                     return Id.END_CONNECT;

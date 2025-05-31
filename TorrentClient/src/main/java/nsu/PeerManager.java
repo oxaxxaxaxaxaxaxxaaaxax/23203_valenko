@@ -35,6 +35,7 @@ public class PeerManager{
         torrentData = metadata;
         downloadsBytes = metadata.getDownloadedBytes();
         this.torrentPeers = torrentPeers;
+        logger.trace("torent Peers: "+ torrentPeers.getPeers().size());
         op = new ConnectOperation(torrentPeers,metadata);
         //this.peers = peers;
         serverPORT = torrentPeers.getClientServerPort();
@@ -91,8 +92,9 @@ public class PeerManager{
                     }
                     InetSocketAddress peerAddres = (InetSocketAddress)customChannel.getRemoteAddress();
                     logger.trace("peer address: " + peerAddres);
-                    ByteBuffer habdshake = op.createInitialHandshake(peerAddres);
-                    customChannel.write(habdshake);
+                    ByteBuffer handshake = op.createInitialHandshake(peerAddres);
+                    customChannel.write(handshake);
+                    logger.trace("write handshake");
                     customChannel.register(selector, SelectionKey.OP_READ);
                 }
                 if (key.isReadable()) {

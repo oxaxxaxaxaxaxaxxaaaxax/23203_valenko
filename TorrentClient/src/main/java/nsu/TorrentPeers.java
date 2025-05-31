@@ -26,7 +26,7 @@ public class TorrentPeers {
     }
 
     TorrentPeers(int countPeers,String numberClient){
-        this.countPeers = countPeers -1;
+        this.countPeers = countPeers;
         genPeers();
         serverPort = serverPorts.get(Integer.parseInt(numberClient));
         logger.debug("my server port " + serverPort);
@@ -63,9 +63,15 @@ public class TorrentPeers {
         for(int i=0;i<countPeers;i++){
             Peer peer =peers.get(i);
             if(peer.getLeecherPort() == port){
+                logger.trace("leecher port! "+ port);
                 return peer.getId();
             }
+            if(peer.getServerPort() == port){
+                logger.trace("server port! "+ port);
+                return  peer.getId();
+            }
         }
+        logger.trace("not find");
         return peers.get(0).getId();//по хорошему исключение
     }
 }

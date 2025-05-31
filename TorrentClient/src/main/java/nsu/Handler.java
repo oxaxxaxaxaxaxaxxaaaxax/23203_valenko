@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.BitSet;
 
@@ -60,6 +61,12 @@ public class Handler {
         return true;
     }
 
+    public static String bufferToString(ByteBuffer buffer) {
+        ByteBuffer duplicate = buffer.duplicate();
+        duplicate.flip();
+        return StandardCharsets.UTF_8.decode(duplicate).toString();
+    }
+
     public ByteBuffer getHandshake(byte[] infoHash, InetSocketAddress peerAddres, TorrentPeers torrentPeers) {
         ByteBuffer handShake = ByteBuffer.allocate(lengthMessage);
         byte firstByte = (byte) lengthProtocol;
@@ -70,8 +77,12 @@ public class Handler {
             handShake.put((byte) 0);
         }
         handShake.put(infoHash);
+        logger.trace("remote address: "+ peerAddres);
         byte[] peerId = torrentPeers.getPeerID(peerAddres.getPort());//
         handShake.put(peerId);
+        logger.trace("message: "  + bufferToString(handShake));
+        logger.trace("position: "+ handShake.position());
+        handShake.flip();
         return handShake;
     }
 

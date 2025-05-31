@@ -31,6 +31,7 @@ public class TorrentClient {
             return;
         }
         TorrentPeers torrentPeers = new TorrentPeers(peerCount,numberClient);
+        logger.trace("torent Peers1: "+ torrentPeers.getPeers().size());
         metadata.parseTorrentFile();
         metadata.createCard();
         logger.trace("peer manager start");
