@@ -3,6 +3,7 @@ package nsu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
@@ -63,11 +64,15 @@ public class ConnectOperation {
     private Map<Integer, HandShake> peerHandshakes= new ConcurrentHashMap<>();
     private final Logger logger = LogManager.getLogger(ConnectOperation.class);
 
-    ConnectOperation(TorrentPeers torrentPeers, TorrentData metadata) throws IOException{
+    ConnectOperation(TorrentPeers torrentPeers, TorrentData metadata) {
         this.torrentPeers = torrentPeers;
         this.metadata = metadata;
         downloadedPieces = metadata.getDownloadedBytes();
-        localFile = new RandomAccessFile(metadata.getFile(),"rw");
+        try{
+            localFile = new RandomAccessFile(metadata.getFile(),"rw");
+        } catch (FileNotFoundException e) {
+            logger.trace("failed create file " + e.getMessage());
+        }
         countPieces = downloadedPieces.size();
         pieceSize = metadata.getPieceSize();
         setNeedPieces(downloadedPieces,(int)(pieceSize+partSize - 1)/partSize,notDownloadedPieces);//должно делиться нацело
@@ -79,13 +84,14 @@ public class ConnectOperation {
         int peerCount = torrentPeers.getCountPeers();
         for(int i=0;i< peerCount;i++){
             Peer peer = peers.get(i);
-            peerHandshakes.put(peer.getPort(),HandShake.INITIAL_HANDSHAKE);
+            peerHandshakes.put(peer.getServerPort(),HandShake.INITIAL_HANDSHAKE);
         }
     }
 
     public void setNeedPieces(BitSet downloadedPieces,int countParts, Map<Integer, Piece> pieces){
         for(int i=0;i< countPieces;i++){
             if(!downloadedPieces.get(i)){
+                logger.trace("set piece");
                 pieces.put(i,new Piece(countParts,i));
             }
         }
@@ -125,7 +131,7 @@ public class ConnectOperation {
             List<Peer> peers = torrentPeers.getPeers();
             for(int i=0;i<countPeer;i++){
                 Peer peer = peers.get(i);
-                if(peer.getPort() == peerPort){
+                if(peer.getLeecherPort() == peerPort){/// /////
                     peer.setPeerBitfield(peerPieces);
                 }
             }

@@ -9,34 +9,42 @@ import java.util.Random;
 
 public class TorrentPeers {
     private List<Peer> peers = new ArrayList<>();
-    private static List<Integer> peerPorts = new ArrayList<>();
+    private static List<Integer> serverPorts = new ArrayList<>();
+    private static List<Integer> leecherPorts = new ArrayList<>();
     private final int countPeers;
-    private final int port;
+    private final int serverPort;
+    private final int leecherPort;
     Logger logger = LogManager.getLogger(TorrentPeers.class);
 
     static{
-        peerPorts.add(4537);
-        peerPorts.add(2486);
-        peerPorts.add(6000);
+        serverPorts.add(4537);
+        serverPorts.add(2486);
+        serverPorts.add(6000);
+        leecherPorts.add(5567);
+        leecherPorts.add(4888);
+        leecherPorts.add(6722);
     }
 
     TorrentPeers(int countPeers,String numberClient){
-        countPeers-=1;
-        this.countPeers = countPeers;
+        this.countPeers = countPeers -1;
         genPeers();
-        port = peerPorts.get(Integer.parseInt(numberClient));
-        logger.debug("my port " + port);
+        serverPort = serverPorts.get(Integer.parseInt(numberClient));
+        logger.debug("my server port " + serverPort);
+        leecherPort = leecherPorts.get(Integer.parseInt(numberClient));
+        logger.debug("my leecher port" + leecherPort);
         peers.remove(Integer.parseInt(numberClient));
-        peerPorts.remove(Integer.parseInt(numberClient));
+        serverPorts.remove(Integer.parseInt(numberClient));
+        leecherPorts.remove(Integer.parseInt(numberClient));
     }
-    public int getClientPort(){return port;}
+    public int getClientServerPort(){return serverPort;}
+    public int getClientLeecherPort(){return leecherPort;}
     public List<Peer> getPeers(){
         return peers;
     }
     public int getCountPeers(){return countPeers;}
     public void genPeers(){
         for(int i=0;i<countPeers;i++){
-            peers.add(new Peer(genPeerID(),peerPorts.get(i)));
+            peers.add(new Peer(genPeerID(),serverPorts.get(i), leecherPorts.get(i)));//////////
         }
     }
 
@@ -47,14 +55,14 @@ public class TorrentPeers {
         return peerId;
     }
 
-    public int getPort(int numberPeer){
-        return peerPorts.get(numberPeer);
+    public int getServerPort(int numberPeer){
+        return serverPorts.get(numberPeer);
     }
 
-    public byte[] getPeerID(int port){
+    public byte[] getPeerID(int port){//тут порт от канала(которым подклюились)
         for(int i=0;i<countPeers;i++){
             Peer peer =peers.get(i);
-            if(peer.getPort() == port){
+            if(peer.getLeecherPort() == port){
                 return peer.getId();
             }
         }

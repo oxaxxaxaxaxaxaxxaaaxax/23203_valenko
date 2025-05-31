@@ -3,14 +3,12 @@ package nsu;
 import com.dampcake.bencode.Bencode;
 import com.dampcake.bencode.Type;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +23,9 @@ public class TorrentData {
     byte[] infoHash;
     BitSet piecesCard;
     File localFile;
+    File torrentFile;
     private static final int SHAsize =20;
+    private String downloadDir = "/home/oksana/Downloads";
     private final Logger logger = LogManager.getLogger(TorrentData.class);
 
     TorrentData(String pathName, int peerCount){
@@ -37,6 +37,7 @@ public class TorrentData {
         logger.trace("create a TorrentData class with localFile");
         torrentPathName = torrentFilePath;
         localPathName = localFilePath;
+        localFile = new File(localPathName);
         //genPeerAddress(peerCount,peers);
     }
 
@@ -73,7 +74,7 @@ public class TorrentData {
         System.out.println("parse");
         logger.trace("start parsing torrent");
         Bencode bencode = new Bencode(StandardCharsets.UTF_8);//парсим как байтмассив а не строку
-        File torrentFile = new File(torrentPathName);
+        torrentFile = new File(torrentPathName);
         byte[] dataArray = new byte[(int)torrentFile.length()];
         try(FileInputStream input = new FileInputStream(torrentFile)){
             input.read(dataArray);
@@ -94,7 +95,7 @@ public class TorrentData {
         System.out.println(bytesToHex(infoHash));
     }
 
-    public void createPartCard(int pieceIdx, int begin) throws IOException, java.security.NoSuchAlgorithmException{
+    public void createPartCard(int pieceIdx, int begin) {
         try(RandomAccessFile file = new RandomAccessFile(localFile, "r")){
             FileChannel chanel = file.getChannel();
             ByteBuffer downloadedBytes = ByteBuffer.allocate((int)pieceLength);//надо придумать какую записывать за раз
@@ -108,13 +109,21 @@ public class TorrentData {
                 }
             }
             piecesCard.set(pieceIdx);
+        }catch (NoSuchAlgorithmException e) {
+            logger.trace(e.getMessage());
+            return;
+        }catch(IOException e){
+            logger.trace(e.getMessage());
         }
     }
 
     public void createCard() throws IOException, java.security.NoSuchAlgorithmException{
         logger.trace("create card pieces");
         piecesCard = new BitSet((int)length*8);
-        if (localPathName == null){
+        if(localPathName == null){
+            localPathName = downloadDir + "/" + name;
+            localFile = new File(localPathName);
+            logger.trace("create a file: " + localPathName);
             return;
         }
         long countPieces = length/pieceLength;
