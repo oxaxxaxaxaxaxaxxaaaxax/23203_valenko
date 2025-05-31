@@ -244,7 +244,12 @@ public class ConnectOperation {
             Piece piece = notDownloadedPieces.get(index);
             piece.addLoadedPart(offset /partSize, block);//на всякий случай
             if(piece.checkIsCompletedPiece()){
-               if(metadata.compareSHAHashWithTorrent(index,piece.getPieceFile())){
+                ByteBuffer buff =piece.getPieceFile();
+                buff.flip();
+                byte[] array= new byte[piece.getSize()];
+                buff.put(array);
+               //if(metadata.compareSHAHashWithTorrent(index,piece.getPieceFile())){
+                if(metadata.compareSHAHashWithTorrent(index,array)){
                    downloadedPieces.set(index);
                    notDownloadedPieces.remove(index);
                    sendHaveMessage(index);

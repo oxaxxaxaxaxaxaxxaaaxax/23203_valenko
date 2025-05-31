@@ -88,11 +88,10 @@ public class TorrentData {
         String strPiece = (String)info.get("pieces");
         pieces = strPiece.getBytes(StandardCharsets.UTF_8);
         infoHash = getSHAHash(ByteBuffer.wrap(bencode.encode(info)));
-        System.out.println(length);
-        System.out.println(name);
-        System.out.println(pieceLength);
-        //System.out.println(Arrays.toString(pieces));
-        System.out.println(bytesToHex(infoHash));
+        logger.trace("length " + length);
+        logger.trace("name "+ name);
+        logger.trace("pieceLength "+ pieceLength);
+        logger.trace("infoHash "+ bytesToHex(infoHash));
     }
 
     public void createPartCard(int pieceIdx, int begin) {
