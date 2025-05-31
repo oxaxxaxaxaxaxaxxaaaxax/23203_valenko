@@ -58,7 +58,7 @@ public class PeerManager{
         while (true) {
             System.out.println("Waiting for clients");
             selector.select();
-            System.out.println("Accepted client!");
+            logger.trace("Accepted client!");
             Set<SelectionKey> selectedKeys = selector.selectedKeys();
             Iterator<SelectionKey> iter = selectedKeys.iterator();
             while (iter.hasNext()) {
@@ -69,14 +69,14 @@ public class PeerManager{
                         SocketChannel client = srv.accept();
                         client.configureBlocking(false);
                         client.register(selector, SelectionKey.OP_READ);
-                        System.out.println("Accepted client" + client.getRemoteAddress());
+                        System.out.println("accepted peer" + client.getRemoteAddress());
                     }
                 }
                 if (key.isConnectable()) {//подключение завершилось
                     logger.trace("connect to peer");
                     SocketChannel customChannel = (SocketChannel) key.channel();
                     InetSocketAddress peerAddres = (InetSocketAddress)customChannel.getRemoteAddress();
-                    ByteBuffer habdshake = op.getHandshake(infoHash, peerAddres);
+                    ByteBuffer habdshake = op.createInitialHandshake(peerAddres);
                     customChannel.write(habdshake);
                     customChannel.register(selector, SelectionKey.OP_READ);
                 }

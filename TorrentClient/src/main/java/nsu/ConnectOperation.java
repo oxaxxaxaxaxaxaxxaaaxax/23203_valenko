@@ -1,5 +1,8 @@
 package nsu;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
@@ -41,18 +44,24 @@ enum Id{
     public int getId(){return id;}
 }
 
+enum HandShake{
+    INITIAL_HANDSHAKE,
+    COMPLETE_HANDSHAKE,
+    WAIT_HANDSHAKE,
+}
+
 public class ConnectOperation {
     private RandomAccessFile localFile;
-    private final int lengthName = 19;
-    private final int lengthMessage = lengthName + 49;
     private final TorrentPeers torrentPeers;
     private BitSet downloadedPieces;
-    //private BitSet neededPieces;////?????
+    private Handler handler= new Handler();
     private Map<Integer, Piece> notDownloadedPieces = new ConcurrentHashMap<>();
     private final int countPieces;
     private final int partSize = 16* 1024;
     private final long pieceSize;
-    TorrentData metadata;
+    private TorrentData metadata;
+    private Map<Integer, HandShake> peerHandshakes= new ConcurrentHashMap<>();
+    private final Logger logger = LogManager.getLogger(ConnectOperation.class);
 
     ConnectOperation(TorrentPeers torrentPeers, TorrentData metadata) throws IOException{
         this.torrentPeers = torrentPeers;
@@ -62,6 +71,16 @@ public class ConnectOperation {
         countPieces = downloadedPieces.size();
         pieceSize = metadata.getPieceSize();
         setNeedPieces(downloadedPieces,(int)(pieceSize+partSize - 1)/partSize,notDownloadedPieces);//должно делиться нацело
+        fillHandshakes(torrentPeers);
+    }
+
+    public void fillHandshakes(TorrentPeers torrentPeers){
+        List<Peer> peers = torrentPeers.getPeers();
+        int peerCount = torrentPeers.getCountPeers();
+        for(int i=0;i< peerCount;i++){
+            Peer peer = peers.get(i);
+            peerHandshakes.put(peer.getPort(),HandShake.INITIAL_HANDSHAKE);
+        }
     }
 
     public void setNeedPieces(BitSet downloadedPieces,int countParts, Map<Integer, Piece> pieces){
@@ -72,107 +91,24 @@ public class ConnectOperation {
         }
     }
 
-    public ByteBuffer getHandshake(byte[] infoHash, InetSocketAddress peerAddres) {
-        ByteBuffer handShake = ByteBuffer.allocate(lengthMessage);
-        byte firstByte = (byte) lengthName;
-        handShake.put(firstByte);
-        String name = "BitTorrent protocol";
-        handShake.put(name.getBytes());
-        for (int i = 0; i < 8; i++) {
-            handShake.put((byte) 0);
-        }
-        handShake.put(infoHash);
-        byte[] peerId = torrentPeers.getPeerID(peerAddres.getPort());
-        handShake.put(peerId);
-        return handShake;
+    public void setWaitHandshake(InetSocketAddress peerAddres){
+        peerHandshakes.put(peerAddres.getPort(),HandShake.WAIT_HANDSHAKE);
     }
 
-
-    public byte[] BitToByte(BitSet bitset) {
-        int bitLength = bitset.length();
-        int length = (bitLength + 7) / 8;
-        byte[] bytes = new byte[length];
-        for (int i = 0; i < bitLength; i++) {
-            if (bitset.get(i)) {
-                bytes[i / 8] |= (byte) 1 << (7 - i % 8);
-            }
-        }
-        return bytes;
+    public ByteBuffer createHandshake(InetSocketAddress peerAddres){
+        logger.debug("create handshake");
+        byte[] infoHash = metadata.getInfoHash();
+        return handler.getHandshake(infoHash,peerAddres,torrentPeers);
     }
 
-    public BitSet ByteToBit(byte[] buffer, int countPieces) {
-        BitSet bitset = new BitSet(countPieces);
-        for (int i = 0; i < countPieces; i++) {
-            if ((buffer[i / 8] & (byte) (1 << (7 - i % 8))) != 0) {
-                bitset.set(i);
-            }
-        }
-        return bitset;
+    public ByteBuffer createInitialHandshake(InetSocketAddress peerAddres){
+        logger.debug("create initial handshake");
+        setWaitHandshake(peerAddres);
+        return createHandshake(peerAddres);
     }
 
-    public ByteBuffer getBitfield() {
-        byte[] bitfieldsByte = BitToByte(downloadedPieces);
-        ByteBuffer buff = ByteBuffer.allocate(4 + bitfieldsByte.length + 1);
-        buff.putInt(bitfieldsByte.length + 1);
-        buff.put((byte) 5);
-        buff.put(bitfieldsByte);
-        return buff;
-    }
-
-    public ByteBuffer getChocke() {
-        ByteBuffer buff = ByteBuffer.allocate(5);
-        buff.putInt(1);
-        buff.put((byte) 0);
-        return buff;
-    }
-
-    public ByteBuffer getUnchocke() {
-        ByteBuffer buff = ByteBuffer.allocate(5);
-        buff.putInt(1);
-        buff.put((byte) 1);
-        return buff;
-    }
-
-    public ByteBuffer getInterested() {
-        ByteBuffer buff = ByteBuffer.allocate(5);
-        buff.putInt(1);
-        buff.put((byte) 2);
-        return buff;
-    }
-
-    public ByteBuffer getNotInterested() {
-        ByteBuffer buff = ByteBuffer.allocate(5);
-        buff.putInt(1);
-        buff.put((byte) 3);
-        return buff;
-    }
-
-    public ByteBuffer getRequest(int idx, int offset, int blockLength) {
-        ByteBuffer buff = ByteBuffer.allocate(13 + 4);
-        buff.putInt(13);
-        buff.put((byte) 6);
-        buff.putInt(idx);
-        buff.putInt(offset);
-        buff.putInt(blockLength);
-        return buff;
-    }
-
-    public ByteBuffer getPiece(int idx, int offset, byte[] data) {
-        ByteBuffer buff = ByteBuffer.allocate(9 + data.length);
-        buff.putInt(data.length + 1);
-        buff.put((byte) 7);
-        buff.putInt(idx);
-        buff.putInt(offset);
-        buff.put(data);
-        return buff;
-    }
-
-    public ByteBuffer getHave(int idx) {
-        ByteBuffer buff = ByteBuffer.allocate(9);
-        buff.putInt(5);
-        buff.put((byte) 4);
-        buff.putInt(idx);
-        return buff;
+    public ByteBuffer createBitfield(){
+        return handler.getBitfield(downloadedPieces);
     }
 
     public boolean hasNeededPieces(BitSet peerPieces) {
@@ -201,7 +137,7 @@ public class ConnectOperation {
         buffer.get();
         byte[] buff = new byte[length - 1];
         buffer.get(buff);
-        BitSet peerPieces = ByteToBit(buff, countPieces);
+        BitSet peerPieces = handler.ByteToBit(buff, countPieces);
         setPeerBitfield(peerPieces,channel);
         if (hasNeededPieces(peerPieces)) {
             return Id.INTERESTED;
@@ -226,7 +162,7 @@ public class ConnectOperation {
                 neededPieces.andNot(downloadedPieces);
                 int pieceIndex = neededPieces.nextSetBit(0);
                 int offset = getNotDownloadedPart(notDownloadedPieces,pieceIndex);//с учетом байтового смещения
-                return getRequest(pieceIndex,offset,partSize);
+                return handler.getRequest(pieceIndex,offset,partSize);
             }
         }
         return null;//?????
@@ -256,7 +192,7 @@ public class ConnectOperation {
             localFile.seek(filePosition);
             byte[] sendData = new byte[length];
             localFile.readFully(sendData);
-            return getPiece(index,offset,sendData);
+            return handler.getPiece(index,offset,sendData);
         } catch (IOException e) {return null;}
     }
 
@@ -268,7 +204,7 @@ public class ConnectOperation {
             if(hasNeededPieces(peer.getBitfield())){
                 SocketChannel peerChannel =  peer.getChannel();
                 try{
-                    peerChannel.write(getInterested());
+                    peerChannel.write(handler.getInterested());
                 } catch (IOException e) {}
 
             }
@@ -282,7 +218,7 @@ public class ConnectOperation {
         for(int i=0;i<countPeer;i++){
             SocketChannel peerChannel =peers.get(i).getChannel();
             try{
-                peerChannel.write(getHave(index));
+                peerChannel.write(handler.getHave(index));
             } catch (IOException e) {}
         }
     }
@@ -338,14 +274,14 @@ public class ConnectOperation {
         try{
             switch(messageId){
                 case Id.CHOKE:
-                case Id.UNCHOKE: channel.write(getUnchocke());
+                case Id.UNCHOKE: channel.write(handler.getUnchocke());
                     break;
-                case Id.INTERESTED: channel.write(getInterested());
+                case Id.INTERESTED: channel.write(handler.getInterested());
                     break;
                 case Id.NOT_INTERESTED:
                 case Id.HAVE:
                     break;
-                case Id.BITFIELD:
+                case Id.BITFIELD: channel.write(createBitfield());
                 case Id.REQUEST: channel.write(requestPiece(channel));
                     break;
                 case Id.PIECE: channel.write(sendPiece(buffer));
@@ -357,10 +293,33 @@ public class ConnectOperation {
     }
 
     public Id handlePeerMessage(ByteBuffer buffer,SocketChannel channel) {
-        //может проверк на то что это не хэндшейк....
-        byte id = buffer.get(5);
-//        buffer.getInt();
-//        byte id = buffer.get();//настроить
+        int peerPort;
+        try{
+            InetSocketAddress peerAddress = (InetSocketAddress) channel.getRemoteAddress();
+            peerPort = peerAddress.getPort();
+        } catch (IOException e) {return Id.END_CONNECT;}
+        HandShake handshakeState = peerHandshakes.get(peerPort);
+        buffer.flip();
+        switch (handshakeState){
+            case HandShake.COMPLETE_HANDSHAKE: break;
+            case HandShake.INITIAL_HANDSHAKE:
+                if(!handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
+                    return Id.END_CONNECT;
+                }
+                try{
+                    channel.write(createHandshake((InetSocketAddress)channel.getRemoteAddress()));
+                } catch (IOException e) {}
+                    peerHandshakes.put(peerPort,HandShake.COMPLETE_HANDSHAKE);
+                    return Id.BITFIELD;
+            case HandShake.WAIT_HANDSHAKE:
+                if(handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
+                    peerHandshakes.put(peerPort,HandShake.COMPLETE_HANDSHAKE);
+                    return Id.END_CONNECT;
+                }
+                return Id.END_CONNECT;
+        }
+        buffer.flip();
+        int id = buffer.get(5);
         Id messageId = Id.IntToId(id);
         switch (messageId) {
             case Id.CHOKE: return Id.END_CONNECT;

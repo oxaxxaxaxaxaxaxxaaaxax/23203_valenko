@@ -10,14 +10,14 @@ import java.util.Random;
 
 public class Peer {
     private byte[] id;
-    private final int port;
+    //private final int port;
     private BitSet bitfield;
     private SocketChannel channel;
     //private final String ip;
 
     Peer(byte[] peerID, int port){
         this.id = peerID;
-        this.port = port;
+        //this.port = port;
     }
     public void setPeerBitfield(BitSet peerBitfield){
         bitfield = peerBitfield;
@@ -30,6 +30,6 @@ public class Peer {
     public void setId(byte[] id){
         this.id = id;
     }
-    public int getPort(){return port;}
+    //public int getPort(){return port;}
     public byte[] getId(){return id;}
 }

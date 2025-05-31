@@ -1,0 +1,5 @@
+javac -cp /home/oksana/IdeaProjects/TorrentClient/build/log4j-api-2.20.0.jar:/home/oksana/IdeaProjects/TorrentClient/build/log4j-core-2.20.0.jar:/home/oksana/IdeaProjects/TorrentClient/build/bencode-1.2.jar -d out nsu/TorrentClient.java nsu/PeerManager.java nsu/TorrentData.java nsu/TorrentPeers.java nsu/Peer.java nsu/ConnectOperation.java nsu/Piece.java
+
+cd out
+
+java -cp /home/oksana/IdeaProjects/TorrentClient/src/main/resources:nsu:.:/home/oksana/IdeaProjects/TorrentClient/build/log4j-api-2.20.0.jar:/home/oksana/IdeaProjects/TorrentClient/build/log4j-core-2.20.0.jar:/home/oksana/IdeaProjects/TorrentClient/build/bencode-1.2.jar nsu.TorrentClient /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRi_552311_82.torrent 0

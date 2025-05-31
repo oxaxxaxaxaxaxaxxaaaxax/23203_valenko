@@ -1,0 +1,190 @@
+2025-05-30 11:49:40 TRACE TorrentClient:15 - peer manager start
+2025-05-30 11:49:40 TRACE TorrentClient:26 - length =2
+2025-05-30 11:49:40 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 11:49:40 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 11:49:40 TRACE TorrentData:116 - create card pieces
+2025-05-30 11:49:40 TRACE TorrentClient:37 - peer manager start
+2025-05-30 11:49:40 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 11:49:40 TRACE PeerManager:53 - start handle peers
+2025-05-30 11:51:04 TRACE TorrentClient:15 - peer manager start
+2025-05-30 11:51:04 TRACE TorrentClient:26 - length =2
+2025-05-30 11:51:04 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 11:51:04 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 11:51:04 TRACE TorrentData:116 - create card pieces
+2025-05-30 11:51:04 TRACE TorrentClient:37 - peer manager start
+2025-05-30 11:51:04 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 11:51:04 TRACE PeerManager:53 - start handle peers
+2025-05-30 11:53:46 INFO  TorrentClient:15 - Start
+2025-05-30 11:53:46 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-30 11:53:46 TRACE TorrentClient:25 - length =2
+2025-05-30 11:53:46 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 11:53:46 DEBUG TorrentPeers:28 - my port4537
+2025-05-30 11:53:46 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 11:53:47 TRACE TorrentData:116 - create card pieces
+2025-05-30 11:53:47 TRACE TorrentClient:36 - peer manager start
+2025-05-30 11:53:47 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 11:53:47 TRACE PeerManager:53 - start handle peers
+2025-05-30 11:54:26 INFO  TorrentClient:15 - Start
+2025-05-30 11:54:26 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-30 11:54:26 TRACE TorrentClient:25 - length =2
+2025-05-30 11:54:26 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 11:54:26 DEBUG TorrentPeers:28 - my port4537
+2025-05-30 11:54:26 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 11:54:26 TRACE TorrentData:116 - create card pieces
+2025-05-30 11:54:27 TRACE TorrentClient:36 - peer manager start
+2025-05-30 11:54:27 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 11:54:27 TRACE PeerManager:53 - start handle peers
+2025-05-30 11:56:39 INFO  TorrentClient:15 - Start
+2025-05-30 11:56:39 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-30 11:56:39 TRACE TorrentClient:25 - length =2
+2025-05-30 11:56:39 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 11:56:39 DEBUG TorrentPeers:28 - my port4537
+2025-05-30 11:56:39 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 11:56:39 TRACE TorrentData:116 - create card pieces
+2025-05-30 11:56:39 TRACE TorrentClient:36 - peer manager start
+2025-05-30 11:56:39 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 11:56:39 TRACE PeerManager:53 - start handle peers
+2025-05-30 13:05:17 INFO  TorrentClient:15 - Start
+2025-05-30 13:05:17 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-30 13:05:17 TRACE TorrentClient:25 - length =2
+2025-05-30 13:05:17 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 13:05:17 DEBUG TorrentPeers:28 - my port 4537
+2025-05-30 13:05:17 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 13:05:18 TRACE TorrentData:116 - create card pieces
+2025-05-30 13:05:18 TRACE TorrentClient:36 - peer manager start
+2025-05-30 13:05:18 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 13:05:18 TRACE PeerManager:53 - start handle peers
+2025-05-30 13:14:43 INFO  TorrentClient:15 - Start
+2025-05-30 13:14:43 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-30 13:14:43 TRACE TorrentClient:25 - length =2
+2025-05-30 13:14:43 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 13:14:43 DEBUG TorrentPeers:28 - my port 4537
+2025-05-30 13:14:43 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 13:14:44 TRACE TorrentData:116 - create card pieces
+2025-05-30 13:14:44 TRACE TorrentClient:36 - peer manager start
+2025-05-30 13:14:44 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 13:14:44 TRACE PeerManager:53 - start handle peers
+2025-05-30 13:14:53 TRACE PeerManager:68 - accept peer
+2025-05-30 13:41:38 INFO  TorrentClient:15 - Start
+2025-05-30 13:41:38 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-30 13:41:38 TRACE TorrentClient:25 - length =2
+2025-05-30 13:41:38 TRACE TorrentData:33 - create a TorrentData class
+2025-05-30 13:41:38 DEBUG TorrentPeers:28 - my port 4537
+2025-05-30 13:41:38 TRACE TorrentData:75 - start parsing torrent
+2025-05-30 13:41:38 TRACE TorrentData:116 - create card pieces
+2025-05-30 13:41:38 TRACE TorrentClient:36 - peer manager start
+2025-05-30 13:41:38 TRACE PeerManager:47 - start connectToLoad method
+2025-05-30 13:41:38 TRACE PeerManager:53 - start handle peers
+2025-05-30 13:41:52 TRACE PeerManager:68 - accept peer
+2025-05-31 12:35:20 INFO  TorrentClient:15 - Start
+2025-05-31 12:35:20 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 12:35:20 TRACE TorrentClient:25 - length =2
+2025-05-31 12:35:20 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 12:35:20 DEBUG TorrentPeers:28 - my port 4537
+2025-05-31 12:35:20 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 12:35:20 TRACE TorrentData:115 - create card pieces
+2025-05-31 12:35:21 TRACE TorrentClient:36 - peer manager start
+2025-05-31 12:35:21 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 12:35:21 TRACE PeerManager:52 - start handle peers
+2025-05-31 12:35:41 TRACE PeerManager:61 - Accepted client!
+2025-05-31 12:35:41 TRACE PeerManager:67 - accept peer
+2025-05-31 16:35:56 INFO  TorrentClient:15 - Start
+2025-05-31 16:35:56 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 16:35:56 TRACE TorrentClient:25 - length =2
+2025-05-31 16:35:56 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 16:35:56 DEBUG TorrentPeers:28 - my port 4537
+2025-05-31 16:35:56 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 16:35:56 TRACE TorrentData:115 - create card pieces
+2025-05-31 16:35:57 TRACE TorrentClient:36 - peer manager start
+2025-05-31 16:35:57 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 16:35:57 TRACE PeerManager:52 - start handle peers
+2025-05-31 16:36:50 TRACE PeerManager:61 - Accepted client!
+2025-05-31 16:36:50 TRACE PeerManager:67 - accept peer
+2025-05-31 16:44:37 INFO  TorrentClient:15 - Start
+2025-05-31 16:44:37 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 16:44:37 TRACE TorrentClient:25 - length =2
+2025-05-31 16:44:37 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 16:44:37 DEBUG TorrentPeers:28 - my port 4537
+2025-05-31 16:44:37 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 16:44:37 TRACE TorrentData:115 - create card pieces
+2025-05-31 16:44:37 TRACE TorrentClient:36 - peer manager start
+2025-05-31 16:44:37 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 16:44:37 TRACE PeerManager:52 - start handle peers
+2025-05-31 16:45:26 INFO  TorrentClient:15 - Start
+2025-05-31 16:45:26 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 16:45:26 TRACE TorrentClient:25 - length =2
+2025-05-31 16:45:26 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 16:45:26 DEBUG TorrentPeers:28 - my port 2486
+2025-05-31 16:45:26 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 16:45:26 TRACE TorrentData:115 - create card pieces
+2025-05-31 16:45:26 TRACE TorrentClient:36 - peer manager start
+2025-05-31 16:45:26 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 16:45:26 TRACE PeerManager:61 - Accepted client!
+2025-05-31 16:45:26 TRACE PeerManager:67 - accept peer
+2025-05-31 16:45:26 TRACE PeerManager:52 - start handle peers
+2025-05-31 16:55:15 INFO  TorrentClient:15 - Start
+2025-05-31 16:55:15 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 16:55:15 TRACE TorrentClient:25 - length =2
+2025-05-31 16:55:15 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 16:55:15 DEBUG TorrentPeers:28 - my port 4537
+2025-05-31 16:55:15 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 16:55:15 TRACE TorrentData:115 - create card pieces
+2025-05-31 16:55:15 TRACE TorrentClient:36 - peer manager start
+2025-05-31 16:55:15 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 16:55:15 TRACE PeerManager:52 - start handle peers
+2025-05-31 16:55:26 INFO  TorrentClient:15 - Start
+2025-05-31 16:55:26 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 16:55:26 TRACE TorrentClient:25 - length =2
+2025-05-31 16:55:26 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 16:55:26 DEBUG TorrentPeers:28 - my port 2486
+2025-05-31 16:55:26 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 16:55:26 TRACE TorrentData:115 - create card pieces
+2025-05-31 16:55:27 TRACE TorrentClient:36 - peer manager start
+2025-05-31 16:55:27 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 16:55:27 TRACE PeerManager:61 - Accepted client!
+2025-05-31 16:55:27 TRACE PeerManager:52 - start handle peers
+2025-05-31 16:55:27 TRACE PeerManager:67 - accept peer
+2025-05-31 17:01:25 INFO  TorrentClient:15 - Start
+2025-05-31 17:01:25 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 17:01:25 TRACE TorrentClient:25 - length =2
+2025-05-31 17:01:25 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 17:01:25 DEBUG TorrentPeers:28 - my port 4537
+2025-05-31 17:01:25 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 17:01:25 TRACE TorrentData:115 - create card pieces
+2025-05-31 17:01:25 TRACE TorrentClient:36 - peer manager start
+2025-05-31 17:01:25 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 17:01:25 TRACE PeerManager:52 - start handle peers
+2025-05-31 17:01:33 INFO  TorrentClient:15 - Start
+2025-05-31 17:01:33 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 17:01:33 TRACE TorrentClient:25 - length =2
+2025-05-31 17:01:33 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 17:01:33 DEBUG TorrentPeers:28 - my port 2486
+2025-05-31 17:01:33 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 17:01:33 TRACE TorrentData:115 - create card pieces
+2025-05-31 17:01:33 TRACE TorrentClient:36 - peer manager start
+2025-05-31 17:01:33 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 17:01:33 TRACE PeerManager:61 - Accepted client!
+2025-05-31 17:01:33 TRACE PeerManager:52 - start handle peers
+2025-05-31 17:01:33 TRACE PeerManager:67 - accept peer
+2025-05-31 17:03:14 INFO  TorrentClient:15 - Start
+2025-05-31 17:03:14 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 17:03:14 TRACE TorrentClient:25 - length =2
+2025-05-31 17:03:14 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 17:03:14 DEBUG TorrentPeers:28 - my port 4537
+2025-05-31 17:03:14 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 17:03:14 TRACE TorrentData:115 - create card pieces
+2025-05-31 17:03:15 TRACE TorrentClient:36 - peer manager start
+2025-05-31 17:03:15 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 17:03:15 TRACE PeerManager:52 - start handle peers
+2025-05-31 17:03:18 INFO  TorrentClient:15 - Start
+2025-05-31 17:03:18 TRACE TorrentClient:16 - put number client starting to 0....
+2025-05-31 17:03:18 TRACE TorrentClient:25 - length =2
+2025-05-31 17:03:18 TRACE TorrentData:32 - create a TorrentData class
+2025-05-31 17:03:18 DEBUG TorrentPeers:28 - my port 2486
+2025-05-31 17:03:18 TRACE TorrentData:74 - start parsing torrent
+2025-05-31 17:03:18 TRACE TorrentData:115 - create card pieces
+2025-05-31 17:03:19 TRACE TorrentClient:36 - peer manager start
+2025-05-31 17:03:19 TRACE PeerManager:46 - start connectToLoad method
+2025-05-31 17:03:19 TRACE PeerManager:61 - Accepted client!
+2025-05-31 17:03:19 TRACE PeerManager:67 - accept peer
+2025-05-31 17:03:19 TRACE PeerManager:52 - start handle peers
