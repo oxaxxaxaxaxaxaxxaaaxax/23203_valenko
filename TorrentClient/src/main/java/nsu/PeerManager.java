@@ -24,7 +24,8 @@ public class PeerManager{
     private ConnectOperation op ;
     private final TorrentPeers torrentPeers;
     private final int serverPORT;//порт пира запустившего программу
-    private final int leecherPORT;
+    //private final int leecherPORT1;
+    //private final int leecherPORT2;
     private final String hostname = "127.0.0.1";
     private Selector selector;
     private static final int BUFFER_SIZE = 1024;
@@ -39,7 +40,8 @@ public class PeerManager{
         op = new ConnectOperation(torrentPeers,metadata);
         //this.peers = peers;
         serverPORT = torrentPeers.getClientServerPort();
-        leecherPORT = torrentPeers.getClientLeecherPort();
+        //leecherPORT1 = torrentPeers.getClientLeecherPort1();
+        //leecherPORT2 = torrentPeers.getClientLeecherPort2();
         infoHash = metadata.getInfoHash();
     }
 
@@ -107,7 +109,9 @@ public class PeerManager{
                     } else {
                         String message = new String(readBuffer.array(), 0, read).trim();
                         System.out.println("Received: " + message);
+                        logger.trace("position: "+ readBuffer.position());
                         readBuffer.flip();
+                        logger.trace("position: "+readBuffer.position());
                         byte[] copyBuffer = new byte[readBuffer.remaining()];
                         readBuffer.get(copyBuffer);
                         ByteBuffer buffer = ByteBuffer.wrap(copyBuffer);
@@ -126,13 +130,14 @@ public class PeerManager{
         SocketChannel channel;
         try {
             channel = SocketChannel.open();
-            logger.trace("my leecher port " + leecherPORT);
-            channel.bind(new InetSocketAddress(leecherPORT));
+            //logger.trace("my leecher port " + leecherPORT);
+            //channel.bind(new InetSocketAddress(leecherPORT));
             channel.configureBlocking(false);
             channel.connect(new InetSocketAddress(hostname, port));
+            logger.trace("leecher address:"+ channel.getLocalAddress());
             channel.register(selector, SelectionKey.OP_CONNECT);
         } catch (IOException e) {
-            //???
+            logger.trace("connection failed "+ e.getMessage());
         }
     }
 

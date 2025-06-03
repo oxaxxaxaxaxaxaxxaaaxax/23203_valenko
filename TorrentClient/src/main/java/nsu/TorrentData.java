@@ -27,6 +27,7 @@ public class TorrentData {
     private static final int SHAsize =20;
     private String downloadDir = "/home/oksana/Downloads";
     private final Logger logger = LogManager.getLogger(TorrentData.class);
+    private final Handler handler = new Handler();
 
     TorrentData(String pathName, int peerCount){
         logger.trace("create a TorrentData class");
@@ -47,17 +48,11 @@ public class TorrentData {
     public long getPieceSize(){return pieceLength;}
     public File getFile(){return localFile;}
 
-    public byte[] getSHAHash(ByteBuffer message) throws  java.security.NoSuchAlgorithmException{
-        MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
-        sha1.update(message);
-        return sha1.digest();
-    }
-
     public boolean compareSHAHashWithTorrent(int index, byte[] filePiece){
         byte[] torrentHash = new byte[20];
         System.arraycopy(pieces,index*SHAsize,torrentHash,0,SHAsize);
         try{
-            byte[] localHash = getSHAHash(ByteBuffer.wrap(filePiece));
+            byte[] localHash = handler.getSHAHash(ByteBuffer.wrap(filePiece));
             return Arrays.equals(torrentHash,localHash);
         }catch(Exception e){}
         return false;
@@ -87,7 +82,7 @@ public class TorrentData {
         pieceLength = (Long)info.get("piece length");
         String strPiece = (String)info.get("pieces");
         pieces = strPiece.getBytes(StandardCharsets.UTF_8);
-        infoHash = getSHAHash(ByteBuffer.wrap(bencode.encode(info)));
+        infoHash = handler.getSHAHash(ByteBuffer.wrap(bencode.encode(info)));
         logger.trace("length " + length);
         logger.trace("name "+ name);
         logger.trace("pieceLength "+ pieceLength);
@@ -100,7 +95,7 @@ public class TorrentData {
             ByteBuffer downloadedBytes = ByteBuffer.allocate((int)pieceLength);//надо придумать какую записывать за раз
             long offset = begin + (long)pieceIdx * pieceLength;
             chanel.read(downloadedBytes,offset);
-            byte[] pieceHash = getSHAHash(downloadedBytes);
+            byte[] pieceHash = handler.getSHAHash(downloadedBytes);
             int counter = 0;
             for(int i = 0;i<20;i++){
                 if(pieceHash[i] != pieces[pieceIdx*(int)pieceLength + i]){
@@ -108,9 +103,6 @@ public class TorrentData {
                 }
             }
             piecesCard.set(pieceIdx);
-        }catch (NoSuchAlgorithmException e) {
-            logger.trace(e.getMessage());
-            return;
         }catch(IOException e){
             logger.trace(e.getMessage());
         }

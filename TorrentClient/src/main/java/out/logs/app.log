@@ -43855,3 +43855,983 @@
 2025-06-01 02:42:11 TRACE Handler:84 - position: 68
 2025-06-01 02:42:14 TRACE PeerManager:101 - read peer message!
 2025-06-01 02:42:15 TRACE PeerManager:97 - write handshake
+2025-06-03 10:58:28 INFO  TorrentClient:15 - Start
+2025-06-03 10:58:28 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 10:58:28 TRACE TorrentClient:25 - length =2
+2025-06-03 10:58:28 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 10:58:28 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 10:58:28 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 10:58:28 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 10:58:28 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 10:58:29 TRACE TorrentData:91 - length 5613205554
+2025-06-03 10:58:29 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 10:58:29 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 10:58:29 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 10:58:29 TRACE TorrentData:120 - create card pieces
+2025-06-03 10:58:29 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 10:58:29 TRACE TorrentClient:37 - peer manager start
+2025-06-03 10:58:29 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 10:58:29 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 10:58:29 TRACE ConnectOperation:16 - 7360
+2025-06-03 10:58:29 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 10:58:29 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 10:58:29 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 10:58:29 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 10:58:29 TRACE PeerManager:144 - another server port 2486
+2025-06-03 10:58:29 TRACE PeerManager:129 - my leecher port 5567
+2025-06-03 10:58:29 TRACE PeerManager:144 - another server port 6000
+2025-06-03 10:58:29 TRACE PeerManager:129 - my leecher port 5567
+2025-06-03 10:58:29 TRACE PeerManager:53 - start handle peers
+2025-06-03 10:58:29 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 10:58:41 INFO  TorrentClient:15 - Start
+2025-06-03 10:58:41 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 10:58:41 TRACE TorrentClient:25 - length =2
+2025-06-03 10:58:41 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 10:58:41 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 10:58:41 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 10:58:41 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 10:58:41 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 10:58:42 TRACE TorrentData:91 - length 5613205554
+2025-06-03 10:58:42 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 10:58:42 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 10:58:42 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 10:58:42 TRACE TorrentData:120 - create card pieces
+2025-06-03 10:58:42 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 10:58:42 TRACE TorrentClient:37 - peer manager start
+2025-06-03 10:58:42 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 10:58:42 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 10:58:42 TRACE ConnectOperation:16 - 7360
+2025-06-03 10:58:42 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 10:58:42 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 10:58:42 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 10:58:42 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 10:58:42 TRACE PeerManager:144 - another server port 4537
+2025-06-03 10:58:42 TRACE PeerManager:129 - my leecher port 4888
+2025-06-03 10:58:42 TRACE PeerManager:68 - accept peer
+2025-06-03 10:58:42 TRACE PeerManager:144 - another server port 6000
+2025-06-03 10:58:42 TRACE PeerManager:129 - my leecher port 4888
+2025-06-03 10:58:42 TRACE PeerManager:53 - start handle peers
+2025-06-03 10:58:42 TRACE PeerManager:83 - connect to peer
+2025-06-03 10:58:42 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 10:58:42 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 10:58:42 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 10:58:42 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 10:58:42 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 10:58:42 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)�s&�jhu����G�v����'
+2025-06-03 10:58:42 TRACE Handler:84 - position: 68
+2025-06-03 10:58:42 TRACE PeerManager:97 - write handshake
+2025-06-03 10:58:42 TRACE PeerManager:101 - read peer message!
+2025-06-03 10:58:48 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:06:50 INFO  TorrentClient:15 - Start
+2025-06-03 11:06:50 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:06:50 TRACE TorrentClient:25 - length =2
+2025-06-03 11:06:50 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:06:50 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:06:50 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:06:50 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:06:50 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:06:50 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:06:50 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:06:50 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:06:50 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:06:50 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:06:51 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:06:51 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:06:51 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:06:51 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:06:51 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:06:51 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:06:51 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:06:51 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:06:51 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:06:51 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:06:51 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:06:51 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:06:51 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:06:51 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:06:51 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:06:57 INFO  TorrentClient:15 - Start
+2025-06-03 11:06:57 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:06:57 TRACE TorrentClient:25 - length =2
+2025-06-03 11:06:57 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:06:57 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:06:57 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:06:57 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:06:57 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:06:57 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:06:57 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:06:57 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:06:57 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:06:57 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:06:58 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:06:58 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:06:58 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:06:58 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:06:58 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:06:58 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:06:58 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:06:58 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:06:58 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:06:58 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:06:58 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:06:58 TRACE PeerManager:68 - accept peer
+2025-06-03 11:06:58 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:06:58 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:06:58 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:06:58 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:06:58 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:06:58 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:06:58 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:06:58 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:06:58 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:06:58 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)\�1�֟ܻ���d<{�+
+2025-06-03 11:06:58 TRACE Handler:84 - position: 68
+2025-06-03 11:06:58 TRACE Handler:86 - position: 0
+2025-06-03 11:06:58 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:06:58 TRACE PeerManager:97 - write handshake
+2025-06-03 11:06:58 TRACE PeerManager:110 - position: 68
+2025-06-03 11:06:58 TRACE PeerManager:112 - position: 0
+2025-06-03 11:07:03 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:07:11 INFO  TorrentClient:15 - Start
+2025-06-03 11:07:11 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:07:11 TRACE TorrentClient:25 - length =2
+2025-06-03 11:07:11 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:07:11 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:07:11 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:07:11 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:07:11 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:07:11 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:07:11 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:07:11 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:07:11 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:07:11 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:07:11 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:07:11 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:07:11 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:07:11 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:07:11 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:07:11 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:07:11 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:07:11 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:07:11 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:07:11 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:07:11 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:07:11 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:07:11 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:07:11 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:07:11 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:07:16 INFO  TorrentClient:15 - Start
+2025-06-03 11:07:16 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:07:16 TRACE TorrentClient:25 - length =2
+2025-06-03 11:07:16 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:07:16 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:07:16 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:07:16 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:07:16 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:07:16 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:07:16 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:07:16 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:07:16 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:07:16 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:07:16 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:07:16 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:07:16 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:07:16 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:07:16 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:07:16 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:07:16 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:07:16 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:07:16 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:07:16 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:07:16 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:07:16 TRACE PeerManager:68 - accept peer
+2025-06-03 11:07:16 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:07:16 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:07:16 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:07:16 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:07:16 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:07:16 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:07:16 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:07:16 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:07:16 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:07:16 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)�%��{�̴�yC	�N�
+2025-06-03 11:07:16 TRACE Handler:84 - position: 68
+2025-06-03 11:07:16 TRACE Handler:86 - position: 0
+2025-06-03 11:07:16 TRACE PeerManager:97 - write handshake
+2025-06-03 11:07:16 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:07:16 TRACE PeerManager:110 - position: 68
+2025-06-03 11:07:16 TRACE PeerManager:112 - position: 0
+2025-06-03 11:07:30 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:09:00 INFO  TorrentClient:15 - Start
+2025-06-03 11:09:00 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:09:00 TRACE TorrentClient:25 - length =2
+2025-06-03 11:09:00 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:09:00 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:09:00 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:09:00 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:09:00 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:09:00 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:09:00 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:09:00 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:09:00 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:09:00 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:09:00 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:09:00 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:09:00 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:09:00 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:09:00 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:09:00 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:09:00 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:09:00 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:09:00 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:09:00 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:09:00 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:09:00 TRACE PeerManager:68 - accept peer
+2025-06-03 11:09:00 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:09:00 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:09:00 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:09:00 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:09:00 TRACE PeerManager:94 - peer address: /127.0.0.1:2486
+2025-06-03 11:09:00 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:09:00 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:09:00 TRACE Handler:80 - remote address: /127.0.0.1:2486
+2025-06-03 11:09:00 TRACE TorrentPeers:70 - server port! 2486
+2025-06-03 11:09:00 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)��$^��B�:W����Ē@T
+2025-06-03 11:09:00 TRACE Handler:84 - position: 68
+2025-06-03 11:09:00 TRACE Handler:86 - position: 0
+2025-06-03 11:09:00 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:09:00 TRACE PeerManager:97 - write handshake
+2025-06-03 11:09:00 TRACE PeerManager:110 - position: 68
+2025-06-03 11:09:00 TRACE PeerManager:112 - position: 0
+2025-06-03 11:09:04 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:09:07 INFO  TorrentClient:15 - Start
+2025-06-03 11:09:07 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:09:07 TRACE TorrentClient:25 - length =2
+2025-06-03 11:09:07 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:09:07 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:09:07 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:09:07 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:09:07 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:09:07 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:09:07 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:09:07 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:09:07 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:09:07 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:09:08 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:09:08 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:09:08 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:09:08 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:09:08 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:09:08 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:09:08 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:09:08 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:09:08 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:09:08 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:09:08 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:09:08 TRACE PeerManager:68 - accept peer
+2025-06-03 11:09:08 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:09:08 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:09:08 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:09:08 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:09:08 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:09:08 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:09:08 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:09:08 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:09:08 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:09:08 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)��bM9����CS)Δ��am
+2025-06-03 11:09:08 TRACE Handler:84 - position: 68
+2025-06-03 11:09:08 TRACE Handler:86 - position: 0
+2025-06-03 11:09:08 TRACE PeerManager:97 - write handshake
+2025-06-03 11:09:08 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:09:08 TRACE PeerManager:110 - position: 68
+2025-06-03 11:09:08 TRACE PeerManager:112 - position: 0
+2025-06-03 11:09:08 TRACE ConnectOperation:311 - handle message!!!!!111
+2025-06-03 11:10:54 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:11:06 INFO  TorrentClient:15 - Start
+2025-06-03 11:11:06 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:11:06 TRACE TorrentClient:25 - length =2
+2025-06-03 11:11:06 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:11:06 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:11:06 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:11:06 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:11:06 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:11:07 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:11:07 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:07 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:11:07 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:11:07 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:11:07 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:07 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:11:07 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:11:07 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:11:07 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:11:07 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:11:07 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:11:07 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:11:07 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:11:07 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:11:07 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:11:07 TRACE PeerManager:68 - accept peer
+2025-06-03 11:11:07 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:11:07 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:11:07 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:11:07 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:11:07 TRACE PeerManager:94 - peer address: /127.0.0.1:2486
+2025-06-03 11:11:07 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:11:07 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:11:07 TRACE Handler:80 - remote address: /127.0.0.1:2486
+2025-06-03 11:11:07 TRACE TorrentPeers:70 - server port! 2486
+2025-06-03 11:11:07 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)����-Zsֹ�~,r�h�
+2025-06-03 11:11:07 TRACE Handler:84 - position: 68
+2025-06-03 11:11:07 TRACE Handler:86 - position: 0
+2025-06-03 11:11:07 TRACE PeerManager:97 - write handshake
+2025-06-03 11:11:07 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:11:07 TRACE PeerManager:110 - position: 68
+2025-06-03 11:11:07 TRACE PeerManager:112 - position: 0
+2025-06-03 11:11:07 TRACE ConnectOperation:311 - handle message!!!!!111
+2025-06-03 11:11:14 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:11:19 INFO  TorrentClient:15 - Start
+2025-06-03 11:11:19 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:11:19 TRACE TorrentClient:25 - length =2
+2025-06-03 11:11:19 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:11:19 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:11:19 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:11:19 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:11:19 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:11:19 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:11:19 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:19 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:11:19 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:11:19 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:11:20 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:20 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:11:20 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:11:20 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:11:20 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:11:20 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:11:20 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:11:20 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:11:20 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:11:20 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:11:20 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:11:20 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:11:20 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:11:20 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:11:20 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:11:35 INFO  TorrentClient:15 - Start
+2025-06-03 11:11:35 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:11:35 TRACE TorrentClient:25 - length =2
+2025-06-03 11:11:35 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:11:35 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:11:35 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:11:35 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:11:35 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:11:35 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:11:35 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:35 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:11:35 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:11:35 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:11:35 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:35 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:11:35 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:11:35 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:11:35 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:11:35 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:11:35 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:11:35 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:11:35 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:11:35 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:11:35 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:11:35 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:11:35 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:11:35 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:11:35 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:11:51 INFO  TorrentClient:15 - Start
+2025-06-03 11:11:51 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:11:51 TRACE TorrentClient:25 - length =2
+2025-06-03 11:11:51 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:11:51 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:11:51 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:11:51 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:11:51 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:11:51 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:11:51 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:51 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:11:51 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:11:51 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:11:51 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:11:51 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:11:51 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:11:51 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:11:51 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:11:51 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:11:51 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:11:51 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:11:51 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:11:51 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:11:51 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:11:51 TRACE PeerManager:68 - accept peer
+2025-06-03 11:11:51 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:11:51 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:11:51 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:11:51 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:11:51 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:11:51 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:11:51 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:11:51 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:11:51 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:11:51 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)��#Ka�_�L0��Aj]G4
+2025-06-03 11:11:51 TRACE Handler:84 - position: 68
+2025-06-03 11:11:51 TRACE Handler:86 - position: 0
+2025-06-03 11:11:51 TRACE PeerManager:97 - write handshake
+2025-06-03 11:11:51 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:11:51 TRACE PeerManager:110 - position: 68
+2025-06-03 11:11:51 TRACE PeerManager:112 - position: 0
+2025-06-03 11:11:51 TRACE ConnectOperation:311 - handle message!!!!!111
+2025-06-03 11:12:05 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:13:17 INFO  TorrentClient:15 - Start
+2025-06-03 11:13:17 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:13:17 TRACE TorrentClient:25 - length =2
+2025-06-03 11:13:17 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:13:17 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:13:17 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:13:17 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:13:17 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:13:17 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:13:17 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:17 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:13:17 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:13:17 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:13:17 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:17 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:13:17 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:13:17 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:13:17 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:13:17 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:13:17 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:13:17 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:13:17 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:13:17 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:13:17 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:13:17 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:13:17 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:13:17 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:13:17 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:13:26 INFO  TorrentClient:15 - Start
+2025-06-03 11:13:26 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:13:26 TRACE TorrentClient:25 - length =2
+2025-06-03 11:13:26 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:13:26 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:13:26 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:13:26 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:13:26 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:13:26 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:13:26 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:26 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:13:26 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:13:26 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:13:26 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:26 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:13:26 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:13:26 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:13:26 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:13:26 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:13:26 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:13:26 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:13:26 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:13:26 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:13:26 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:13:26 TRACE PeerManager:68 - accept peer
+2025-06-03 11:13:26 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:13:26 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:13:26 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:13:26 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:13:26 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:13:26 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:13:26 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:13:26 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:13:26 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:13:26 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)%�dc��\
+lM�h	xJ
+2025-06-03 11:13:26 TRACE Handler:84 - position: 68
+2025-06-03 11:13:26 TRACE Handler:86 - position: 0
+2025-06-03 11:13:26 TRACE PeerManager:97 - write handshake
+2025-06-03 11:13:26 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:13:26 TRACE PeerManager:110 - position: 68
+2025-06-03 11:13:26 TRACE PeerManager:112 - position: 0
+2025-06-03 11:13:26 TRACE ConnectOperation:311 - handle message!!!!!111
+2025-06-03 11:13:26 TRACE ConnectOperation:320 - position:0
+2025-06-03 11:13:26 TRACE ConnectOperation:322 - position:0
+2025-06-03 11:13:34 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:13:41 INFO  TorrentClient:15 - Start
+2025-06-03 11:13:41 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:13:41 TRACE TorrentClient:25 - length =2
+2025-06-03 11:13:41 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:13:41 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:13:41 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:13:41 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:13:41 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:13:41 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:13:41 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:41 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:13:41 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:13:41 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:13:41 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:41 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:13:41 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:13:41 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:13:41 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:13:41 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:13:41 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:13:41 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:13:41 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:13:41 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:13:41 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:13:41 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:13:41 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:13:41 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:13:41 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:13:45 INFO  TorrentClient:15 - Start
+2025-06-03 11:13:46 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:13:46 TRACE TorrentClient:25 - length =2
+2025-06-03 11:13:46 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:13:46 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:13:46 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:13:46 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:13:46 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:13:46 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:13:46 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:46 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:13:46 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:13:46 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:13:46 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:13:46 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:13:46 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:13:46 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:13:46 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:13:46 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:13:46 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:13:46 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:13:46 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:13:46 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:13:46 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:13:46 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:13:46 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:13:46 TRACE PeerManager:68 - accept peer
+2025-06-03 11:13:46 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:13:46 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:13:46 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:13:46 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:13:46 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:13:46 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:13:46 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:13:46 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)^�#;���cH,�UG��;
+2025-06-03 11:13:46 TRACE Handler:84 - position: 68
+2025-06-03 11:13:46 TRACE Handler:86 - position: 0
+2025-06-03 11:13:46 TRACE PeerManager:97 - write handshake
+2025-06-03 11:13:46 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:13:46 TRACE PeerManager:110 - position: 68
+2025-06-03 11:13:46 TRACE PeerManager:112 - position: 0
+2025-06-03 11:13:46 TRACE ConnectOperation:311 - handle message!!!!!111
+2025-06-03 11:13:46 TRACE ConnectOperation:320 - position:0
+2025-06-03 11:13:46 TRACE ConnectOperation:322 - position:0
+2025-06-03 11:15:19 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:15:34 INFO  TorrentClient:15 - Start
+2025-06-03 11:15:34 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:15:34 TRACE TorrentClient:25 - length =2
+2025-06-03 11:15:34 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:15:34 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:15:34 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:15:34 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:15:34 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:15:34 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:15:34 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:15:34 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:15:34 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:15:34 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:15:35 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:15:35 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:15:35 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:15:35 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:15:35 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:15:35 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:15:35 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:15:35 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:15:35 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:15:35 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:15:35 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:15:35 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:15:35 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:15:35 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:15:35 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:15:40 INFO  TorrentClient:15 - Start
+2025-06-03 11:15:40 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:15:40 TRACE TorrentClient:25 - length =2
+2025-06-03 11:15:40 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:15:40 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:15:40 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:15:40 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:15:40 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:15:40 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:15:40 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:15:40 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:15:40 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:15:40 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:15:40 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:15:40 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:15:40 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:15:40 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:15:40 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:15:40 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:15:40 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:15:40 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:15:40 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:15:40 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:15:40 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:15:40 TRACE PeerManager:68 - accept peer
+2025-06-03 11:15:40 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:15:40 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:15:40 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:15:40 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:15:40 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:15:40 DEBUG ConnectOperation:115 - create initial handshake
+2025-06-03 11:15:40 DEBUG ConnectOperation:109 - create handshake
+2025-06-03 11:15:40 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:15:40 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:15:40 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)�J��2#����#���@־KN
+2025-06-03 11:15:40 TRACE Handler:84 - position: 68
+2025-06-03 11:15:40 TRACE Handler:86 - position: 0
+2025-06-03 11:15:40 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:15:40 TRACE PeerManager:97 - write handshake
+2025-06-03 11:15:40 TRACE PeerManager:110 - position: 68
+2025-06-03 11:15:40 TRACE PeerManager:112 - position: 0
+2025-06-03 11:15:40 TRACE ConnectOperation:311 - handle message!!!!!111
+2025-06-03 11:15:40 TRACE ConnectOperation:320 - position:0
+2025-06-03 11:15:40 DEBUG ConnectOperation:323 - Handshake statenull
+2025-06-03 11:15:45 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:19:27 INFO  TorrentClient:15 - Start
+2025-06-03 11:19:27 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:19:27 TRACE TorrentClient:25 - length =2
+2025-06-03 11:19:27 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:19:27 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:19:27 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:19:27 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:19:27 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:19:27 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:19:27 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:19:27 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:19:27 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:19:27 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:19:28 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:19:28 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:19:28 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:19:28 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:19:28 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:19:28 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:19:28 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:19:28 TRACE ConnectOperation:92 - current port2486
+2025-06-03 11:19:28 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:19:28 TRACE ConnectOperation:92 - current port6000
+2025-06-03 11:19:28 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:19:28 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:19:28 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:19:28 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:19:28 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:19:28 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:19:28 TRACE PeerManager:88 - connect exception: Connection refused
+2025-06-03 11:19:33 INFO  TorrentClient:15 - Start
+2025-06-03 11:19:33 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:19:33 TRACE TorrentClient:25 - length =2
+2025-06-03 11:19:33 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:19:33 DEBUG TorrentPeers:32 - my server port 2486
+2025-06-03 11:19:33 DEBUG TorrentPeers:34 - my leecher port4888
+2025-06-03 11:19:33 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:19:33 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:19:33 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:19:33 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:19:33 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:19:33 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:19:33 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:19:33 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:19:33 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:19:33 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:19:33 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:19:33 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:19:33 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:19:33 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:19:33 TRACE ConnectOperation:92 - current port4537
+2025-06-03 11:19:33 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:19:33 TRACE ConnectOperation:92 - current port6000
+2025-06-03 11:19:33 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:19:33 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:19:33 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:19:33 TRACE PeerManager:68 - accept peer
+2025-06-03 11:19:33 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:19:33 TRACE PeerManager:131 - my leecher port 4888
+2025-06-03 11:19:33 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:19:33 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:19:33 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:19:33 DEBUG ConnectOperation:116 - create initial handshake
+2025-06-03 11:19:33 DEBUG ConnectOperation:110 - create handshake
+2025-06-03 11:19:33 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:19:33 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:19:33 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)Y%i��+zN�BҎ�1�w��
+2025-06-03 11:19:33 TRACE Handler:84 - position: 68
+2025-06-03 11:19:33 TRACE Handler:86 - position: 0
+2025-06-03 11:19:33 TRACE PeerManager:97 - write handshake
+2025-06-03 11:19:33 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:19:33 TRACE PeerManager:110 - position: 68
+2025-06-03 11:19:33 TRACE PeerManager:112 - position: 0
+2025-06-03 11:19:33 TRACE ConnectOperation:312 - handle message!!!!!111
+2025-06-03 11:19:33 TRACE ConnectOperation:317 - peer port4888
+2025-06-03 11:19:33 TRACE ConnectOperation:322 - position:0
+2025-06-03 11:19:33 DEBUG ConnectOperation:325 - Handshake statenull
+2025-06-03 11:22:48 INFO  TorrentClient:15 - Start
+2025-06-03 11:22:48 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:22:48 TRACE TorrentClient:25 - length =2
+2025-06-03 11:22:48 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:22:48 DEBUG TorrentPeers:32 - my server port 6000
+2025-06-03 11:22:48 DEBUG TorrentPeers:34 - my leecher port6722
+2025-06-03 11:22:48 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:22:48 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:22:48 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:22:48 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:22:48 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:22:48 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:22:48 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:22:49 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:22:49 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:22:49 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:22:49 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:22:49 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:22:49 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:22:49 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:22:49 TRACE ConnectOperation:92 - current port4537
+2025-06-03 11:22:49 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:22:49 TRACE ConnectOperation:92 - current port2486
+2025-06-03 11:22:49 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:22:49 TRACE PeerManager:146 - another server port 4537
+2025-06-03 11:22:49 TRACE PeerManager:131 - my leecher port 6722
+2025-06-03 11:22:49 TRACE PeerManager:68 - accept peer
+2025-06-03 11:22:49 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:22:49 TRACE PeerManager:131 - my leecher port 6722
+2025-06-03 11:22:49 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:22:49 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:22:49 TRACE PeerManager:94 - peer address: /127.0.0.1:4537
+2025-06-03 11:22:49 DEBUG ConnectOperation:116 - create initial handshake
+2025-06-03 11:22:49 DEBUG ConnectOperation:110 - create handshake
+2025-06-03 11:22:49 TRACE Handler:80 - remote address: /127.0.0.1:4537
+2025-06-03 11:22:49 TRACE TorrentPeers:70 - server port! 4537
+2025-06-03 11:22:49 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)�;
+W�|��K���@���
+2025-06-03 11:22:49 TRACE Handler:84 - position: 68
+2025-06-03 11:22:49 TRACE Handler:86 - position: 0
+2025-06-03 11:22:49 TRACE PeerManager:97 - write handshake
+2025-06-03 11:22:49 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:22:49 TRACE PeerManager:110 - position: 68
+2025-06-03 11:22:49 TRACE PeerManager:112 - position: 0
+2025-06-03 11:22:49 TRACE ConnectOperation:312 - handle message!!!!!111
+2025-06-03 11:22:49 TRACE ConnectOperation:317 - peer port6722
+2025-06-03 11:22:49 TRACE ConnectOperation:322 - position:0
+2025-06-03 11:22:49 DEBUG ConnectOperation:325 - Handshake statenull
+2025-06-03 11:24:32 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:24:39 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:24:55 INFO  TorrentClient:15 - Start
+2025-06-03 11:24:55 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 11:24:55 TRACE TorrentClient:25 - length =2
+2025-06-03 11:24:55 TRACE TorrentData:32 - create a TorrentData class
+2025-06-03 11:24:55 DEBUG TorrentPeers:32 - my server port 4537
+2025-06-03 11:24:55 DEBUG TorrentPeers:34 - my leecher port5567
+2025-06-03 11:24:55 TRACE TorrentClient:34 - torent Peers1: 2
+2025-06-03 11:24:55 TRACE TorrentData:75 - start parsing torrent
+2025-06-03 11:24:55 TRACE TorrentData:91 - length 5613205554
+2025-06-03 11:24:55 TRACE TorrentData:92 - name Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:24:55 TRACE TorrentData:93 - pieceLength 1048576
+2025-06-03 11:24:55 TRACE TorrentData:94 - infoHash E3CA5205F4085D4BBF294E269ED7749F48BCB829
+2025-06-03 11:24:55 TRACE TorrentData:120 - create card pieces
+2025-06-03 11:24:55 TRACE TorrentData:125 - create a file: /home/oksana/Downloads/Captain.America.Brave.New.World.2025.2xDUB.BDRip.720p.x264.seleZen.mkv
+2025-06-03 11:24:55 TRACE TorrentClient:37 - peer manager start
+2025-06-03 11:24:55 TRACE PeerManager:38 - torent Peers: 2
+2025-06-03 11:24:55 TRACE ConnectOperation:15 - 1955971520
+2025-06-03 11:24:55 TRACE ConnectOperation:16 - 7360
+2025-06-03 11:24:55 TRACE ConnectOperation:87 - count torrent peers 32
+2025-06-03 11:24:55 TRACE ConnectOperation:89 - current peer: 0
+2025-06-03 11:24:55 TRACE ConnectOperation:92 - current port2486
+2025-06-03 11:24:55 TRACE ConnectOperation:89 - current peer: 1
+2025-06-03 11:24:55 TRACE ConnectOperation:92 - current port6000
+2025-06-03 11:24:55 TRACE PeerManager:47 - start connectToLoad method
+2025-06-03 11:24:55 TRACE PeerManager:146 - another server port 2486
+2025-06-03 11:24:55 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:24:55 TRACE PeerManager:68 - accept peer
+2025-06-03 11:24:55 TRACE PeerManager:146 - another server port 6000
+2025-06-03 11:24:55 TRACE PeerManager:131 - my leecher port 5567
+2025-06-03 11:24:55 TRACE PeerManager:137 - connection failed Address already in use
+2025-06-03 11:24:55 TRACE PeerManager:53 - start handle peers
+2025-06-03 11:24:55 TRACE PeerManager:83 - connect to peer
+2025-06-03 11:24:55 TRACE PeerManager:94 - peer address: /127.0.0.1:2486
+2025-06-03 11:24:55 DEBUG ConnectOperation:116 - create initial handshake
+2025-06-03 11:24:56 DEBUG ConnectOperation:110 - create handshake
+2025-06-03 11:24:56 TRACE Handler:80 - remote address: /127.0.0.1:2486
+2025-06-03 11:24:56 TRACE TorrentPeers:70 - server port! 2486
+2025-06-03 11:24:56 TRACE Handler:83 - message: BitTorrent protocol        ��R�]K�)N&��t�H��)�@�Ե����Yw��ABE��
+2025-06-03 11:24:56 TRACE Handler:84 - position: 68
+2025-06-03 11:24:56 TRACE Handler:86 - position: 0
+2025-06-03 11:24:56 TRACE PeerManager:97 - write handshake
+2025-06-03 11:24:56 TRACE PeerManager:101 - read peer message!
+2025-06-03 11:24:56 TRACE PeerManager:110 - position: 68
+2025-06-03 11:24:56 TRACE PeerManager:112 - position: 0
+2025-06-03 11:24:56 TRACE ConnectOperation:312 - handle message!!!!!111
+2025-06-03 11:24:56 TRACE ConnectOperation:317 - peer port5567
+2025-06-03 11:24:56 TRACE ConnectOperation:322 - position:0
+2025-06-03 11:24:56 DEBUG ConnectOperation:325 - Handshake statenull
+2025-06-03 11:49:30 TRACE PeerManager:101 - read peer message!
+2025-06-03 13:34:31 INFO  TorrentClient:15 - Start
+2025-06-03 13:34:31 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 13:34:31 TRACE TorrentClient:25 - length =2
+2025-06-03 13:34:31 TRACE TorrentData:33 - create a TorrentData class
+2025-06-03 13:34:31 TRACE TorrentPeers:39 - count peers:3
+2025-06-03 13:34:31 DEBUG Handler:33 - id:nullserver port4537
+2025-06-03 13:34:31 DEBUG Handler:33 - id:nullserver port2486
+2025-06-03 13:34:31 DEBUG Handler:33 - id:nullserver port6000
+2025-06-03 13:34:31 DEBUG TorrentPeers:42 - my server port 4537
+2025-06-03 13:35:38 INFO  TorrentClient:15 - Start
+2025-06-03 13:35:38 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 13:35:38 TRACE TorrentClient:25 - length =2
+2025-06-03 13:35:38 TRACE TorrentData:33 - create a TorrentData class
+2025-06-03 13:35:38 TRACE TorrentPeers:39 - count peers:3
+2025-06-03 13:35:38 DEBUG TorrentPeers:75 - peer ID:[B@302c971fserver port:4537
+2025-06-03 13:35:38 DEBUG TorrentPeers:76 - peer ID:[B@302c971fports:5567
+2025-06-03 13:35:38 DEBUG TorrentPeers:77 - peer ID:nullports:4888
+2025-06-03 13:35:38 DEBUG TorrentPeers:75 - peer ID:[B@7ae0a9ecserver port:2486
+2025-06-03 13:35:38 DEBUG TorrentPeers:76 - peer ID:nullports:6722
+2025-06-03 13:38:18 INFO  TorrentClient:15 - Start
+2025-06-03 13:38:18 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 13:38:18 TRACE TorrentClient:25 - length =2
+2025-06-03 13:38:18 TRACE TorrentData:33 - create a TorrentData class
+2025-06-03 13:38:18 TRACE TorrentPeers:39 - count peers:3
+2025-06-03 13:38:18 DEBUG TorrentPeers:75 - peer ID: [B@302c971fserver port:4537
+2025-06-03 13:38:18 DEBUG TorrentPeers:76 - peer ID: [B@7ae0a9ecports:5567
+2025-06-03 13:38:18 DEBUG TorrentPeers:77 - peer ID: [B@35841320ports:4888
+2025-06-03 13:38:18 DEBUG TorrentPeers:75 - peer ID: [B@61c4eee0server port:2486
+2025-06-03 13:38:18 DEBUG TorrentPeers:76 - peer ID: [B@6f10d5b6ports:6722
+2025-06-03 13:38:18 DEBUG TorrentPeers:77 - peer ID: [B@1040be71ports:4000
+2025-06-03 13:38:18 DEBUG TorrentPeers:75 - peer ID: [B@548a24aserver port:6000
+2025-06-03 13:38:18 DEBUG TorrentPeers:76 - peer ID: [B@433defedports:4455
+2025-06-03 13:38:18 DEBUG TorrentPeers:77 - peer ID: [B@2a693f59ports:3999
+2025-06-03 13:38:18 DEBUG Handler:33 - id:[B@302c971fserver port4537
+2025-06-03 13:38:18 DEBUG Handler:33 - id:[B@61c4eee0server port2486
+2025-06-03 13:38:18 DEBUG Handler:33 - id:[B@548a24aserver port6000
+2025-06-03 13:38:18 DEBUG TorrentPeers:43 - my server port 4537
+2025-06-03 13:39:28 INFO  TorrentClient:15 - Start
+2025-06-03 13:39:28 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 13:39:28 TRACE TorrentClient:25 - length =2
+2025-06-03 13:39:28 TRACE TorrentData:33 - create a TorrentData class
+2025-06-03 13:39:28 TRACE TorrentPeers:39 - count peers:3
+2025-06-03 13:39:28 DEBUG TorrentPeers:75 - peer ID: [B@302c971f server port: 4537
+2025-06-03 13:39:28 DEBUG TorrentPeers:76 - peer ID: [B@7ae0a9ec ports: 5567
+2025-06-03 13:39:28 DEBUG TorrentPeers:77 - peer ID: [B@35841320 ports: 4888
+2025-06-03 13:39:28 DEBUG TorrentPeers:75 - peer ID: [B@61c4eee0 server port: 2486
+2025-06-03 13:39:28 DEBUG TorrentPeers:76 - peer ID: [B@6f10d5b6 ports: 6722
+2025-06-03 13:39:28 DEBUG TorrentPeers:77 - peer ID: [B@1040be71 ports: 4000
+2025-06-03 13:39:28 DEBUG TorrentPeers:75 - peer ID: [B@548a24a server port: 6000
+2025-06-03 13:39:28 DEBUG TorrentPeers:76 - peer ID: [B@433defed ports: 4455
+2025-06-03 13:39:28 DEBUG TorrentPeers:77 - peer ID: [B@2a693f59 ports: 3999
+2025-06-03 13:39:28 DEBUG Handler:33 - id:[B@302c971fserver port4537
+2025-06-03 13:39:28 DEBUG Handler:33 - id:[B@61c4eee0server port2486
+2025-06-03 13:39:28 DEBUG Handler:33 - id:[B@548a24aserver port6000
+2025-06-03 13:39:28 DEBUG TorrentPeers:43 - my server port 4537
+2025-06-03 13:42:47 INFO  TorrentClient:15 - Start
+2025-06-03 13:42:47 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 13:42:47 TRACE TorrentClient:25 - length =2
+2025-06-03 13:42:47 TRACE TorrentData:33 - create a TorrentData class
+2025-06-03 13:42:47 TRACE TorrentPeers:39 - count peers:3
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 4537 hash: [B@302c971f
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 4537 hash: [B@304bb45b
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 4537 hash: [B@723ca036
+2025-06-03 13:42:47 DEBUG TorrentPeers:75 - peer ID: [B@302c971f server port: 4537
+2025-06-03 13:42:47 DEBUG TorrentPeers:76 - peer ID: [B@304bb45b ports: 5567
+2025-06-03 13:42:47 DEBUG TorrentPeers:77 - peer ID: [B@723ca036 ports: 4888
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 2486 hash: [B@25be7b63
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 2486 hash: [B@28dcca0c
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 2486 hash: [B@45d84a20
+2025-06-03 13:42:47 DEBUG TorrentPeers:75 - peer ID: [B@25be7b63 server port: 2486
+2025-06-03 13:42:47 DEBUG TorrentPeers:76 - peer ID: [B@28dcca0c ports: 6722
+2025-06-03 13:42:47 DEBUG TorrentPeers:77 - peer ID: [B@45d84a20 ports: 4000
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 6000 hash: [B@52f27fbd
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 6000 hash: [B@4c163e3
+2025-06-03 13:42:47 TRACE TorrentPeers:110 - port: 6000 hash: [B@4a8355dd
+2025-06-03 13:42:47 DEBUG TorrentPeers:75 - peer ID: [B@52f27fbd server port: 6000
+2025-06-03 13:42:47 DEBUG TorrentPeers:76 - peer ID: [B@4c163e3 ports: 4455
+2025-06-03 13:42:47 DEBUG TorrentPeers:77 - peer ID: [B@4a8355dd ports: 3999
+2025-06-03 13:42:47 DEBUG Handler:33 - id:[B@302c971fserver port4537
+2025-06-03 13:42:47 DEBUG Handler:33 - id:[B@25be7b63server port2486
+2025-06-03 13:42:47 DEBUG Handler:33 - id:[B@52f27fbdserver port6000
+2025-06-03 13:42:47 DEBUG TorrentPeers:43 - my server port 4537
+2025-06-03 13:54:29 INFO  TorrentClient:15 - Start
+2025-06-03 13:54:29 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 13:54:29 TRACE TorrentClient:25 - length =2
+2025-06-03 13:54:29 TRACE TorrentData:33 - create a TorrentData class
+2025-06-03 13:54:29 TRACE TorrentPeers:38 - count peers:3
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 4537 hash: 8c38b85b01732fdef045f31667e68cec6cb70a46
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 4537 hash: 8c38b85b01732fdef045f31667e68cec6cb70a46
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 4537 hash: 8c38b85b01732fdef045f31667e68cec6cb70a46
+2025-06-03 13:54:29 DEBUG TorrentPeers:74 - peer ID: [B@304bb45b server port: 4537
+2025-06-03 13:54:29 DEBUG TorrentPeers:75 - peer ID: [B@723ca036 ports: 5567
+2025-06-03 13:54:29 DEBUG TorrentPeers:76 - peer ID: [B@25be7b63 ports: 4888
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 2486 hash: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 2486 hash: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 2486 hash: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257
+2025-06-03 13:54:29 DEBUG TorrentPeers:74 - peer ID: [B@28dcca0c server port: 2486
+2025-06-03 13:54:29 DEBUG TorrentPeers:75 - peer ID: [B@45d84a20 ports: 6722
+2025-06-03 13:54:29 DEBUG TorrentPeers:76 - peer ID: [B@52f27fbd ports: 4000
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 6000 hash: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 6000 hash: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d
+2025-06-03 13:54:29 TRACE TorrentPeers:110 - port: 6000 hash: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d
+2025-06-03 13:54:29 DEBUG TorrentPeers:74 - peer ID: [B@4c163e3 server port: 6000
+2025-06-03 13:54:29 DEBUG TorrentPeers:75 - peer ID: [B@4a8355dd ports: 4455
+2025-06-03 13:54:29 DEBUG TorrentPeers:76 - peer ID: [B@4d0d9fe7 ports: 3999
+2025-06-03 13:54:29 DEBUG Handler:33 - id:[B@304bb45bserver port4537
+2025-06-03 13:54:29 DEBUG Handler:33 - id:[B@28dcca0cserver port2486
+2025-06-03 13:54:29 DEBUG Handler:33 - id:[B@4c163e3server port6000
+2025-06-03 13:54:29 DEBUG TorrentPeers:42 - my server port 4537
+2025-06-03 13:56:18 INFO  TorrentClient:15 - Start
+2025-06-03 13:56:18 TRACE TorrentClient:16 - put number client starting to 0....
+2025-06-03 13:56:18 TRACE TorrentClient:25 - length =2
+2025-06-03 13:56:18 TRACE TorrentData:33 - create a TorrentData class
+2025-06-03 13:56:18 TRACE TorrentPeers:38 - count peers:3
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 4537 hash: 8c38b85b01732fdef045f31667e68cec6cb70a46
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 4537 hash: 8c38b85b01732fdef045f31667e68cec6cb70a46
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 4537 hash: 8c38b85b01732fdef045f31667e68cec6cb70a46
+2025-06-03 13:56:18 DEBUG TorrentPeers:74 - peer ID: 8c38b85b01732fdef045f31667e68cec6cb70a46 server port: 4537
+2025-06-03 13:56:18 DEBUG TorrentPeers:75 - peer ID: 8c38b85b01732fdef045f31667e68cec6cb70a46 ports: 5567
+2025-06-03 13:56:18 DEBUG TorrentPeers:76 - peer ID: 8c38b85b01732fdef045f31667e68cec6cb70a46 ports: 4888
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 2486 hash: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 2486 hash: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 2486 hash: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257
+2025-06-03 13:56:18 DEBUG TorrentPeers:74 - peer ID: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257 server port: 2486
+2025-06-03 13:56:18 DEBUG TorrentPeers:75 - peer ID: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257 ports: 6722
+2025-06-03 13:56:18 DEBUG TorrentPeers:76 - peer ID: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257 ports: 4000
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 6000 hash: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 6000 hash: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d
+2025-06-03 13:56:18 TRACE TorrentPeers:110 - port: 6000 hash: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d
+2025-06-03 13:56:18 DEBUG TorrentPeers:74 - peer ID: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d server port: 6000
+2025-06-03 13:56:18 DEBUG TorrentPeers:75 - peer ID: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d ports: 4455
+2025-06-03 13:56:18 DEBUG TorrentPeers:76 - peer ID: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d ports: 3999
+2025-06-03 13:56:18 DEBUG Handler:33 - id:[B@723ca036server port4537
+2025-06-03 13:56:18 DEBUG Handler:33 - id:[B@66982506server port2486
+2025-06-03 13:56:18 DEBUG Handler:33 - id:[B@70cf32e3server port6000
+2025-06-03 13:56:18 DEBUG TorrentPeers:42 - my server port 4537
+2025-06-03 13:57:09 INFO  TorrentClient:15 - Start
+2025-06-03 13:57:09 DEBUG TorrentPeers:74 - peer ID: 8c38b85b01732fdef045f31667e68cec6cb70a46 server port: 4537
+2025-06-03 13:57:09 DEBUG TorrentPeers:75 - peer ID: 8c38b85b01732fdef045f31667e68cec6cb70a46 ports: 5567
+2025-06-03 13:57:09 DEBUG TorrentPeers:76 - peer ID: 8c38b85b01732fdef045f31667e68cec6cb70a46 ports: 4888
+2025-06-03 13:57:09 DEBUG TorrentPeers:74 - peer ID: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257 server port: 2486
+2025-06-03 13:57:09 DEBUG TorrentPeers:75 - peer ID: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257 ports: 6722
+2025-06-03 13:57:09 DEBUG TorrentPeers:76 - peer ID: ba27e7d348b1b6a593cf68e28edeeb80fa8a5257 ports: 4000
+2025-06-03 13:57:09 DEBUG TorrentPeers:74 - peer ID: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d server port: 6000
+2025-06-03 13:57:09 DEBUG TorrentPeers:75 - peer ID: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d ports: 4455
+2025-06-03 13:57:09 DEBUG TorrentPeers:76 - peer ID: 31d9ddeaa80bc88c1f3117b9724726ebcc7fc72d ports: 3999
+2025-06-03 13:57:09 DEBUG Handler:33 - id:[B@723ca036server port4537
+2025-06-03 13:57:09 DEBUG Handler:33 - id:[B@66982506server port2486
+2025-06-03 13:57:09 DEBUG Handler:33 - id:[B@70cf32e3server port6000
+2025-06-03 13:57:09 DEBUG TorrentPeers:42 - my server port 4537

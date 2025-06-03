@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.BitSet;
 
@@ -35,6 +37,25 @@ public class Handler {
             }
         }
         return bitset;
+    }
+
+    public byte[] getSHAHash(ByteBuffer message){
+        try{
+            MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+            sha1.update(message);
+            return sha1.digest();
+        } catch (NoSuchAlgorithmException e) {
+            logger.trace("exception:"+ e.getMessage());
+            return null;
+        }
+    }
+
+    public String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
     public boolean isCorrectHandshake(ByteBuffer buffer, byte[] infoHash){
@@ -83,6 +104,7 @@ public class Handler {
         logger.trace("message: "  + bufferToString(handShake));
         logger.trace("position: "+ handShake.position());
         handShake.flip();
+        logger.trace("position: "+ handShake.position());
         return handShake;
     }
 

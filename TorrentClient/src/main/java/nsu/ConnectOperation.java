@@ -89,6 +89,7 @@ public class ConnectOperation {
             logger.trace("current peer: "+ i);
             Peer peer = peers.get(i);
             peerHandshakes.put(peer.getServerPort(),HandShake.INITIAL_HANDSHAKE);
+            logger.trace("current port" + peer.getServerPort());
         }
     }
 
@@ -135,9 +136,9 @@ public class ConnectOperation {
             List<Peer> peers = torrentPeers.getPeers();
             for(int i=0;i<countPeer;i++){
                 Peer peer = peers.get(i);
-                if(peer.getLeecherPort() == peerPort){/// /////
-                    peer.setPeerBitfield(peerPieces);
-                }
+//                if(peer.getLeecherPort() == peerPort){/// /////
+//                    peer.setPeerBitfield(peerPieces);
+//                }//НАПИСАТЬ УДАЛИЛА ЧТОБЫ СКОМПИЛИЛОСЬ
             }
         }catch (IOException e){}
     }
@@ -308,13 +309,20 @@ public class ConnectOperation {
     }
 
     public Id handlePeerMessage(ByteBuffer buffer,SocketChannel channel) {
+        logger.trace("handle message!!!!!111");
         int peerPort;
         try{
             InetSocketAddress peerAddress = (InetSocketAddress) channel.getRemoteAddress();
             peerPort = peerAddress.getPort();
-        } catch (IOException e) {return Id.END_CONNECT;}
+            logger.trace("peer port"+ peerPort);
+        } catch (IOException e) {
+            logger.trace("address exception" + e.getMessage());
+            return Id.END_CONNECT;}
         HandShake handshakeState = peerHandshakes.get(peerPort);
-        buffer.flip();
+        logger.trace("position:" + buffer.position());
+        //buffer.flip();
+        //logger.trace("position:" + buffer.position());
+        logger.debug("Handshake state" + handshakeState);
         switch (handshakeState){
             case HandShake.COMPLETE_HANDSHAKE:
                 logger.debug("complete handshake with: " + peerPort);
