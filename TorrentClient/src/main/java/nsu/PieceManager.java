@@ -12,8 +12,8 @@ public class PieceManager {
     private final int COUNT_PARTS = 265757;
     int countPieces;
     PieceManager(int countPieces){
-        logger.trace(countPieces);
-        logger.trace(countPieces/COUNT_PARTS);
+        logger.trace("count pieces " + countPieces);
+        logger.trace("count pieces2 " + (countPieces/COUNT_PARTS));
         this.countPieces = countPieces/COUNT_PARTS;
     }
     public void setNeedPieces(BitSet downloadedPieces, int countParts, Map<Integer, Piece> pieces){

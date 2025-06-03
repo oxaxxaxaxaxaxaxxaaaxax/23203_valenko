@@ -13,8 +13,9 @@ public class TorrentPeers {
     private List<Peer> peers = new ArrayList<>();
     private static List<Integer> serverPorts = new ArrayList<>();
     private static List<Integer> leecherPorts = new ArrayList<>();
-    private final int countPeers;
+    private int countPeers;
     private final int serverPort;
+    private final List<Integer> leechers;
     //private final int leecherPort1;
     //private final int leecherPort2;
     private Map<Integer, byte[]> idList = new ConcurrentHashMap<>();
@@ -39,18 +40,20 @@ public class TorrentPeers {
         fillPortIdMap();
         genPeers();
         serverPort = serverPorts.get(Integer.parseInt(numberClient));
+        leechers = peers.get(Integer.parseInt(numberClient)).getLeecherPorts();
         logger.debug("my server port " + serverPort);
         //leecherPort1 = leecherPorts.get(2* Integer.parseInt(numberClient));
         //leecherPort2 = leecherPorts.get(1+ 2*Integer.parseInt(numberClient));
         //logger.debug("my leecher port1" + leecherPort1);
         //logger.debug("my leecher port2" + leecherPort2);
         peers.remove(Integer.parseInt(numberClient));
+        this.countPeers --;
+        logger.trace("count peers:"+this.countPeers);
         //serverPorts.remove(Integer.parseInt(numberClient));
         //leecherPorts.remove(Integer.parseInt(numberClient));
-        serverPorts.remove(serverPort);
+        //serverPorts.remove(serverPort);
         //leecherPorts.remove(leecherPort1);
         //leecherPorts.remove(leecherPort2);
-        logger.trace("count peers:"+countPeers);
     }
 
     public void fillPortIdMap(){
@@ -64,6 +67,8 @@ public class TorrentPeers {
         }
 
     }
+
+    public List<Integer> getLeechers(){ return leechers;}
 
     public int getClientServerPort(){return serverPort;}
     //public int getClientLeecherPort1(){return leecherPort1;}
@@ -80,19 +85,12 @@ public class TorrentPeers {
 
     public void genPeers(){
         for(int i=0;i<countPeers;i++){
-            peers.add(new Peer((idList.get(serverPorts.get(i))),serverPorts.get(i)));//////////
+            peers.add(new Peer((idList.get(serverPorts.get(i))),serverPorts.get(i),leecherPorts.get(i*2),leecherPorts.get(i*2+1)));//////////
         }
     }
 
-    public byte[] genPeerID(){
-        Random rand = new Random();
-        byte[] peerId = new byte[20];
-        rand.nextBytes(peerId);
-        return peerId;
-    }
-
     public byte[] genPeerID(int port){
-        byte[] hash = handler.getSHAHash(ByteBuffer.wrap(String.valueOf(port).getBytes()));
+        byte[] hash = handler.getSHAHashForPort(port);
         String hexHash = handler.bytesToHex(hash);
         logger.trace("port: "+ port + " hash: " + hexHash);
         return hash;
@@ -102,19 +100,23 @@ public class TorrentPeers {
         return serverPorts.get(numberPeer);
     }
 
-    public byte[] getPeerID(int port){//тут порт от канала(которым подклюились)
-        for(int i=0;i<countPeers;i++){
-            Peer peer =peers.get(i);
-//            if((peer.getLeecherPort1() == port)||(peer.getLeecherPort2() == port)){
-//                logger.trace("leecher port! "+ port);
-//                return peer.getId();
-//            }
-            if(peer.getServerPort() == port){
-                logger.trace("server port! "+ port);
-                return  peer.getId();
-            }
-        }
-        logger.trace("not find");
-        return peers.get(0).getId();//по хорошему исключение
+    public byte[] getPeerID(int port){
+        return idList.get(port);
     }
+//
+//    public byte[] getPeerID(int port){//тут порт от канала(которым подклюились)
+//        for(int i=0;i<countPeers;i++){
+//            Peer peer =peers.get(i);
+////            if((peer.getLeecherPort1() == port)||(peer.getLeecherPort2() == port)){
+////                logger.trace("leecher port! "+ port);
+////                return peer.getId();
+////            }
+//            if(peer.getServerPort() == port){
+//                logger.trace("server port! "+ port);
+//                return  peer.getId();
+//            }
+//        }
+//        logger.trace("not find");
+//        return peers.get(0).getId();//по хорошему исключение
+//    }
 }

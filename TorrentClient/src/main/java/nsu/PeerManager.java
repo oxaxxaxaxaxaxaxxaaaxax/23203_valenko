@@ -24,6 +24,7 @@ public class PeerManager{
     private ConnectOperation op ;
     private final TorrentPeers torrentPeers;
     private final int serverPORT;//порт пира запустившего программу
+    private List<Integer> leecherPorts;
     //private final int leecherPORT1;
     //private final int leecherPORT2;
     private final String hostname = "127.0.0.1";
@@ -40,6 +41,7 @@ public class PeerManager{
         op = new ConnectOperation(torrentPeers,metadata);
         //this.peers = peers;
         serverPORT = torrentPeers.getClientServerPort();
+        leecherPorts = torrentPeers.getLeechers();
         //leecherPORT1 = torrentPeers.getClientLeecherPort1();
         //leecherPORT2 = torrentPeers.getClientLeecherPort2();
         infoHash = metadata.getInfoHash();
@@ -126,14 +128,14 @@ public class PeerManager{
         }
     }
 
-    public void connectToPeer(int port) {
+    public void connectToPeer(int serverPort, int leecherPort) {
         SocketChannel channel;
         try {
             channel = SocketChannel.open();
-            //logger.trace("my leecher port " + leecherPORT);
-            //channel.bind(new InetSocketAddress(leecherPORT));
+            logger.trace("my leecher port " + leecherPort);
+            channel.bind(new InetSocketAddress(leecherPort));
             channel.configureBlocking(false);
-            channel.connect(new InetSocketAddress(hostname, port));
+            channel.connect(new InetSocketAddress(hostname, serverPort));
             logger.trace("leecher address:"+ channel.getLocalAddress());
             channel.register(selector, SelectionKey.OP_CONNECT);
         } catch (IOException e) {
@@ -150,7 +152,8 @@ public class PeerManager{
             if (currentServerPort == serverPORT) {
                 continue;
             }
-            connectToPeer(currentServerPort);
+            int currentLeechPort = leecherPorts.get(i);
+            connectToPeer(currentServerPort,currentLeechPort);
         }
     }
 }

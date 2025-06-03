@@ -24,7 +24,8 @@ enum Id{
     BITFIELD(5),
     REQUEST(6),
     PIECE(7),
-    END_CONNECT(8);
+    END_CONNECT(8),
+    NOT_HANDSHAKE(9);
 
     private final int id;
     static Map<Integer,Id> ids = new HashMap<>();
@@ -61,8 +62,9 @@ public class ConnectOperation {
     private final int countPieces;
     private final int partSize = 16* 1024;
     private final long pieceSize;
+    private final int MESSAGE_ID_INDEX = 4;
     private TorrentData metadata;
-    private Map<Integer, HandShake> peerHandshakes= new ConcurrentHashMap<>();
+    private Map<String, HandShake> peerHandshakes= new ConcurrentHashMap<>();
     private final Logger logger = LogManager.getLogger(ConnectOperation.class);
 
     ConnectOperation(TorrentPeers torrentPeers, TorrentData metadata) {
@@ -74,7 +76,8 @@ public class ConnectOperation {
         } catch (FileNotFoundException e) {
             logger.trace("failed create file " + e.getMessage());
         }
-        countPieces = downloadedPieces.size();
+        //countPieces = downloadedPieces.size();
+        countPieces = ;
         pieceSize = metadata.getPieceSize();
         manager = new PieceManager(countPieces);
         manager.setNeedPieces(downloadedPieces,(int)(pieceSize+partSize - 1)/partSize,notDownloadedPieces);//должно делиться нацело
@@ -84,12 +87,14 @@ public class ConnectOperation {
     public void fillHandshakes(TorrentPeers torrentPeers){
         List<Peer> peers = torrentPeers.getPeers();
         int peerCount = torrentPeers.getCountPeers();
-        logger.trace("count torrent peers "+ peerCount + peers.size());
-        for(int i=0;i< peerCount -1 ;i++){
-            logger.trace("current peer: "+ i);
+        logger.trace("count torrent peers "+ peerCount + " " + peers.size());
+        for(int i=0;i< peerCount;i++){
+            logger.trace("current peer: "+ (i+1));
             Peer peer = peers.get(i);
-            peerHandshakes.put(peer.getServerPort(),HandShake.INITIAL_HANDSHAKE);
+            peerHandshakes.put(handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort())),HandShake.INITIAL_HANDSHAKE);
             logger.trace("current port" + peer.getServerPort());
+            logger.trace("hash: " + handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort())));
+            logger.trace("handshake: " + peerHandshakes.get(handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort()))));
         }
     }
 
@@ -103,7 +108,7 @@ public class ConnectOperation {
 //    }
 
     public void setWaitHandshake(InetSocketAddress peerAddres){
-        peerHandshakes.put(peerAddres.getPort(),HandShake.WAIT_HANDSHAKE);
+        peerHandshakes.put(handler.bytesToHex(handler.getSHAHashForPort(peerAddres.getPort())),HandShake.WAIT_HANDSHAKE);
     }
 
     public ByteBuffer createHandshake(InetSocketAddress peerAddres){
@@ -119,6 +124,7 @@ public class ConnectOperation {
     }
 
     public ByteBuffer createBitfield(){
+        logger.trace("create bitfield");
         return handler.getBitfield(downloadedPieces);
     }
 
@@ -144,8 +150,14 @@ public class ConnectOperation {
     }
 
     public Id handleBitfield(ByteBuffer buffer, SocketChannel channel) {
+        logger.trace("handle peer's bitfield");
+        logger.trace("position:" + buffer.position());
         int length = buffer.getInt();
+        logger.trace("length:" + length);
         buffer.get();
+        if(length == 1){
+            return Id.NOT_INTERESTED;
+        }
         byte[] buff = new byte[length - 1];
         buffer.get(buff);
         BitSet peerPieces = handler.ByteToBit(buff, countPieces);
@@ -287,14 +299,27 @@ public class ConnectOperation {
     }
 
     public void sendMessage(Id messageId, SocketChannel channel,ByteBuffer buffer) {
+        logger.trace("send message!!!!!111");
         try{
             switch(messageId){
+                case Id.END_CONNECT:
+                    logger.trace("end connect");
                 case Id.CHOKE:
-                case Id.UNCHOKE: channel.write(handler.getUnchocke());
+                    logger.trace("send choke");
+                    channel.write(handler.getChocke());
                     break;
-                case Id.INTERESTED: channel.write(handler.getInterested());
+                case Id.UNCHOKE:
+                    logger.trace("send unchoke");
+                    channel.write(handler.getUnchocke());
+                    break;
+                case Id.INTERESTED:
+                    logger.trace("send interested");
+                    channel.write(handler.getInterested());
                     break;
                 case Id.NOT_INTERESTED:
+                    logger.trace(" send not interested");
+                    channel.write(handler.getNotInterested());
+                    break;
                 case Id.HAVE:
                     break;
                 case Id.BITFIELD: channel.write(createBitfield());
@@ -302,10 +327,46 @@ public class ConnectOperation {
                     break;
                 case Id.PIECE: channel.write(sendPiece(buffer));
                     break;
-                default:
             }
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            logger.trace("IOEexception "+ e.getMessage());
+        }
+    }
 
+    public synchronized Id handleHandshake(ByteBuffer buffer,SocketChannel channel,int peerPort){
+        String peerID = handler.bytesToHex(torrentPeers.getPeerID(peerPort));
+        HandShake handshakeState = peerHandshakes.get(peerID);
+        logger.debug("Handshake state2: " + handshakeState);
+        switch (handshakeState){
+            case HandShake.COMPLETE_HANDSHAKE:
+                logger.debug("complete handshake with: " + peerPort);
+                return Id.NOT_HANDSHAKE;
+            case HandShake.INITIAL_HANDSHAKE:
+                logger.debug("initial handshake with: " + peerPort);
+                if(!handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
+                    logger.debug("is not correct handshake!");
+                    return Id.END_CONNECT;
+                }
+                peerHandshakes.put(peerID,HandShake.COMPLETE_HANDSHAKE);
+                logger.debug("is correct handshake!");
+                try{
+                    logger.trace("write handshake");
+                    channel.write(createHandshake((InetSocketAddress)channel.getRemoteAddress()));
+                } catch (IOException e) {
+                    logger.trace("exception " + e.getMessage());
+                }
+                return Id.BITFIELD;
+            case HandShake.WAIT_HANDSHAKE:
+                logger.debug("I wait handshake with: " + peerPort);
+                if(handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
+                    peerHandshakes.put(peerID,HandShake.COMPLETE_HANDSHAKE);
+                    logger.debug("is correct handshake!");
+                    return Id.END_CONNECT;
+                }
+                logger.debug("is not correct handshake!");
+                return Id.END_CONNECT;
+            default: return Id.END_CONNECT;
+        }
     }
 
     public Id handlePeerMessage(ByteBuffer buffer,SocketChannel channel) {
@@ -318,35 +379,21 @@ public class ConnectOperation {
         } catch (IOException e) {
             logger.trace("address exception" + e.getMessage());
             return Id.END_CONNECT;}
-        HandShake handshakeState = peerHandshakes.get(peerPort);
         logger.trace("position:" + buffer.position());
-        //buffer.flip();
-        //logger.trace("position:" + buffer.position());
-        logger.debug("Handshake state" + handshakeState);
-        switch (handshakeState){
-            case HandShake.COMPLETE_HANDSHAKE:
-                logger.debug("complete handshake with: " + peerPort);
-                break;
-            case HandShake.INITIAL_HANDSHAKE:
-                logger.debug("initial handshake with: " + peerPort);
-                if(!handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
-                    return Id.END_CONNECT;
-                }
-                try{
-                    channel.write(createHandshake((InetSocketAddress)channel.getRemoteAddress()));
-                } catch (IOException e) {}
-                    peerHandshakes.put(peerPort,HandShake.COMPLETE_HANDSHAKE);
-                    return Id.BITFIELD;
-            case HandShake.WAIT_HANDSHAKE:
-                logger.debug("I wait handshake with: " + peerPort);
-                if(handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
-                    peerHandshakes.put(peerPort,HandShake.COMPLETE_HANDSHAKE);
-                    return Id.END_CONNECT;
-                }
-                return Id.END_CONNECT;
+        String peerID = handler.bytesToHex(torrentPeers.getPeerID(peerPort));
+        HandShake handshakeState = peerHandshakes.get(peerID);
+        logger.debug("Handshake state: " + handshakeState);
+        if(handshakeState != HandShake.COMPLETE_HANDSHAKE){
+            switch(handleHandshake(buffer,channel,peerPort)){
+                case Id.NOT_HANDSHAKE: break;
+                case Id.BITFIELD: return Id.BITFIELD;
+                default: return Id.END_CONNECT;
+            }
         }
-        buffer.flip();
-        int id = buffer.get(5);
+        logger.trace("position before handling:" + buffer.position());
+        logger.trace("size before handling:" + buffer.limit());
+        int id = buffer.get(MESSAGE_ID_INDEX);
+        logger.trace("id message:" + id);
         Id messageId = Id.IntToId(id);
         switch (messageId) {
             case Id.CHOKE: return Id.END_CONNECT;

@@ -89,6 +89,8 @@ public class TorrentData {
         logger.trace("infoHash "+ bytesToHex(infoHash));
     }
 
+    public long getCountPieces(){return length/pieceLength;} //возможно оно нацело не делится
+
     public void createPartCard(int pieceIdx, int begin) {
         try(RandomAccessFile file = new RandomAccessFile(localFile, "r")){
             FileChannel chanel = file.getChannel();

@@ -39,6 +39,10 @@ public class Handler {
         return bitset;
     }
 
+    public byte[] getSHAHashForPort(int port){
+        return getSHAHash(ByteBuffer.wrap(String.valueOf(port).getBytes()));
+    }
+
     public byte[] getSHAHash(ByteBuffer message){
         try{
             MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
@@ -114,13 +118,20 @@ public class Handler {
         buff.putInt(bitfieldsByte.length + 1);
         buff.put((byte) 5);
         buff.put(bitfieldsByte);
+        logger.trace("position " + buff.position());
+        buff.flip();
+        logger.trace("position " + buff.position());
         return buff;
     }
 
     public ByteBuffer getChocke() {
+        logger.trace("create choke message");
         ByteBuffer buff = ByteBuffer.allocate(5);
         buff.putInt(1);
         buff.put((byte) 0);
+        logger.trace("position:" + buff.position());
+        buff.flip();
+        logger.trace("position:" + buff.position());
         return buff;
     }
 
@@ -139,9 +150,13 @@ public class Handler {
     }
 
     public ByteBuffer getNotInterested() {
+        logger.trace("create not interested message");
         ByteBuffer buff = ByteBuffer.allocate(5);
         buff.putInt(1);
         buff.put((byte) 3);
+        logger.trace("position:" + buff.position());
+        buff.flip();
+        logger.trace("position:" + buff.position());
         return buff;
     }
 
