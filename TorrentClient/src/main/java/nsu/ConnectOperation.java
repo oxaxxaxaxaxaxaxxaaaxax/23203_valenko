@@ -57,9 +57,9 @@ public class ConnectOperation {
     private final TorrentPeers torrentPeers;
     private BitSet downloadedPieces;
     private Handler handler= new Handler();
-    PieceManager manager;
+    BlockManager blockManager;
     private Map<Integer, Piece> notDownloadedPieces = new ConcurrentHashMap<>();
-    private final int countPieces;
+    private final long countPieces;
     private final int partSize = 16* 1024;
     private final long pieceSize;
     private final int MESSAGE_ID_INDEX = 4;
@@ -77,10 +77,10 @@ public class ConnectOperation {
             logger.trace("failed create file " + e.getMessage());
         }
         //countPieces = downloadedPieces.size();
-        countPieces = ;
+        countPieces = metadata.getCountPieces();
         pieceSize = metadata.getPieceSize();
-        manager = new PieceManager(countPieces);
-        manager.setNeedPieces(downloadedPieces,(int)(pieceSize+partSize - 1)/partSize,notDownloadedPieces);//должно делиться нацело
+        blockManager = new BlockManager(countPieces, metadata.getLength(),pieceSize,downloadedPieces,(int)(pieceSize+partSize - 1)/partSize);
+        //blockManager.setNeedPiecesInBlock(0);//должно делиться нацело
         fillHandshakes(torrentPeers);
     }
 
@@ -160,17 +160,12 @@ public class ConnectOperation {
         }
         byte[] buff = new byte[length - 1];
         buffer.get(buff);
-        BitSet peerPieces = handler.ByteToBit(buff, countPieces);
+        BitSet peerPieces = handler.ByteToBit(buff, (int)countPieces);
         setPeerBitfield(peerPieces,channel);
         if (hasNeededPieces(peerPieces)) {
             return Id.INTERESTED;
         }
         return Id.NOT_INTERESTED;
-    }
-
-    public int getNotDownloadedPart(Map<Integer,Piece> pieces, int idx){
-        Piece piece = pieces.get(idx);
-        return piece.getFreePart();
     }
 
     public ByteBuffer requestPiece(SocketChannel channel){
@@ -184,7 +179,7 @@ public class ConnectOperation {
                 BitSet neededPieces = (BitSet) peerPieces.clone();
                 neededPieces.andNot(downloadedPieces);
                 int pieceIndex = neededPieces.nextSetBit(0);
-                int offset = getNotDownloadedPart(notDownloadedPieces,pieceIndex);//с учетом байтового смещения
+                int offset = blockManager.getNotDownloadedPart(pieceIndex);//с учетом байтового смещения(глобальный индекс)
                 return handler.getRequest(pieceIndex,offset,partSize);
             }
         }
@@ -258,7 +253,8 @@ public class ConnectOperation {
             long filePosition = index*pieceSize+offset;
             localFile.seek(filePosition);
             localFile.write(block);
-            Piece piece = notDownloadedPieces.get(index);
+            //Piece piece = notDownloadedPieces.get(index);
+            Piece piece = blockManager.getPiece(index);
             piece.addLoadedPart(offset /partSize, block);//на всякий случай
             if(piece.checkIsCompletedPiece()){
                 ByteBuffer buff =piece.getPieceFile();
@@ -268,7 +264,8 @@ public class ConnectOperation {
                //if(metadata.compareSHAHashWithTorrent(index,piece.getPieceFile())){
                 if(metadata.compareSHAHashWithTorrent(index,array)){
                    downloadedPieces.set(index);
-                   notDownloadedPieces.remove(index);
+                   //notDownloadedPieces.remove(index);
+                    blockManager.removePiece(index);
                    sendHaveMessage(index);
                    return Id.END_CONNECT;
                }

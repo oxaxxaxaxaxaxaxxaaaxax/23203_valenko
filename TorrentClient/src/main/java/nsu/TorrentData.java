@@ -47,6 +47,7 @@ public class TorrentData {
     }
     public long getPieceSize(){return pieceLength;}
     public File getFile(){return localFile;}
+    public long getLength(){return length;}
 
     public boolean compareSHAHashWithTorrent(int index, byte[] filePiece){
         byte[] torrentHash = new byte[20];
