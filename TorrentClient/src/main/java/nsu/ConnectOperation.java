@@ -9,10 +9,7 @@ import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 enum Id{
@@ -129,6 +126,14 @@ public class ConnectOperation {
     }
 
     public boolean hasNeededPieces(BitSet peerPieces) {
+//        System.out.println("peer bitfield:");
+//        for(int i=0;i< countPieces;i++){
+//            System.out.print(peerPieces.get(i));
+//        }
+//        System.out.println("my bitfield:");
+//        for(int i=0;i< countPieces;i++){
+//            System.out.print(downloadedPieces.get(i));
+//        }
         BitSet neededPieces = (BitSet) peerPieces.clone();
         neededPieces.andNot(downloadedPieces);
         return !neededPieces.isEmpty();
@@ -142,6 +147,10 @@ public class ConnectOperation {
             List<Peer> peers = torrentPeers.getPeers();
             for(int i=0;i<countPeer;i++){
                 Peer peer = peers.get(i);
+                if(Arrays.equals(torrentPeers.getPeerID(peerPort),peer.getId())){
+                    logger.trace("find peer!! "+ peerPort);
+                    peer.setPeerBitfield(peerPieces);
+                }
 //                if(peer.getLeecherPort() == peerPort){/// /////
 //                    peer.setPeerBitfield(peerPieces);
 //                }//НАПИСАТЬ УДАЛИЛА ЧТОБЫ СКОМПИЛИЛОСЬ
@@ -158,8 +167,12 @@ public class ConnectOperation {
         if(length == 1){
             return Id.NOT_INTERESTED;
         }
+        logger.trace("length >1");
         byte[] buff = new byte[length - 1];
         buffer.get(buff);
+        logger.trace("position:" + buffer.position());
+        buffer.flip();
+        logger.trace("position:" + buffer.position());
         BitSet peerPieces = handler.ByteToBit(buff, (int)countPieces);
         setPeerBitfield(peerPieces,channel);
         if (hasNeededPieces(peerPieces)) {
@@ -301,6 +314,7 @@ public class ConnectOperation {
             switch(messageId){
                 case Id.END_CONNECT:
                     logger.trace("end connect");
+                    break;
                 case Id.CHOKE:
                     logger.trace("send choke");
                     channel.write(handler.getChocke());

@@ -139,6 +139,9 @@ public class Handler {
         ByteBuffer buff = ByteBuffer.allocate(5);
         buff.putInt(1);
         buff.put((byte) 1);
+        logger.trace("position:" + buff.position());
+        buff.flip();
+        logger.trace("position:" + buff.position());
         return buff;
     }
 
@@ -146,6 +149,9 @@ public class Handler {
         ByteBuffer buff = ByteBuffer.allocate(5);
         buff.putInt(1);
         buff.put((byte) 2);
+        logger.trace("position:" + buff.position());
+        buff.flip();
+        logger.trace("position:" + buff.position());
         return buff;
     }
 
@@ -167,6 +173,9 @@ public class Handler {
         buff.putInt(idx);
         buff.putInt(offset);
         buff.putInt(blockLength);
+        logger.trace("position:" + buff.position());
+        buff.flip();
+        logger.trace("position:" + buff.position());
         return buff;
     }
 
@@ -177,6 +186,9 @@ public class Handler {
         buff.putInt(idx);
         buff.putInt(offset);
         buff.put(data);
+        logger.trace("position:" + buff.position());
+        buff.flip();
+        logger.trace("position:" + buff.position());
         return buff;
     }
 
@@ -185,6 +197,9 @@ public class Handler {
         buff.putInt(5);
         buff.put((byte) 4);
         buff.putInt(idx);
+        logger.trace("position:" + buff.position());
+        buff.flip();
+        logger.trace("position:" + buff.position());
         return buff;
     }
 }
