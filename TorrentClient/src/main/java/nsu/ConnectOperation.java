@@ -254,11 +254,13 @@ public class ConnectOperation {
     }
 
     public void askAllPeer(){
+        logger.trace("ask all peer");
         List<Peer> peers = torrentPeers.getPeers();
         int countPeer = torrentPeers.getCountPeers();
         for(int i=0;i<countPeer;i++){
             Peer peer =peers.get(i);
             if(hasNeededPieces(peer.getBitfield())){
+                logger.trace("find peer!");
                 SocketChannel peerChannel =  peer.getChannel();
                 try{
                     peerChannel.write(handler.getInterested());
@@ -282,17 +284,21 @@ public class ConnectOperation {
 
     public Id handlePiece(ByteBuffer buffer){
         try{
+            logger.trace("HANDLE PIECE");
+            logger.debug("HANDLE PIECE");
+            logger.trace("HANDLE PIECE");
+            logger.trace("buffer "+buffer.remaining());
             logger.trace("position:" + buffer.position());
-            buffer.flip();
+            //buffer.flip();
             logger.trace("position:" + buffer.position());
             buffer.getInt();
             buffer.get();
-            int index = buffer.getInt();
-            logger.trace("received piece index "+index);
+            int index = buffer.getInt();//05.06. ошибка какая то
+            logger.debug("received piece index "+index);
             int offset = buffer.getInt();
-            logger.trace("received piece offset "+offset);
+            logger.debug("received piece offset "+offset);
             int length = buffer.remaining();
-            logger.trace("received piece length "+length);
+            logger.debug("received piece length "+length);
             byte[] block = new byte[length];
             buffer.get(block);
             long filePosition = index*pieceSize+offset;
@@ -315,13 +321,16 @@ public class ConnectOperation {
                    sendHaveMessage(index);
                    return Id.END_CONNECT;
                }
-                logger.trace("hash not equals, need to load more parts");
+                logger.trace("hash not equals, need to load again");
                piece.clearPiece();
                askAllPeer();
                return Id.END_CONNECT;
             }
+            logger.trace("need to load more parts");
             return Id.INTERESTED;
-        }catch (IOException e) {return Id.END_CONNECT;}
+        }catch (Exception e) {
+            logger.trace("IOEexception "+e.getMessage());
+            return Id.END_CONNECT;}
     }
 
     public Id handleHave(ByteBuffer buffer,SocketChannel channel){
@@ -368,6 +377,7 @@ public class ConnectOperation {
                 case Id.HAVE:
                     break;
                 case Id.BITFIELD: channel.write(createBitfield());
+                    break;
                 case Id.REQUEST:
                     logger.trace(" send request");
                     channel.write(requestPiece(channel));
@@ -442,6 +452,10 @@ public class ConnectOperation {
         logger.trace("position before handling:" + buffer.position());
         logger.trace("size before handling:" + buffer.limit());
         int id = buffer.get(MESSAGE_ID_INDEX);
+        if(id < 0 || id > 9){
+            logger.trace("ERROR");
+            return Id.END_CONNECT;
+        }
         logger.trace("id message:" + id);
         Id messageId = Id.IntToId(id);
         switch (messageId) {

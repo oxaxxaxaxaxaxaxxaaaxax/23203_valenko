@@ -29,7 +29,7 @@ public class PeerManager{
     //private final int leecherPORT2;
     private final String hostname = "127.0.0.1";
     private Selector selector;
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 17000;///////////////
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
     private final Logger logger = LogManager.getLogger(PeerManager.class);
 

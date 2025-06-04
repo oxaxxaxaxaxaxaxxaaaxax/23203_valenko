@@ -67,6 +67,7 @@ public class Piece {
     public void clearPiece() {
         pieceFile.clear(); // position=0, limit=capacity
         parts.clear();     // сбрасываем все биты
+        logger.trace("piece is clear");
     }
 
 }
