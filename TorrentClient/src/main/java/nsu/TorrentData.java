@@ -15,6 +15,7 @@ import java.util.*;
 
 import com.turn.ttorrent.bcodec.BDecoder;
 import com.turn.ttorrent.bcodec.BEValue;
+import com.turn.ttorrent.common.Torrent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -103,54 +104,30 @@ public class TorrentData {
 
     public void parseTorrentFile() throws IOException, java.security.NoSuchAlgorithmException {
         logger.trace("start parsing torrent");
-
         BDecoder decoder = new BDecoder(new FileInputStream(torrentPathName));
         BEValue decoded = decoder.bdecode();
         Map<String, BEValue> root = decoded.getMap();
         BEValue infoValue = root.get("info");
-
         Map<String, BEValue> infoMap = infoValue.getMap();
-        pieceLength = infoMap.get("piece length").getInt();
-        length = infoMap.get("length").getInt();
+        pieceLength = infoMap.get("piece length").getLong();
+        length = infoMap.get("length").getLong();
         BEValue piecesValue = infoMap.get("pieces");
         pieces = piecesValue.getBytes();
-
-//        try (FileInputStream fis = new FileInputStream(torrentPathName);
-//             BencodeInputStream bencodeInputStream = new BencodeInputStream(fis, StandardCharsets.UTF_8, true)) {
-//
-//            Map<String, Object> torrentData = bencodeInputStream.readDictionary();
-//            Map<String, Object> info = (Map<String, Object>) torrentData.get("info");
-//
-//            pieceLength = ((Number) info.get("piece length")).intValue();
-//            length = ((Number) info.get("length")).longValue();
-//            //name = ((String) info.get("name"));
-//            //List<byte[]> pieceHashes = parsePieceHashes(info);
-//            pieces = (byte[])info.get("pieces");
-        //pieces = new byte[piecesBuffer.remaining()];
-        //piecesBuffer.get(pieces);
-
-//        Bencode bencode = new Bencode(StandardCharsets.UTF_8);//парсим как байтмассив а не строку
         torrentFile = new File(torrentPathName);
         byte[] dataArray = new byte[(int) torrentFile.length()];
         try (FileInputStream input = new FileInputStream(torrentFile)) {
             input.read(dataArray);
         }
-//        Map<String, Object> torrentData = (Map<String, Object>)bencode.decode(dataArray, Type.DICTIONARY);
-//        @SuppressWarnings("unchecked")
-//        Map<String, Object> info = (Map<String, Object>)torrentData.get("info");
-//        length = (Long)info.get("length");
-//        name = (String)info.get("name");
-//        pieceLength = (Long)info.get("piece length");
         countPieces = length / pieceLength;
-//        String strPiece = (String)info.get("pieces");
-        //pieces = strPiece.getBytes(StandardCharsets.UTF_8);
-//        Object piecesObj = info.get("pieces");
-//        pieces =strPiece.getBytes(StandardCharsets.ISO_8859_1);
-//        infoHash = handler.getSHAHash(ByteBuffer.wrap(bencode.encode(info)));
+        Torrent torrent = Torrent.load(torrentFile);
+        infoHash = torrent.getInfoHash();
+        name = torrent.getName();
+        //infoBytes = bencode.encode(info);
+        //infoHash = handler.getSHAHash(ByteBuffer.wrap(bencode.encode(infoMap)));
         logger.trace("length " + length);
         logger.trace("name " + name);
         logger.trace("pieceLength " + pieceLength);
-        //logger.trace("infoHash " + bytesToHex(infoHash));
+        logger.trace("infoHash " + bytesToHex(infoHash));
         logger.trace("countPieces " + countPieces);
     }
 
@@ -159,16 +136,16 @@ public class TorrentData {
 
 
     public void createPartCard(int pieceIdx, int begin) {
-        logger.trace("create part card");
-        logger.trace("piece index" + pieceIdx);
+        //logger.trace("create part card");
+        //logger.trace("piece index" + pieceIdx);
         try(RandomAccessFile file = new RandomAccessFile(localFile, "r")){
             FileChannel chanel = file.getChannel();
             ByteBuffer downloadedPiece = ByteBuffer.allocate((int)pieceLength);//надо придумать какую записывать за раз
             long offset = begin + (long)pieceIdx * pieceLength;
             chanel.read(downloadedPiece,offset);
-            logger.trace("position "+downloadedPiece.position());
+            //logger.trace("position "+downloadedPiece.position());
             downloadedPiece.flip();
-            logger.trace("position "+downloadedPiece.position());
+            //logger.trace("position "+downloadedPiece.position());
             byte[] pieceHash = handler.getSHAHash(downloadedPiece);
             byte[] torrentPieceHash = new byte[20];
             System.arraycopy(pieces,pieceIdx*20, torrentPieceHash, 0,20);
@@ -178,7 +155,7 @@ public class TorrentData {
                 logger.trace("Actual hash:   {}", HexFormat.of().formatHex(pieceHash));
                 return;
             }
-            logger.trace("equals pieces!!!!");
+            //logger.trace("equals pieces!!!!");
             piecesCard.set(pieceIdx);
         }catch(IOException e){
             logger.trace("IOEexception!!!!" + e.getMessage());
