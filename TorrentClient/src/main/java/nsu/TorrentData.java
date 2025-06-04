@@ -1,15 +1,20 @@
 package nsu;
 
-import com.dampcake.bencode.Bencode;
-import com.dampcake.bencode.Type;
+//import com.dampcake.bencode.Bencode;
+//import com.dampcake.bencode.BencodeInputStream;
+//import com.dampcake.bencode.Type;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+
+import com.turn.ttorrent.bcodec.BDecoder;
+import com.turn.ttorrent.bcodec.BEValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,22 +24,24 @@ public class TorrentData {
     long length;
     String name;
     long pieceLength;
-    byte[] pieces ;
+    byte[] pieces;
     byte[] infoHash;
+    long countPieces;
     BitSet piecesCard;
     File localFile;
     File torrentFile;
-    private static final int SHAsize =20;
+    private static final int SHAsize = 20;
     private String downloadDir = "/home/oksana/Downloads";
     private final Logger logger = LogManager.getLogger(TorrentData.class);
     private final Handler handler = new Handler();
 
-    TorrentData(String pathName, int peerCount){
+    TorrentData(String pathName, int peerCount) {
         logger.trace("create a TorrentData class");
         torrentPathName = pathName;
         //genPeerAddress(peerCount,peers);
     }
-    TorrentData(String torrentFilePath, String localFilePath, int peerCount){
+
+    TorrentData(String torrentFilePath, String localFilePath, int peerCount) {
         logger.trace("create a TorrentData class with localFile");
         torrentPathName = torrentFilePath;
         localPathName = localFilePath;
@@ -42,20 +49,30 @@ public class TorrentData {
         //genPeerAddress(peerCount,peers);
     }
 
-    public byte[] getInfoHash(){
+    public byte[] getInfoHash() {
         return infoHash;
     }
-    public long getPieceSize(){return pieceLength;}
-    public File getFile(){return localFile;}
-    public long getLength(){return length;}
 
-    public boolean compareSHAHashWithTorrent(int index, byte[] filePiece){
+    public long getPieceSize() {
+        return pieceLength;
+    }
+
+    public File getFile() {
+        return localFile;
+    }
+
+    public long getLength() {
+        return length;
+    }
+
+    public boolean compareSHAHashWithTorrent(int index, byte[] filePiece) {
         byte[] torrentHash = new byte[20];
-        System.arraycopy(pieces,index*SHAsize,torrentHash,0,SHAsize);
-        try{
+        System.arraycopy(pieces, index * SHAsize, torrentHash, 0, SHAsize);
+        try {
             byte[] localHash = handler.getSHAHash(ByteBuffer.wrap(filePiece));
-            return Arrays.equals(torrentHash,localHash);
-        }catch(Exception e){}
+            return Arrays.equals(torrentHash, localHash);
+        } catch (Exception e) {
+        }
         return false;
     }
 
@@ -66,61 +83,128 @@ public class TorrentData {
         }
         return sb.toString();
     }
-    public void parseTorrentFile()  throws IOException,java.security.NoSuchAlgorithmException {
-        System.out.println("parse");
+
+
+    private List<byte[]> parsePieceHashes(Map<String, Object> info) {
+        ByteBuffer piecesBuffer = (ByteBuffer) info.get("pieces");
+        byte[] pieces = new byte[piecesBuffer.remaining()];
+        piecesBuffer.get(pieces);
+
+        List<byte[]> pieceHashes = new ArrayList<>();
+        for (int i = 0; i < pieces.length; i += 20) {
+            byte[] hash = new byte[20];
+            System.arraycopy(pieces, i, hash, 0, 20);
+            pieceHashes.add(hash);
+        }
+
+        return pieceHashes;
+    }
+
+
+    public void parseTorrentFile() throws IOException, java.security.NoSuchAlgorithmException {
         logger.trace("start parsing torrent");
-        Bencode bencode = new Bencode(StandardCharsets.UTF_8);//парсим как байтмассив а не строку
+
+        BDecoder decoder = new BDecoder(new FileInputStream(torrentPathName));
+        BEValue decoded = decoder.bdecode();
+        Map<String, BEValue> root = decoded.getMap();
+        BEValue infoValue = root.get("info");
+
+        Map<String, BEValue> infoMap = infoValue.getMap();
+        pieceLength = infoMap.get("piece length").getInt();
+        length = infoMap.get("length").getInt();
+        BEValue piecesValue = infoMap.get("pieces");
+        pieces = piecesValue.getBytes();
+
+//        try (FileInputStream fis = new FileInputStream(torrentPathName);
+//             BencodeInputStream bencodeInputStream = new BencodeInputStream(fis, StandardCharsets.UTF_8, true)) {
+//
+//            Map<String, Object> torrentData = bencodeInputStream.readDictionary();
+//            Map<String, Object> info = (Map<String, Object>) torrentData.get("info");
+//
+//            pieceLength = ((Number) info.get("piece length")).intValue();
+//            length = ((Number) info.get("length")).longValue();
+//            //name = ((String) info.get("name"));
+//            //List<byte[]> pieceHashes = parsePieceHashes(info);
+//            pieces = (byte[])info.get("pieces");
+        //pieces = new byte[piecesBuffer.remaining()];
+        //piecesBuffer.get(pieces);
+
+//        Bencode bencode = new Bencode(StandardCharsets.UTF_8);//парсим как байтмассив а не строку
         torrentFile = new File(torrentPathName);
-        byte[] dataArray = new byte[(int)torrentFile.length()];
-        try(FileInputStream input = new FileInputStream(torrentFile)){
+        byte[] dataArray = new byte[(int) torrentFile.length()];
+        try (FileInputStream input = new FileInputStream(torrentFile)) {
             input.read(dataArray);
         }
-        Map<String, Object> torrentData = (Map<String, Object>)bencode.decode(dataArray, Type.DICTIONARY);
-        @SuppressWarnings("unchecked")
-        Map<String, Object> info = (Map<String, Object>)torrentData.get("info");
-        length = (Long)info.get("length");
-        name = (String)info.get("name");
-        pieceLength = (Long)info.get("piece length");
-        String strPiece = (String)info.get("pieces");
-        pieces = strPiece.getBytes(StandardCharsets.UTF_8);
-        infoHash = handler.getSHAHash(ByteBuffer.wrap(bencode.encode(info)));
+//        Map<String, Object> torrentData = (Map<String, Object>)bencode.decode(dataArray, Type.DICTIONARY);
+//        @SuppressWarnings("unchecked")
+//        Map<String, Object> info = (Map<String, Object>)torrentData.get("info");
+//        length = (Long)info.get("length");
+//        name = (String)info.get("name");
+//        pieceLength = (Long)info.get("piece length");
+        countPieces = length / pieceLength;
+//        String strPiece = (String)info.get("pieces");
+        //pieces = strPiece.getBytes(StandardCharsets.UTF_8);
+//        Object piecesObj = info.get("pieces");
+//        pieces =strPiece.getBytes(StandardCharsets.ISO_8859_1);
+//        infoHash = handler.getSHAHash(ByteBuffer.wrap(bencode.encode(info)));
         logger.trace("length " + length);
-        logger.trace("name "+ name);
-        logger.trace("pieceLength "+ pieceLength);
-        logger.trace("infoHash "+ bytesToHex(infoHash));
+        logger.trace("name " + name);
+        logger.trace("pieceLength " + pieceLength);
+        //logger.trace("infoHash " + bytesToHex(infoHash));
+        logger.trace("countPieces " + countPieces);
     }
 
-    public long getCountPieces(){return length/pieceLength;} //возможно оно нацело не делится
+
+    public long getCountPieces(){return countPieces;} //возможно оно нацело не делится
+
 
     public void createPartCard(int pieceIdx, int begin) {
+        logger.trace("create part card");
+        logger.trace("piece index" + pieceIdx);
         try(RandomAccessFile file = new RandomAccessFile(localFile, "r")){
             FileChannel chanel = file.getChannel();
-            ByteBuffer downloadedBytes = ByteBuffer.allocate((int)pieceLength);//надо придумать какую записывать за раз
+            ByteBuffer downloadedPiece = ByteBuffer.allocate((int)pieceLength);//надо придумать какую записывать за раз
             long offset = begin + (long)pieceIdx * pieceLength;
-            chanel.read(downloadedBytes,offset);
-            byte[] pieceHash = handler.getSHAHash(downloadedBytes);
-            int counter = 0;
-            for(int i = 0;i<20;i++){
-                if(pieceHash[i] != pieces[pieceIdx*(int)pieceLength + i]){
-                    return;
-                }
+            chanel.read(downloadedPiece,offset);
+            logger.trace("position "+downloadedPiece.position());
+            downloadedPiece.flip();
+            logger.trace("position "+downloadedPiece.position());
+            byte[] pieceHash = handler.getSHAHash(downloadedPiece);
+            byte[] torrentPieceHash = new byte[20];
+            System.arraycopy(pieces,pieceIdx*20, torrentPieceHash, 0,20);
+            if(!Arrays.equals(pieceHash,torrentPieceHash)){
+                logger.trace("not equals pieces!!!!");
+                logger.trace("Expected hash: {}", HexFormat.of().formatHex(torrentPieceHash));
+                logger.trace("Actual hash:   {}", HexFormat.of().formatHex(pieceHash));
+                return;
             }
+            logger.trace("equals pieces!!!!");
             piecesCard.set(pieceIdx);
         }catch(IOException e){
-            logger.trace(e.getMessage());
+            logger.trace("IOEexception!!!!" + e.getMessage());
         }
     }
 
-    public void createCard() throws IOException, java.security.NoSuchAlgorithmException{
+    public void createCard() {
         logger.trace("create card pieces");
-        piecesCard = new BitSet((int)length*8);
+        logger.trace("create bitset1");
+//        logger.trace(length);
+//        logger.trace((int)length);
+//        logger.trace(length*8);
+//        logger.trace((int)length*8);
+        logger.trace(countPieces);
+        logger.trace((int)countPieces);
+        logger.trace(countPieces*8);
+        logger.trace((int)countPieces*8);
+        piecesCard = new BitSet((int)countPieces);
+        //piecesCard = new BitSet((int)length*8);/////!!!!!
+        logger.trace("bitset is created");
         if(localPathName == null){
             localPathName = downloadDir + "/" + name;
             localFile = new File(localPathName);
             logger.trace("create a file: " + localPathName);
             return;
         }
-        long countPieces = length/pieceLength;
         for(int i=0;i<countPieces;i++){
             createPartCard(i,0);
         }

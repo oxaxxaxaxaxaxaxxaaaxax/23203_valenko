@@ -43,7 +43,7 @@ public class BlockManager {
         if(isCompleteBlock(index)){
             updateBlock();//!!!!!!!!!
         }
-        logger.trace("index" + currentBlockIndex);
+        //logger.trace("index" + currentBlockIndex);
         for(int i=0;i< countPiecesInBlock;i++){
             if(!downloadedPieces.get(index*countPiecesInBlock +i)){
                 logger.trace("set piece!!!");

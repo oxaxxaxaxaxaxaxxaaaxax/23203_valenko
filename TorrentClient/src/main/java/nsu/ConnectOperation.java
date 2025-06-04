@@ -260,7 +260,7 @@ public class ConnectOperation {
                 ByteBuffer buff =piece.getPieceFile();
                 buff.flip();
                 byte[] array= new byte[piece.getSize()];
-                buff.put(array);
+                buff.get(array);
                //if(metadata.compareSHAHashWithTorrent(index,piece.getPieceFile())){
                 if(metadata.compareSHAHashWithTorrent(index,array)){
                    downloadedPieces.set(index);
