@@ -167,6 +167,7 @@ public class Handler {
     }
 
     public ByteBuffer getRequest(int idx, int offset, int blockLength) {
+        logger.trace("create request message");
         ByteBuffer buff = ByteBuffer.allocate(13 + 4);
         buff.putInt(13);
         buff.put((byte) 6);
@@ -180,8 +181,10 @@ public class Handler {
     }
 
     public ByteBuffer getPiece(int idx, int offset, byte[] data) {
-        ByteBuffer buff = ByteBuffer.allocate(9 + data.length);
-        buff.putInt(data.length + 1);
+        logger.trace("create piece message");
+        logger.trace("data.length: "+data.length);
+        ByteBuffer buff = ByteBuffer.allocate(13 + data.length);
+        buff.putInt(data.length + 9);
         buff.put((byte) 7);
         buff.putInt(idx);
         buff.putInt(offset);

@@ -185,26 +185,43 @@ public class ConnectOperation {
         BitSet peerPieces;
         List<Peer> peers = torrentPeers.getPeers();
         int countPeer = torrentPeers.getCountPeers();
-        for(int i=0;i<countPeer;i++) {
-            Peer peer = peers.get(i);
-            if(peer.getChannel() == channel){
-                peerPieces = peer.getBitfield();
-                BitSet neededPieces = (BitSet) peerPieces.clone();
-                neededPieces.andNot(downloadedPieces);
-                int pieceIndex = neededPieces.nextSetBit(0);
-                int offset = blockManager.getNotDownloadedPart(pieceIndex);//с учетом байтового смещения(глобальный индекс)
-                return handler.getRequest(pieceIndex,offset,partSize);
+        try{
+            InetSocketAddress addr = (InetSocketAddress) channel.getRemoteAddress();
+            int peerPort = addr.getPort();
+            for(int i=0;i<countPeer;i++) {
+                Peer peer = peers.get(i);
+//            if(peer.getChannel() == channel){
+                if(Arrays.equals(torrentPeers.getPeerID(peerPort),peer.getId())){
+                    logger.trace("find peer!! "+ peerPort);
+                    peerPieces = peer.getBitfield();
+                    BitSet neededPieces = (BitSet) peerPieces.clone();
+                    neededPieces.andNot(downloadedPieces);
+                    int pieceIndex = neededPieces.nextSetBit(0);
+                    logger.trace("needed piece "+ pieceIndex);
+                    int offset = blockManager.getNotDownloadedPart(pieceIndex);//с учетом байтового смещения(глобальный индекс)
+                    //ЛОМАЕМСЯ СТРОКОЙ ВЫШЕ
+                    logger.trace("needed part in piece "+ offset);
+                    return handler.getRequest(pieceIndex,offset,partSize);
+                }
             }
+        } catch (IOException e) {
+            logger.trace("IOEexception "+ e.getMessage());
         }
+
+
         return null;//?????
     }
 
     public Id handleRequest(ByteBuffer buffer){
-        int lengthMessage = buffer.getInt();
-        int id = buffer.get();
+        logger.trace("position:" + buffer.position());
+        buffer.getInt();
+        buffer.get();
         int index = buffer.getInt();
-//        int offset = buffer.getInt();
-//        int length = buffer.getInt();
+        logger.trace("request index "+index);
+        int offset = buffer.getInt();
+        logger.trace("request offset "+offset);
+        int length = buffer.getInt();
+        logger.trace("request length "+length);
         if(!downloadedPieces.get(index)){
             return Id.END_CONNECT;
         }
@@ -212,19 +229,28 @@ public class ConnectOperation {
     }
 
     public ByteBuffer sendPiece(ByteBuffer buffer) {
+        logger.trace("position:" + buffer.position());
+        buffer.flip();
+        logger.trace("position:" + buffer.position());
         try {
-            buffer.rewind();
+            //buffer.rewind();
             buffer.getInt();
             buffer.get();
             int index = buffer.getInt();
+            logger.trace("piece index "+index);
             int offset = buffer.getInt();
+            logger.trace("piece offset "+offset);
             int length = buffer.getInt();
+            logger.trace("piece length "+length);
             long filePosition = index * pieceSize + offset;
             localFile.seek(filePosition);
             byte[] sendData = new byte[length];
             localFile.readFully(sendData);
             return handler.getPiece(index,offset,sendData);
-        } catch (IOException e) {return null;}
+        } catch (IOException e) {
+            logger.trace("IOEexception "+e.getMessage());
+            return null;
+        }
     }
 
     public void askAllPeer(){
@@ -256,11 +282,17 @@ public class ConnectOperation {
 
     public Id handlePiece(ByteBuffer buffer){
         try{
+            logger.trace("position:" + buffer.position());
+            buffer.flip();
+            logger.trace("position:" + buffer.position());
             buffer.getInt();
             buffer.get();
             int index = buffer.getInt();
+            logger.trace("received piece index "+index);
             int offset = buffer.getInt();
+            logger.trace("received piece offset "+offset);
             int length = buffer.remaining();
+            logger.trace("received piece length "+length);
             byte[] block = new byte[length];
             buffer.get(block);
             long filePosition = index*pieceSize+offset;
@@ -276,12 +308,14 @@ public class ConnectOperation {
                 buff.get(array);
                //if(metadata.compareSHAHashWithTorrent(index,piece.getPieceFile())){
                 if(metadata.compareSHAHashWithTorrent(index,array)){
-                   downloadedPieces.set(index);
+                    logger.trace("hash is equals");
+                    downloadedPieces.set(index);
                    //notDownloadedPieces.remove(index);
                     blockManager.removePiece(index);
                    sendHaveMessage(index);
                    return Id.END_CONNECT;
                }
+                logger.trace("hash not equals, need to load more parts");
                piece.clearPiece();
                askAllPeer();
                return Id.END_CONNECT;
@@ -334,9 +368,13 @@ public class ConnectOperation {
                 case Id.HAVE:
                     break;
                 case Id.BITFIELD: channel.write(createBitfield());
-                case Id.REQUEST: channel.write(requestPiece(channel));
+                case Id.REQUEST:
+                    logger.trace(" send request");
+                    channel.write(requestPiece(channel));
                     break;
-                case Id.PIECE: channel.write(sendPiece(buffer));
+                case Id.PIECE:
+                    logger.trace(" send piece");
+                    channel.write(sendPiece(buffer));
                     break;
             }
         } catch (IOException e) {

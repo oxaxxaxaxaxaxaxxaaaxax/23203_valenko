@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BlockManager {
-    private final Logger logger = LogManager.getLogger(ConnectOperation.class);
-    private final int COUNT_BLOCKS = 1000;
+    private final Logger logger = LogManager.getLogger(BlockManager.class);
+    private final int COUNT_BLOCKS ;
+    private final int countPiecesInBlock = 400;
     long countPieces;
     int countBlocks;
-    int countPiecesInBlock;
     int blockSize;
     int countPartsInPiece;
     private int currentBlockIndex =0;
@@ -22,30 +22,30 @@ public class BlockManager {
         logger.trace("length: "+ length);
         logger.trace("pieceSize" + pieceSize);
         logger.trace("count pieces" + countPieces);
-        logger.trace("count blocks" + COUNT_BLOCKS);
-        logger.trace("countPiecesInBlock" + (countPieces/COUNT_BLOCKS));
         this.countPieces = countPieces;
-        this.countPiecesInBlock =(int)countPieces/COUNT_BLOCKS;
+        this.COUNT_BLOCKS =(int)(countPieces +countPiecesInBlock-1) /countPiecesInBlock;
+        logger.trace("count blocks" + COUNT_BLOCKS);
+        logger.trace("countPiecesInBlock" + countPiecesInBlock);
         blockSize = (int)(length/COUNT_BLOCKS);
         logger.trace("blockSize "+blockSize);
-        countPiecesInBlock = (int)(blockSize/pieceSize);
-        logger.trace("countPiecesInBlock "+countPiecesInBlock);
+        //countPiecesInBlock = (int)(blockSize/pieceSize);
+        //logger.trace("countPiecesInBlock "+countPiecesInBlock);
         this.downloadedPieces = downloadedPieces;
         this.countPartsInPiece = countPartsInPiece;
         logger.trace("countPartsInPiece "+countPartsInPiece);
-        setNeedPiecesInBlock(currentBlockIndex);
+        setNeedPiecesInBlock();
     }
-    public void setNeedPiecesInBlock(int index){
-        if(index >= COUNT_BLOCKS){
-            logger.debug("reach the limit");
+    public void setNeedPiecesInBlock(){
+        logger.trace("index" + currentBlockIndex);
+        if(isCompleteBlock(currentBlockIndex)){
+            updateBlock();
+        }
+        if(currentBlockIndex >= COUNT_BLOCKS){
+            logger.debug("reach the limit1");
             return;
         }
-        if(isCompleteBlock(index)){
-            updateBlock();//!!!!!!!!!
-        }
-        //logger.trace("index" + currentBlockIndex);
         for(int i=0;i< countPiecesInBlock;i++){
-            if(!downloadedPieces.get(index*countPiecesInBlock +i)){
+            if(!downloadedPieces.get(currentBlockIndex*countPiecesInBlock +i)){
                 logger.trace("set piece!!!");
                 pieces.put(i,new Piece(countPartsInPiece,i));
             }
@@ -56,19 +56,17 @@ public class BlockManager {
         }
     }
     public void clearBlock(){
-        for(int i=0;i<countPiecesInBlock;i++){
-            pieces.get(i).clearPiece();
-        }
         pieces.clear();
     }
     public void updateBlock(){
         currentBlockIndex++;
+        logger.trace("index in update" + currentBlockIndex);
         if(currentBlockIndex>=COUNT_BLOCKS){
             logger.debug("reach the limit");
             return;
         }
         clearBlock();
-        setNeedPiecesInBlock(currentBlockIndex);
+        setNeedPiecesInBlock();
     }
     public boolean isCompleteBlock(int index){
         if(index != currentBlockIndex){
@@ -109,9 +107,16 @@ public class BlockManager {
             logger.trace("index didn't match");
             return 0;
         }
+        logger.trace("find piece index "+idx);
+        if(idx ==0){
+            return pieces.get(0).getFreePart();
+        }
         int index = idx%countPiecesInBlock;
-        Piece piece = pieces.get(index);
-        return piece.getFreePart();
+        return pieces.get(index).getFreePart();
+    }
+
+    public boolean isEmpty(){
+        return pieces.isEmpty();
     }
 
 }

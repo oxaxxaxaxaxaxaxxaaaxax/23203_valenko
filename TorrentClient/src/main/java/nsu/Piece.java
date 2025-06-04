@@ -1,5 +1,8 @@
 package nsu;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -11,6 +14,7 @@ public class Piece {
     private BitSet parts;
     //private byte[] pieceFile;
     private ByteBuffer pieceFile;
+    Logger logger = LogManager.getLogger(Piece.class);
     Piece(int countParts, int index){
         this.index = index;
         this.countParts = countParts;
@@ -21,10 +25,11 @@ public class Piece {
     public int getFreePart(){
         for(int i=0;i< countParts;i++){
             if(!parts.get(i)){
+                logger.trace("find free part "+ i);
                 return i*partSize;
             }
         }
-        return 0;///////
+        throw new RuntimeException("all part is loaded!!!!!");
     }
 //    public void addLoadedPart(int idx, byte[] loadedPart){
 //        parts.set(idx);

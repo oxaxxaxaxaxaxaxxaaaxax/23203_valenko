@@ -109,8 +109,8 @@ public class PeerManager{
                     if (read == -1) {
                         client.close();
                     } else {
-                        String message = new String(readBuffer.array(), 0, read).trim();
-                        System.out.println("Received: " + message);
+                        //String message = new String(readBuffer.array(), 0, read).trim();
+                        //System.out.println("Received: " + message);
                         logger.trace("position: "+ readBuffer.position());
                         readBuffer.flip();
                         logger.trace("position: "+readBuffer.position());

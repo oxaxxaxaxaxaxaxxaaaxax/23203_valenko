@@ -67,6 +67,7 @@ public class TorrentData {
     }
 
     public boolean compareSHAHashWithTorrent(int index, byte[] filePiece) {
+        logger.trace("compare hash");
         byte[] torrentHash = new byte[20];
         System.arraycopy(pieces, index * SHAsize, torrentHash, 0, SHAsize);
         try {
