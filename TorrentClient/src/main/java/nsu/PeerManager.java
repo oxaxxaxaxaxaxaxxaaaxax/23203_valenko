@@ -30,7 +30,7 @@ public class PeerManager{
     private final String hostname = "127.0.0.1";
     private Selector selector;
     private static final int BUFFER_SIZE = 17000;///////////////
-    private final ExecutorService executor = Executors.newFixedThreadPool(10);
+    private final ExecutorService executor = Executors.newFixedThreadPool(20);
     private final Logger logger = LogManager.getLogger(PeerManager.class);
 
     PeerManager(TorrentData metadata, String numberClient, TorrentPeers torrentPeers) {
