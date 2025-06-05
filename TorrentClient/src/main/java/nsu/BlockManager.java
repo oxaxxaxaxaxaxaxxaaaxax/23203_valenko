@@ -37,23 +37,24 @@ public class BlockManager {
     }
     public void setNeedPiecesInBlock(){
         logger.trace("index" + currentBlockIndex);
-        if(isCompleteBlock(currentBlockIndex)){
-            logger.trace("Block is completed");
-            updateBlock();
-        }
         if(currentBlockIndex >= COUNT_BLOCKS){
             logger.debug("reach the limit1");
             return;
+        }
+        if(isCompleteBlock(currentBlockIndex)){
+            logger.trace("Block is completed");
+            return;
+            //updateBlock();
         }
         for(int i=0;i< countPiecesInBlock;i++){
             if(!downloadedPieces.get(currentBlockIndex*countPiecesInBlock +i)){
                 logger.trace("set piece!!!");
                 pieces.put(i,new Piece(countPartsInPiece,i));
             }
-            if(pieces.isEmpty()){
-                logger.trace("empty map");
-                updateBlock();
-            }
+//            if(pieces.isEmpty()){
+//                logger.trace("empty map");
+//                updateBlock();
+//            }
         }
     }
     public void clearBlock(){
@@ -75,7 +76,7 @@ public class BlockManager {
             return false;
         }
         for(int i=0;i<countPiecesInBlock;i++){
-            if(!downloadedPieces.get(i)){
+            if(!downloadedPieces.get(index*countPiecesInBlock + i)){
                 return false;
             }
         }
@@ -85,6 +86,11 @@ public class BlockManager {
     public void removePiece(int idx){
         int blockIndex = idx/countPiecesInBlock;
         if(blockIndex != currentBlockIndex){
+            if(blockIndex == 1+ currentBlockIndex){
+                logger.trace("load new block");
+                updateBlock();
+                return;
+            }
             logger.trace("index didn't match");
             return;
         }
@@ -105,9 +111,16 @@ public class BlockManager {
 
     public int getNotDownloadedPart( int idx){//idx - глобальный
         int blockIndex = idx/countPiecesInBlock;
+        logger.trace("block index "+blockIndex);
+        logger.trace("currentBlockIndex" + currentBlockIndex);
         if(blockIndex != currentBlockIndex){
-            logger.trace("index didn't match");
-            return 0;
+            if(blockIndex == 1+ currentBlockIndex){
+                logger.trace("load new block");
+                updateBlock();
+            }else{
+                logger.trace("index didn't match");
+                return 0;
+            }
         }
         logger.trace("find piece index "+idx);
         if(idx ==0){

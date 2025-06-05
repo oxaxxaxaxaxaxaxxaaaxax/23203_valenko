@@ -371,7 +371,11 @@ public class ConnectOperation {
                     downloadedPieces.set(index);
                    //notDownloadedPieces.remove(index);
                     blockManager.removePiece(index);
-                   sendHaveMessage(index);
+                    sendHaveMessage(index);
+                    if (downloadedPieces.cardinality() == countPieces){
+                        logger.info("FILE IS LOADED!!");
+                        return Id.END_CONNECT;
+                    }
                    if(hasNeededPieces(neededPeer)){
                        return Id.INTERESTED;//!!!!!!!!!!!!!1
                        //return Id.END_CONNECT;
@@ -452,6 +456,7 @@ public class ConnectOperation {
                     channel.write(handler.getNotInterested());
                     break;
                 case Id.HAVE:
+                    logger.trace(" send have");
                     break;
                 case Id.BITFIELD: channel.write(createBitfield());
                     break;

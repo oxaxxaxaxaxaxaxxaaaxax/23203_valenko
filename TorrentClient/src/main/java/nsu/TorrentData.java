@@ -178,7 +178,7 @@ public class TorrentData {
         //piecesCard = new BitSet((int)length*8);/////!!!!!
         logger.trace("bitset is created");
         if(localPathName == null){
-            localPathName = downloadDir + "/" + name;
+            localPathName = downloadDir + "/" + "COPYdadushka_au.avi";
             localFile = new File(localPathName);
             logger.trace("create a file: " + localPathName);
             return;

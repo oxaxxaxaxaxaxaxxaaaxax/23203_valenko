@@ -16,7 +16,7 @@ public class Peer {
     private List<Integer> leecherPorts = new ArrayList<>();
     private BitSet bitfield = new BitSet();
     private SocketChannel channel =null;
-    private final Logger logger = LogManager.getLogger(Handler.class);
+    private final Logger logger = LogManager.getLogger(Peer.class);
     private Handler handler= new Handler();
     //private final String ip;
 
