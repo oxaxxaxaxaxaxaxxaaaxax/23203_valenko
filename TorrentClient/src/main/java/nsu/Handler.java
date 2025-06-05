@@ -64,9 +64,10 @@ public class Handler {
 
     public boolean isCorrectHandshake(ByteBuffer buffer, byte[] infoHash){
         logger.debug("check correct handshake");
-        if(buffer.remaining() != 68){
-            return false;
-        }
+        logger.trace(buffer);
+//        if(buffer.remaining() != 68){
+//            return false;
+//        }
         byte length = buffer.get();
         if(length != lengthProtocol){
             return false;
@@ -83,6 +84,9 @@ public class Handler {
         if(!Arrays.equals(infoHash,localInfoHash)){
             return false;
         }
+        byte[] peerID = new byte[20];
+        buffer.get(peerID);
+        logger.trace("remaining "+buffer.remaining());
         return true;
     }
 

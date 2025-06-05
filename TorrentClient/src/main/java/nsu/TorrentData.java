@@ -31,22 +31,25 @@ public class TorrentData {
     BitSet piecesCard;
     File localFile;
     File torrentFile;
+    private String numberClient;
     private static final int SHAsize = 20;
     private String downloadDir = "/home/oksana/Downloads";
     private final Logger logger = LogManager.getLogger(TorrentData.class);
     private final Handler handler = new Handler();
 
-    TorrentData(String pathName, int peerCount) {
+    TorrentData(String pathName, String numberClient) {
         logger.trace("create a TorrentData class");
         torrentPathName = pathName;
+        this.numberClient = numberClient;
         //genPeerAddress(peerCount,peers);
     }
 
-    TorrentData(String torrentFilePath, String localFilePath, int peerCount) {
+    TorrentData(String torrentFilePath, String localFilePath, String numberClient) {
         logger.trace("create a TorrentData class with localFile");
         torrentPathName = torrentFilePath;
         localPathName = localFilePath;
         localFile = new File(localPathName);
+        this.numberClient = numberClient;
         //genPeerAddress(peerCount,peers);
     }
 
@@ -178,7 +181,7 @@ public class TorrentData {
         //piecesCard = new BitSet((int)length*8);/////!!!!!
         logger.trace("bitset is created");
         if(localPathName == null){
-            localPathName = downloadDir + "/" + "COPY123dadushka_au.avi";
+            localPathName = downloadDir + "/" + "COPY123dadushka_au" + numberClient + ".avi";
             localFile = new File(localPathName);
             logger.trace("create a file: " + localPathName);
             return;

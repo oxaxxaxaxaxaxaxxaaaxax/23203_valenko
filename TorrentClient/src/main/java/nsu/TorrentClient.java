@@ -18,14 +18,14 @@ public class TorrentClient {
         String numberClient;
         if(args.length==3){
             logger.trace("length =3");
-            metadata = new TorrentData(args[0],args[1], peerCount);
             numberClient = args[2];
             System.out.println(numberClient);
+            metadata = new TorrentData(args[0],args[1], numberClient);
         }else if(args.length==2){
             logger.trace("length =2");
-            metadata = new TorrentData(args[0],peerCount);
             numberClient = args[1];
             System.out.println(numberClient);
+            metadata = new TorrentData(args[0],numberClient);
         }else{
             logger.trace("put .torrent file");
             return;

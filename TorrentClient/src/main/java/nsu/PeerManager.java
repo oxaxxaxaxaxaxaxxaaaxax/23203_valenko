@@ -3,14 +3,9 @@ package nsu;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.util.BitSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.nio.channels.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,13 +27,20 @@ public class PeerManager{
     private static final int BUFFER_SIZE = 17000;///////////////
     private final ExecutorService executor = Executors.newFixedThreadPool(20);
     private final Logger logger = LogManager.getLogger(PeerManager.class);
+    private Map<SocketChannel, ConnectionContext> contexts = new ConcurrentHashMap<>();
 
     PeerManager(TorrentData metadata, String numberClient, TorrentPeers torrentPeers) {
         torrentData = metadata;
         downloadsBytes = metadata.getDownloadedBytes();
         this.torrentPeers = torrentPeers;
         logger.trace("torent Peers: "+ torrentPeers.getPeers().size());
-        op = new ConnectOperation(torrentPeers,metadata);
+        try {
+            selector = Selector.open();
+        } catch (IOException e) {
+            logger.trace("IOexception "+e.getMessage());
+            throw new RuntimeException(e);
+        }
+        op = new ConnectOperation(torrentPeers,metadata,contexts,selector);
         //this.peers = peers;
         serverPORT = torrentPeers.getClientServerPort();
         leecherPorts = torrentPeers.getLeechers();
@@ -74,8 +76,11 @@ public class PeerManager{
                         ServerSocketChannel srv = (ServerSocketChannel) key.channel();
                         SocketChannel client = srv.accept();
                         client.configureBlocking(false);
-                        ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
-                        client.register(selector, SelectionKey.OP_READ, buff);
+                        //ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
+                        ConnectionContext ctx = new ConnectionContext(client,BUFFER_SIZE);
+                        //client.register(selector, SelectionKey.OP_READ, buff);
+                        client.register(selector, SelectionKey.OP_READ, ctx);
+                        contexts.put(client,ctx);
                         System.out.println("accepted peer" + client.getRemoteAddress());
                     }catch(IOException e){
                         logger.trace("accept exception: "+ e.getMessage());
@@ -83,6 +88,7 @@ public class PeerManager{
                 }
                 if (key.isConnectable()) {//подключение завершилось
                     SocketChannel customChannel = (SocketChannel) key.channel();
+                    ConnectionContext ctx = (ConnectionContext) key.attachment();
                     try{
                         if(customChannel.finishConnect()){
                             logger.trace("connect to peer");
@@ -98,19 +104,25 @@ public class PeerManager{
                     InetSocketAddress peerAddres = (InetSocketAddress)customChannel.getRemoteAddress();
                     logger.trace("peer address: " + peerAddres);
                     ByteBuffer handshake = op.createInitialHandshake(peerAddres);
-                    customChannel.write(handshake);
+                    ctx.addToQueue(handshake,selector);
+                    key.interestOps(SelectionKey.OP_WRITE|SelectionKey.OP_READ);
+                    //customChannel.write(handshake);
                     logger.trace("write handshake");
-                    ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
-                    customChannel.register(selector, SelectionKey.OP_READ,buff);
+                    //ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
+                    //customChannel.register(selector, SelectionKey.OP_READ,ctx);
                 }
                 if (key.isReadable()) {
                     logger.trace("read peer message!");
-                    SocketChannel client = (SocketChannel) key.channel();
-                    ByteBuffer readBuffer = (ByteBuffer) key.attachment();
+                    //SocketChannel client = (SocketChannel) key.channel();
+                    ConnectionContext ctx = (ConnectionContext)key.attachment();
+                    SocketChannel client = ctx.getChannel();
+                    ByteBuffer readBuffer = ctx.getReadBuffer();
+                    //ByteBuffer readBuffer = (ByteBuffer) key.attachment();
                     readBuffer.clear();
                     int read = client.read(readBuffer);
                     if (read == -1) {
                         client.close();
+                        contexts.remove(client);
                     } else {
                         //String message = new String(readBuffer.array(), 0, read).trim();
                         //System.out.println("Received: " + message);
@@ -126,6 +138,23 @@ public class PeerManager{
                         });
                     }
                 }
+                if(key.isWritable()){
+                    ConnectionContext ctx = (ConnectionContext) key.attachment();
+                    SocketChannel client = ctx.getChannel();
+                    Queue<ByteBuffer> queue = ctx.getWriteQueue();
+                    while (true){
+                        ByteBuffer buffer = queue.peek();
+                        if(buffer == null){
+                            key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
+                            break;
+                        }
+                        client.write(buffer);
+                        if(buffer.hasRemaining()){
+                            logger.trace("message send not full");
+                        }
+                        queue.poll();//возможно проверить что все записалось
+                    }
+                }
                 iter.remove();
             }
         }
@@ -139,15 +168,18 @@ public class PeerManager{
             channel.bind(new InetSocketAddress(leecherPort));
             channel.configureBlocking(false);
             channel.connect(new InetSocketAddress(hostname, serverPort));
+            ConnectionContext ctx = new ConnectionContext(channel, BUFFER_SIZE);
+            contexts.put(channel,ctx);
             logger.trace("leecher address:"+ channel.getLocalAddress());
-            channel.register(selector, SelectionKey.OP_CONNECT);
+            channel.register(selector, SelectionKey.OP_CONNECT,ctx);
         } catch (IOException e) {
             logger.trace("connection failed "+ e.getMessage());
         }
     }
 
-    public void connectWithPeers() throws IOException {
-        selector = Selector.open();
+    public void connectWithPeers() {
+        logger.trace("selector1 "+ selector);
+        logger.trace("selector3 "+ op.getSelector());
         List<Peer> peers = torrentPeers.getPeers();
         for (int i = 0; i < peers.size(); i++) {
             int currentServerPort = peers.get(i).getServerPort();

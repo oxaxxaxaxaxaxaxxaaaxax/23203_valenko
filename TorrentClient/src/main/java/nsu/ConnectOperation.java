@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,10 +65,16 @@ public class ConnectOperation {
     private TorrentData metadata;
     private Map<String, HandShake> peerHandshakes= new ConcurrentHashMap<>();
     private final Logger logger = LogManager.getLogger(ConnectOperation.class);
+    private Map<SocketChannel, ConnectionContext> contexts = new ConcurrentHashMap<>();
+    private Selector selector;
 
-    ConnectOperation(TorrentPeers torrentPeers, TorrentData metadata) {
+    ConnectOperation(TorrentPeers torrentPeers, TorrentData metadata, Map<SocketChannel,ConnectionContext> contexts, Selector selector) {
         this.torrentPeers = torrentPeers;
         this.metadata = metadata;
+        this.contexts = contexts;
+        logger.trace("SELECTOR");
+        logger.trace("selector3 "+ selector);
+        this.selector = selector;
         downloadedPieces = metadata.getDownloadedBytes();
         try{
             localFile = new RandomAccessFile(metadata.getFile(),"rw");
@@ -81,6 +88,8 @@ public class ConnectOperation {
         //blockManager.setNeedPiecesInBlock(0);//должно делиться нацело
         fillHandshakes(torrentPeers);
     }
+
+    public Selector getSelector(){return selector;}
 
     public void fillHandshakes(TorrentPeers torrentPeers){
         List<Peer> peers = torrentPeers.getPeers();
@@ -286,9 +295,11 @@ public class ConnectOperation {
             if(hasNeededPieces(peer)){
                 logger.trace("find peer!");
                 SocketChannel peerChannel =  peer.getChannel();
-                try{
-                    peerChannel.write(handler.getInterested());
-                } catch (IOException e) {}
+                ConnectionContext ctx = contexts.get(peerChannel);
+                ctx.addToQueue(handler.getInterested(),selector);
+//                try{
+//                    peerChannel.write(handler.getInterested());
+//                } catch (IOException e) {}
 
             }
         }
@@ -305,7 +316,9 @@ public class ConnectOperation {
                 SocketChannel peerChannel =peer.getChannel(); /////1!!!!!
                 try{
                     logger.trace("peer address to send have message: "+peerChannel.getRemoteAddress());
-                    peerChannel.write(handler.getHave(index));
+                    ConnectionContext ctx = contexts.get(peerChannel);
+                    ctx.addToQueue(handler.getHave(index),selector);
+                    //peerChannel.write(handler.getHave(index));
                 } catch (IOException e) {
                     logger.trace("IOEexception "+ e.getMessage());
                 }
@@ -383,10 +396,10 @@ public class ConnectOperation {
                    return Id.END_CONNECT;
                }
                 logger.trace("hash not equals, need to load again");
-                return Id.END_CONNECT;
-//               piece.clearPiece();
-//               askAllPeer();
-//               return Id.END_CONNECT;//ЭТО НУЖНАЯ ЧАСТЬ УДАЛЕНА ДЛЯ ОТЛАДКИ 05.06.12:52
+                //return Id.END_CONNECT;
+               piece.clearPiece();
+               askAllPeer();
+               return Id.END_CONNECT;//ЭТО НУЖНАЯ ЧАСТЬ УДАЛЕНА ДЛЯ ОТЛАДКИ 05.06.12:52
             }
             logger.trace("need to load more parts");
             if(hasNeededPieces(neededPeer)){
@@ -434,44 +447,53 @@ public class ConnectOperation {
 
     public void sendMessage(Id messageId, SocketChannel channel,ByteBuffer buffer) {
         logger.trace("send message!!!!!111");
-        try{
+        //try{
+            ConnectionContext ctx = contexts.get(channel);
             switch(messageId){
                 case Id.END_CONNECT:
                     logger.trace("end connect");
                     break;
                 case Id.CHOKE:
                     logger.trace("send choke");
-                    channel.write(handler.getChocke());
+                    ctx.addToQueue(handler.getChocke(),selector);
+                    //channel.write(handler.getChocke());
                     break;
                 case Id.UNCHOKE:
                     logger.trace("send unchoke");
-                    channel.write(handler.getUnchocke());
+                    ctx.addToQueue(handler.getUnchocke(),selector);
+                    //channel.write(handler.getUnchocke());
                     break;
                 case Id.INTERESTED:
                     logger.trace("send interested");
-                    channel.write(handler.getInterested());
+                    ctx.addToQueue(handler.getInterested(),selector);
+                    //channel.write(handler.getInterested());
                     break;
                 case Id.NOT_INTERESTED:
                     logger.trace(" send not interested");
-                    channel.write(handler.getNotInterested());
+                    ctx.addToQueue(handler.getNotInterested(),selector);
+                    //channel.write(handler.getNotInterested());
                     break;
                 case Id.HAVE:
                     logger.trace(" send have");
                     break;
-                case Id.BITFIELD: channel.write(createBitfield());
+                case Id.BITFIELD:
+                    ctx.addToQueue(createBitfield(),selector);
+                    //channel.write(createBitfield());
                     break;
                 case Id.REQUEST:
                     logger.trace(" send request");
-                    channel.write(requestPiece(channel));
+                    ctx.addToQueue(requestPiece(channel),selector);
+                    //channel.write(requestPiece(channel));
                     break;
                 case Id.PIECE:
                     logger.trace(" send piece");
-                    channel.write(sendPiece(buffer));
+                    ctx.addToQueue(sendPiece(buffer),selector);
+                    //channel.write(sendPiece(buffer));
                     break;
             }
-        } catch (IOException e) {
-            logger.trace("IOEexception "+ e.getMessage());
-        }
+        //} catch (IOException e) {
+            //logger.trace("IOEexception "+ e.getMessage());
+        //}
     }
 
     public void setPeerChannel(SocketChannel channel,int peerPort){
@@ -505,7 +527,9 @@ public class ConnectOperation {
                 logger.debug("is correct handshake!");
                 try{
                     logger.trace("write handshake");
-                    channel.write(createHandshake((InetSocketAddress)channel.getRemoteAddress()));
+                    ConnectionContext ctx = contexts.get(channel);
+                    ctx.addToQueue(createHandshake((InetSocketAddress)channel.getRemoteAddress()),selector);
+                    //channel.write(createHandshake((InetSocketAddress)channel.getRemoteAddress()));
                 } catch (IOException e) {
                     logger.trace("exception " + e.getMessage());
                 }
@@ -516,7 +540,9 @@ public class ConnectOperation {
                 if(handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
                     peerHandshakes.put(peerID,HandShake.COMPLETE_HANDSHAKE);
                     logger.debug("is correct handshake!");
-                    return Id.END_CONNECT;
+                    logger.trace("bytes after handshake "+buffer.remaining());
+                    return Id.NOT_HANDSHAKE;
+                    //return Id.END_CONNECT;
                 }
                 logger.debug("is not correct handshake!");
                 return Id.END_CONNECT;
@@ -547,11 +573,14 @@ public class ConnectOperation {
         }
         logger.trace("position before handling:" + buffer.position());
         logger.trace("size before handling:" + buffer.limit());
-        int id = buffer.get(MESSAGE_ID_INDEX);
+        buffer.getInt();
+        int id = buffer.get();
+        //int id = buffer.get(MESSAGE_ID_INDEX);
         if(id < 0 || id > 9){
             logger.trace("ERROR");
             return Id.END_CONNECT;
         }
+        buffer.position(buffer.position() - 5);
         logger.trace("id message:" + id);
         Id messageId = Id.IntToId(id);
         switch (messageId) {
