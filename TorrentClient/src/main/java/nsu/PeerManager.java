@@ -59,7 +59,7 @@ public class PeerManager{
         serverChanel.configureBlocking(false);
         serverChanel.bind(new InetSocketAddress(serverPORT));
         serverChanel.register(selector, SelectionKey.OP_ACCEPT);
-        ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+        //ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         while (true) {
             System.out.println("Waiting for clients");
             selector.select();
@@ -74,7 +74,8 @@ public class PeerManager{
                         ServerSocketChannel srv = (ServerSocketChannel) key.channel();
                         SocketChannel client = srv.accept();
                         client.configureBlocking(false);
-                        client.register(selector, SelectionKey.OP_READ);
+                        ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
+                        client.register(selector, SelectionKey.OP_READ, buff);
                         System.out.println("accepted peer" + client.getRemoteAddress());
                     }catch(IOException e){
                         logger.trace("accept exception: "+ e.getMessage());
@@ -99,11 +100,13 @@ public class PeerManager{
                     ByteBuffer handshake = op.createInitialHandshake(peerAddres);
                     customChannel.write(handshake);
                     logger.trace("write handshake");
-                    customChannel.register(selector, SelectionKey.OP_READ);
+                    ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
+                    customChannel.register(selector, SelectionKey.OP_READ,buff);
                 }
                 if (key.isReadable()) {
                     logger.trace("read peer message!");
                     SocketChannel client = (SocketChannel) key.channel();
+                    ByteBuffer readBuffer = (ByteBuffer) key.attachment();
                     readBuffer.clear();
                     int read = client.read(readBuffer);
                     if (read == -1) {
