@@ -38,6 +38,7 @@ public class BlockManager {
     public void setNeedPiecesInBlock(){
         logger.trace("index" + currentBlockIndex);
         if(isCompleteBlock(currentBlockIndex)){
+            logger.trace("Block is completed");
             updateBlock();
         }
         if(currentBlockIndex >= COUNT_BLOCKS){
@@ -89,6 +90,7 @@ public class BlockManager {
         }
         int index = idx%countPiecesInBlock;
         pieces.remove(index);
+        logger.trace("piece is removed");
     }
 
     public Piece getPiece(int idx){

@@ -196,6 +196,7 @@ public class Handler {
     }
 
     public ByteBuffer getHave(int idx) {
+        logger.trace("create have message");
         ByteBuffer buff = ByteBuffer.allocate(9);
         buff.putInt(5);
         buff.put((byte) 4);

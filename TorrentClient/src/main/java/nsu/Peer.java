@@ -14,8 +14,8 @@ public class Peer {
     //private final int leecherPort1;
     //private final int leecherPort2;
     private List<Integer> leecherPorts = new ArrayList<>();
-    private BitSet bitfield;
-    private SocketChannel channel;
+    private BitSet bitfield = new BitSet();
+    private SocketChannel channel =null;
     private final Logger logger = LogManager.getLogger(Handler.class);
     private Handler handler= new Handler();
     //private final String ip;
@@ -39,9 +39,23 @@ public class Peer {
         bitfield = peerBitfield;
     }
     public void setLoadedPiece(int index){
+        logger.trace("setting piece in index "+index);
+//        if(bitfield.get(index)){
+//            logger.trace("this piece already loaded");
+//        }
         bitfield.set(index);
+        logger.trace("set successful");
     }
     public SocketChannel getChannel(){return channel;}
+    public void setChannel(SocketChannel channel){this.channel = channel;}
+    public boolean hasBindChannel() {
+        if (channel == null) {
+            logger.trace("channel not bind");
+            return false;
+        }
+        logger.trace("channel bind");
+        return true;
+    }
     public BitSet getBitfield(){return bitfield;}
     public void setId(byte[] id){
         this.id = id;

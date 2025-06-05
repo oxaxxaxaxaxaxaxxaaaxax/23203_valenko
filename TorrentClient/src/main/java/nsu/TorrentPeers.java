@@ -103,6 +103,8 @@ public class TorrentPeers {
     public byte[] getPeerID(int port){
         return idList.get(port);
     }
+
+//    public void setChannel()
 //
 //    public byte[] getPeerID(int port){//тут порт от канала(которым подклюились)
 //        for(int i=0;i<countPeers;i++){
