@@ -110,8 +110,8 @@ public class TorrentData {
         logger.trace("start parsing torrent");
         BDecoder decoder = new BDecoder(new FileInputStream(torrentPathName));
         BEValue decoded = decoder.bdecode();
-        Map<String, BEValue> root = decoded.getMap();
-        BEValue infoValue = root.get("info");
+        Map<String, BEValue> map = decoded.getMap();
+        BEValue infoValue = map.get("info");
         Map<String, BEValue> infoMap = infoValue.getMap();
         pieceLength = infoMap.get("piece length").getLong();
         length = infoMap.get("length").getLong();
@@ -181,7 +181,7 @@ public class TorrentData {
         //piecesCard = new BitSet((int)length*8);/////!!!!!
         logger.trace("bitset is created");
         if(localPathName == null){
-            localPathName = downloadDir + "/" + "COPY123dadushka_au" + numberClient + ".avi";
+            localPathName = downloadDir + "/" + "COPY123dadushka_au2" + numberClient + ".avi";
             localFile = new File(localPathName);
             logger.trace("create a file: " + localPathName);
             return;

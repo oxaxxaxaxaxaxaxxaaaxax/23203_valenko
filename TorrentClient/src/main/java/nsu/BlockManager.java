@@ -50,6 +50,9 @@ public class BlockManager {
             if(!downloadedPieces.get(currentBlockIndex*countPiecesInBlock +i)){
                 logger.trace("set piece!!!");
                 pieces.put(i,new Piece(countPartsInPiece,i));
+                logger.trace(i);
+            }else{
+                logger.trace("piece is correct");
             }
 //            if(pieces.isEmpty()){
 //                logger.trace("empty map");

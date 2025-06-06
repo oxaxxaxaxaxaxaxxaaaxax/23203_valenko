@@ -545,7 +545,8 @@ public class ConnectOperation {
                     //return Id.END_CONNECT;
                 }
                 logger.debug("is not correct handshake!");
-                return Id.END_CONNECT;
+                return Id.NOT_HANDSHAKE;
+                //return Id.END_CONNECT;
             default: return Id.END_CONNECT;
         }
     }
@@ -573,6 +574,10 @@ public class ConnectOperation {
         }
         logger.trace("position before handling:" + buffer.position());
         logger.trace("size before handling:" + buffer.limit());
+        if(buffer.limit()-buffer.position() ==0){
+            logger.trace("end of the buff");
+            return Id.END_CONNECT;
+        }
         buffer.getInt();
         int id = buffer.get();
         //int id = buffer.get(MESSAGE_ID_INDEX);
