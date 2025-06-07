@@ -12,12 +12,11 @@ public class BlockManager {
     private final int COUNT_BLOCKS ;
     private final int countPiecesInBlock = 400;
     long countPieces;
-    int countBlocks;
     int blockSize;
     int countPartsInPiece;
     private int currentBlockIndex =0;
     Map<Integer, Piece> pieces = new ConcurrentHashMap<>();
-    BitSet downloadedPieces;
+    private final BitSet downloadedPieces;
     BlockManager(long countPieces, long length, long pieceSize,BitSet downloadedPieces,int countPartsInPiece){
         logger.trace("length: "+ length);
         logger.trace("pieceSize" + pieceSize);
@@ -28,8 +27,6 @@ public class BlockManager {
         logger.trace("countPiecesInBlock" + countPiecesInBlock);
         blockSize = (int)(length/COUNT_BLOCKS);
         logger.trace("blockSize "+blockSize);
-        //countPiecesInBlock = (int)(blockSize/pieceSize);
-        //logger.trace("countPiecesInBlock "+countPiecesInBlock);
         this.downloadedPieces = downloadedPieces;
         this.countPartsInPiece = countPartsInPiece;
         logger.trace("countPartsInPiece "+countPartsInPiece);
@@ -44,20 +41,20 @@ public class BlockManager {
         if(isCompleteBlock(currentBlockIndex)){
             logger.trace("Block is completed");
             return;
-            //updateBlock();
         }
         for(int i=0;i< countPiecesInBlock;i++){
-            if(!downloadedPieces.get(currentBlockIndex*countPiecesInBlock +i)){
-                logger.trace("set piece!!!");
-                pieces.put(i,new Piece(countPartsInPiece,i));
-                logger.trace(i);
-            }else{
-                logger.trace("piece is correct");
+            if(i >= countPieces){
+                return;
             }
-//            if(pieces.isEmpty()){
-//                logger.trace("empty map");
-//                updateBlock();
-//            }
+            synchronized (downloadedPieces){
+                if(!downloadedPieces.get(currentBlockIndex*countPiecesInBlock +i)){
+                    logger.trace("set piece!!!");
+                    pieces.put(i,new Piece(countPartsInPiece,i));
+                    logger.trace(i);
+                }else{
+                    logger.trace("piece is correct");
+                }
+            }
         }
     }
     public void clearBlock(){
@@ -78,9 +75,11 @@ public class BlockManager {
             logger.info("failed index");
             return false;
         }
-        for(int i=0;i<countPiecesInBlock;i++){
-            if(!downloadedPieces.get(index*countPiecesInBlock + i)){
-                return false;
+        synchronized (downloadedPieces){
+            for(int i=0;i<countPiecesInBlock;i++){
+                if(!downloadedPieces.get(index*countPiecesInBlock + i)){
+                    return false;
+                }
             }
         }
         return true;
@@ -132,14 +131,5 @@ public class BlockManager {
         int index = idx%countPiecesInBlock;
         return pieces.get(index).getFreePart();
     }
-
-    public boolean isEmpty(){
-        return pieces.isEmpty();
-    }
-
 }
-//1910128
-//1955971520
-//64*5*23
-//7360
-//265757
+

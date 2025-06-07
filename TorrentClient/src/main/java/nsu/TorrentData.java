@@ -24,6 +24,10 @@ public class TorrentData {
     String localPathName = null;
     long length;
     String name;
+    //String filePathName = "COPY123dadushka_au2";
+    //String extension = ".avi";
+    String filePathName = "image";
+    String extension = "jpeg";
     long pieceLength;
     byte[] pieces;
     byte[] infoHash;
@@ -126,8 +130,6 @@ public class TorrentData {
         Torrent torrent = Torrent.load(torrentFile);
         infoHash = torrent.getInfoHash();
         name = torrent.getName();
-        //infoBytes = bencode.encode(info);
-        //infoHash = handler.getSHAHash(ByteBuffer.wrap(bencode.encode(infoMap)));
         logger.trace("length " + length);
         logger.trace("name " + name);
         logger.trace("pieceLength " + pieceLength);
@@ -136,7 +138,7 @@ public class TorrentData {
     }
 
 
-    public long getCountPieces(){return countPieces;} //возможно оно нацело не делится
+    public long getCountPieces(){return countPieces;}
 
 
     public void createPartCard(int pieceIdx, int begin) {
@@ -178,10 +180,9 @@ public class TorrentData {
         logger.trace(countPieces*8);
         logger.trace((int)countPieces*8);
         piecesCard = new BitSet((int)countPieces);
-        //piecesCard = new BitSet((int)length*8);/////!!!!!
         logger.trace("bitset is created");
         if(localPathName == null){
-            localPathName = downloadDir + "/" + "COPY123dadushka_au2" + numberClient + ".avi";
+            localPathName = downloadDir + "/" + filePathName + numberClient + extension;
             localFile = new File(localPathName);
             logger.trace("create a file: " + localPathName);
             return;

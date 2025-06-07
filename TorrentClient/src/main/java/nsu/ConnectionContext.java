@@ -14,10 +14,19 @@ public class ConnectionContext {
     SocketChannel channel;
     ByteBuffer readBuffer;
     Queue<ByteBuffer> writeQueue = new ConcurrentLinkedQueue<>();
+    int connectionCounter =0;
     private final Logger logger = LogManager.getLogger(ConnectionContext.class);
     public ConnectionContext(SocketChannel ch, int bufferSize) {
         this.channel = ch;
         this.readBuffer = ByteBuffer.allocate(bufferSize);
+    }
+
+    public int getConnectionCounter(){
+        return connectionCounter;
+    }
+
+    public void incrConnectionCounter(){
+        connectionCounter++;
     }
 
     public SocketChannel getChannel() {

@@ -1,9 +1,6 @@
 package nsu;
 
-import com.sun.tools.javac.Main;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,15 +30,9 @@ public class TorrentClient {
         TorrentPeers torrentPeers = new TorrentPeers(peerCount,numberClient);
         logger.trace("torent Peers: "+ torrentPeers.getPeers().size());
         metadata.parseTorrentFile();
-        //metadata.fillBitField();
         metadata.createCard();
         logger.trace("peer manager start");
         PeerManager manager = new PeerManager(metadata,numberClient,torrentPeers);
         manager.connectToLoad();
-        //Thread downloadData = new Thread(new DownloadPeerManager(metadata, peers,args[2]));
-        //Thread distributeData = new Thread(new DistributeManager(metadata, peers, args[2]));
-        //downloadData.start();
-        //distributeData.start();
     }
-
 }

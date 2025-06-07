@@ -16,13 +16,11 @@ public class TorrentPeers {
     private int countPeers;
     private final int serverPort;
     private final List<Integer> leechers;
-    //private final int leecherPort1;
-    //private final int leecherPort2;
     private Map<Integer, byte[]> idList = new ConcurrentHashMap<>();
     Logger logger = LogManager.getLogger(TorrentPeers.class);
     private final Handler handler = new Handler();
 
-    static{
+    static {
         serverPorts.add(4537);
         serverPorts.add(2486);
         serverPorts.add(6000);
@@ -34,9 +32,9 @@ public class TorrentPeers {
         leecherPorts.add(3999);
     }
 
-    TorrentPeers(int countPeers,String numberClient){
+    TorrentPeers(int countPeers, String numberClient) {
         this.countPeers = countPeers;
-        logger.trace("count peers:"+countPeers);
+        logger.trace("count peers:" + countPeers);
         fillPortIdMap();
         genPeers();
         serverPort = serverPorts.get(Integer.parseInt(numberClient));
@@ -47,8 +45,8 @@ public class TorrentPeers {
         //logger.debug("my leecher port1" + leecherPort1);
         //logger.debug("my leecher port2" + leecherPort2);
         peers.remove(Integer.parseInt(numberClient));
-        this.countPeers --;
-        logger.trace("count peers:"+this.countPeers);
+        this.countPeers--;
+        logger.trace("count peers:" + this.countPeers);
         //serverPorts.remove(Integer.parseInt(numberClient));
         //leecherPorts.remove(Integer.parseInt(numberClient));
         //serverPorts.remove(serverPort);
@@ -56,69 +54,53 @@ public class TorrentPeers {
         //leecherPorts.remove(leecherPort2);
     }
 
-    public void fillPortIdMap(){
-        for(int i=0;i<countPeers;i++){
+    public void fillPortIdMap() {
+        for (int i = 0; i < countPeers; i++) {
             idList.put(serverPorts.get(i), genPeerID(serverPorts.get(i)));
-            idList.put(leecherPorts.get(i*2),genPeerID(serverPorts.get(i)));
-            idList.put(leecherPorts.get(i*2+1),genPeerID(serverPorts.get(i)));
+            idList.put(leecherPorts.get(i * 2), genPeerID(serverPorts.get(i)));
+            idList.put(leecherPorts.get(i * 2 + 1), genPeerID(serverPorts.get(i)));
             logger.debug("peer ID: " + handler.bytesToHex(idList.get(serverPorts.get(i))) + " server port: " + serverPorts.get(i));
-            logger.debug("peer ID: " + handler.bytesToHex(idList.get(leecherPorts.get(i*2))) + " ports: " + leecherPorts.get(i*2));
-            logger.debug("peer ID: " + handler.bytesToHex(idList.get(leecherPorts.get(i*2+1))) + " ports: " + leecherPorts.get(i*2+1));
+            logger.debug("peer ID: " + handler.bytesToHex(idList.get(leecherPorts.get(i * 2))) + " ports: " + leecherPorts.get(i * 2));
+            logger.debug("peer ID: " + handler.bytesToHex(idList.get(leecherPorts.get(i * 2 + 1))) + " ports: " + leecherPorts.get(i * 2 + 1));
         }
 
     }
 
-    public List<Integer> getLeechers(){ return leechers;}
+    public List<Integer> getLeechers() {
+        return leechers;
+    }
 
-    public int getClientServerPort(){return serverPort;}
-    //public int getClientLeecherPort1(){return leecherPort1;}
-    //public int getClientLeecherPort2(){return leecherPort2;}
-    public List<Peer> getPeers(){
+    public int getClientServerPort() {
+        return serverPort;
+    }
+
+    public List<Peer> getPeers() {
         return peers;
     }
-    public int getCountPeers(){return countPeers;}
-//    public void genPeers(){
-//        for(int i=0;i<countPeers;i++){
-//            peers.add(new Peer(genPeerID(),serverPorts.get(i), leecherPorts.get(2*i), leecherPorts.get(2*i+1)));//////////
-//        }
-//    }
 
-    public void genPeers(){
-        for(int i=0;i<countPeers;i++){
-            peers.add(new Peer((idList.get(serverPorts.get(i))),serverPorts.get(i),leecherPorts.get(i*2),leecherPorts.get(i*2+1)));//////////
+    public int getCountPeers() {
+        return countPeers;
+    }
+
+    public void genPeers() {
+        for (int i = 0; i < countPeers; i++) {
+            peers.add(new Peer((idList.get(serverPorts.get(i))), serverPorts.get(i), leecherPorts.get(i * 2), leecherPorts.get(i * 2 + 1)));//////////
         }
     }
 
-    public byte[] genPeerID(int port){
+    public byte[] genPeerID(int port) {
         byte[] hash = handler.getSHAHashForPort(port);
         String hexHash = handler.bytesToHex(hash);
-        logger.trace("port: "+ port + " hash: " + hexHash);
+        logger.trace("port: " + port + " hash: " + hexHash);
         return hash;
     }
 
-    public int getServerPort(int numberPeer){
+    public int getServerPort(int numberPeer) {
         return serverPorts.get(numberPeer);
     }
 
-    public byte[] getPeerID(int port){
+    public byte[] getPeerID(int port) {
         return idList.get(port);
     }
-
-//    public void setChannel()
-//
-//    public byte[] getPeerID(int port){//тут порт от канала(которым подклюились)
-//        for(int i=0;i<countPeers;i++){
-//            Peer peer =peers.get(i);
-////            if((peer.getLeecherPort1() == port)||(peer.getLeecherPort2() == port)){
-////                logger.trace("leecher port! "+ port);
-////                return peer.getId();
-////            }
-//            if(peer.getServerPort() == port){
-//                logger.trace("server port! "+ port);
-//                return  peer.getId();
-//            }
-//        }
-//        logger.trace("not find");
-//        return peers.get(0).getId();//по хорошему исключение
-//    }
 }
+

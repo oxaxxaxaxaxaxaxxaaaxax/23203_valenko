@@ -15,6 +15,7 @@ public class Handler {
     private final int lengthProtocol = 19;
     private final int lengthMessage = lengthProtocol + 49;
     private final String nameProtocol = "BitTorrent protocol";
+    //int countPieces;
     private final Logger logger = LogManager.getLogger(Handler.class);
 
     public byte[] BitToByte(BitSet bitset) {
@@ -29,15 +30,40 @@ public class Handler {
         return bytes;
     }
 
-    public BitSet ByteToBit(byte[] buffer, int countPieces) {
-        BitSet bitset = new BitSet(countPieces);
-        for (int i = 0; i < countPieces; i++) {
-            if ((buffer[i / 8] & (byte) (1 << (7 - i % 8))) != 0) {
-                bitset.set(i);
-            }
+    public BitSet ByteToBit(byte[] buff, int countPieces) {
+        logger.trace("in byte to bit");
+//        logger.trace("countPieces "+countPieces);
+//        if (countPieces < 0 || countPieces > buff.length * 8) {
+//            logger.trace("buffer length "+buff.length * 8);
+//            logger.trace("failed limit");
+//        }
+        int lengthMessage = buff.length;
+        logger.trace("lengthMessage "+lengthMessage);
+        if(buff.length * 8 < countPieces){
+            lengthMessage+= ((countPieces+8-1)/8) - buff.length;
+            logger.trace("lengthMessage2 "+lengthMessage);
         }
+        byte[] buffer = new byte[lengthMessage];
+        System.arraycopy(buff,0,buffer,0,buff.length);
+        BitSet bitset = new BitSet(countPieces);
+        try{
+            for (int i = 0; i < countPieces; i++){
+                if ((buffer[i / 8] & (byte) (1 << (7 - i % 8))) != 0) {
+                    logger.trace("i: "+i);
+                    bitset.set(i);
+                }
+                logger.trace("i: "+i);
+            }
+        }catch(Exception e){
+            logger.trace("exception "+e.getMessage());
+        }
+        logger.trace("end byte to bit");
         return bitset;
     }
+
+//    public void setCountPieces(int countPieces){
+//        this.countPieces = countPieces;
+//    }
 
     public byte[] getSHAHashForPort(int port){
         return getSHAHash(ByteBuffer.wrap(String.valueOf(port).getBytes()));

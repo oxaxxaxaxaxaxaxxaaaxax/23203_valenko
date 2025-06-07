@@ -36,14 +36,18 @@ public class Peer {
         //this.leecherPort2 = leecherPort2;
     }
     public void setPeerBitfield(BitSet peerBitfield){
-        bitfield = peerBitfield;
+        synchronized (bitfield){
+            bitfield = peerBitfield;
+        }
     }
     public void setLoadedPiece(int index){
         logger.trace("setting piece in index "+index);
 //        if(bitfield.get(index)){
 //            logger.trace("this piece already loaded");
 //        }
-        bitfield.set(index);
+        synchronized (bitfield){
+            bitfield.set(index);
+        }
         logger.trace("set successful");
     }
     public SocketChannel getChannel(){return channel;}
@@ -56,7 +60,11 @@ public class Peer {
         logger.trace("channel bind");
         return true;
     }
-    public BitSet getBitfield(){return bitfield;}
+    public BitSet getBitfield() {
+        synchronized (bitfield) {
+            return bitfield;
+        }
+    }
     public void setId(byte[] id){
         this.id = id;
     }

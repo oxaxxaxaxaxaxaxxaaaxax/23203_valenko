@@ -3,7 +3,6 @@ package nsu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.management.RuntimeOperationsException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -54,7 +53,7 @@ enum HandShake{
 public class ConnectOperation {
     private RandomAccessFile localFile;
     private final TorrentPeers torrentPeers;
-    private BitSet downloadedPieces;
+    private final BitSet downloadedPieces;
     private Handler handler= new Handler();
     BlockManager blockManager;
     private Map<Integer, Piece> notDownloadedPieces = new ConcurrentHashMap<>();
@@ -63,7 +62,7 @@ public class ConnectOperation {
     private final long pieceSize;
     private final int MESSAGE_ID_INDEX = 4;
     private TorrentData metadata;
-    private Map<String, HandShake> peerHandshakes= new ConcurrentHashMap<>();
+    private Map<Integer, HandShake> peerHandshakes= new ConcurrentHashMap<>();
     private final Logger logger = LogManager.getLogger(ConnectOperation.class);
     private Map<SocketChannel, ConnectionContext> contexts = new ConcurrentHashMap<>();
     private Selector selector;
@@ -81,11 +80,9 @@ public class ConnectOperation {
         } catch (FileNotFoundException e) {
             logger.trace("failed create file " + e.getMessage());
         }
-        //countPieces = downloadedPieces.size();
         countPieces = metadata.getCountPieces();
         pieceSize = metadata.getPieceSize();
         blockManager = new BlockManager(countPieces, metadata.getLength(),pieceSize,downloadedPieces,(int)(pieceSize+partSize - 1)/partSize);
-        //blockManager.setNeedPiecesInBlock(0);//должно делиться нацело
         fillHandshakes(torrentPeers);
     }
 
@@ -98,24 +95,22 @@ public class ConnectOperation {
         for(int i=0;i< peerCount;i++){
             logger.trace("current peer: "+ (i+1));
             Peer peer = peers.get(i);
-            peerHandshakes.put(handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort())),HandShake.INITIAL_HANDSHAKE);
+            peerHandshakes.put(peer.getServerPort(),HandShake.INITIAL_HANDSHAKE);
             logger.trace("current port" + peer.getServerPort());
-            logger.trace("hash: " + handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort())));
-            logger.trace("handshake: " + peerHandshakes.get(handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort()))));
+            //logger.trace("hash: " + handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort())));
+            logger.trace("handshake: " + peerHandshakes.get(peer.getServerPort()));
+            List<Integer> leechers = peer.getLeecherPorts();
+            for(int j=0;j<leechers.size();j++){
+                peerHandshakes.put(leechers.get(j), HandShake.INITIAL_HANDSHAKE);
+                logger.trace("current port" + leechers.get(j));
+                //logger.trace("hash: " + handler.bytesToHex(handler.getSHAHashForPort(peer.getServerPort())));
+                logger.trace("handshake: " + peerHandshakes.get(leechers.get(j)));
+            }
         }
     }
 
-//    public void setNeedPieces(BitSet downloadedPieces,int countParts, Map<Integer, Piece> pieces){
-//        for(int i=0;i< countPieces;i++){
-//            if(!downloadedPieces.get(i)){
-//                logger.trace("set piece");
-//                pieces.put(i,new Piece(countParts,i));
-//            }
-//        }
-//    }
-
     public void setWaitHandshake(InetSocketAddress peerAddres){
-        peerHandshakes.put(handler.bytesToHex(handler.getSHAHashForPort(peerAddres.getPort())),HandShake.WAIT_HANDSHAKE);
+        peerHandshakes.put(peerAddres.getPort(),HandShake.WAIT_HANDSHAKE);
     }
 
     public ByteBuffer createHandshake(InetSocketAddress peerAddres){
@@ -132,7 +127,9 @@ public class ConnectOperation {
 
     public ByteBuffer createBitfield(){
         logger.trace("create bitfield");
-        return handler.getBitfield(downloadedPieces);
+        synchronized (downloadedPieces){
+            return handler.getBitfield(downloadedPieces);
+        }
     }
 
     public boolean hasNeededPieces(Peer peer) {
@@ -150,9 +147,23 @@ public class ConnectOperation {
 //            Peer peer = peers.get(i);
 //            if (Arrays.equals(torrentPeers.getPeerID(peerPort), peer.getId())) {
 //                logger.trace("find peer!! " + peerPort);
-                BitSet neededPieces = (BitSet) peer.getBitfield().clone();
-                neededPieces.andNot(downloadedPieces);
-                return !neededPieces.isEmpty();
+        BitSet neededPieces = (BitSet) peer.getBitfield().clone();
+        logger.trace("peer: "+ peer.getServerPort());
+        for(int i=0;i<countPieces;i++){
+            System.out.print(neededPieces.get(i));
+        }
+        logger.trace("my bitfield");
+        for(int i=0;i<countPieces;i++){
+            System.out.print(downloadedPieces.get(i));
+        }
+        synchronized (downloadedPieces){
+            neededPieces.andNot(downloadedPieces);
+        }
+        logger.trace("nedeed bitfield ");
+        for(int i=0;i<countPieces;i++){
+            System.out.print(neededPieces.get(i));
+        }
+        return !neededPieces.isEmpty();
 //            }
 //        }
 //        logger.trace("not found peer");
@@ -168,15 +179,13 @@ public class ConnectOperation {
                 logger.trace("find peer!! "+ peerPort);
                 peer.setPeerBitfield(peerPieces);
             }
-//                if(peer.getLeecherPort() == peerPort){/// /////
-//                    peer.setPeerBitfield(peerPieces);
-//                }//НАПИСАТЬ УДАЛИЛА ЧТОБЫ СКОМПИЛИЛОСЬ УЖЕ НЕ НАДО
         }
     }
 
     public Id handleBitfield(ByteBuffer buffer, SocketChannel channel) {
         logger.trace("handle peer's bitfield");
         logger.trace("position:" + buffer.position());
+        logger.trace("buffer length "+ buffer.remaining());
         int length = buffer.getInt();
         logger.trace("length:" + length);
         buffer.get();
@@ -184,32 +193,38 @@ public class ConnectOperation {
             return Id.NOT_INTERESTED;
         }
         logger.trace("length >1");
-        byte[] buff = new byte[length - 1];
+        byte[] buff = new byte[length-1];
         buffer.get(buff);
         logger.trace("position:" + buffer.position());
         buffer.flip();
         logger.trace("position:" + buffer.position());
         BitSet peerPieces = handler.ByteToBit(buff, (int) countPieces);
+        logger.trace("");
         try{
             InetSocketAddress addr = (InetSocketAddress) channel.getRemoteAddress();
             int peerPort = addr.getPort();
             int countPeer = torrentPeers.getCountPeers();
             List<Peer> peers = torrentPeers.getPeers();
+            logger.trace("before find peer");
             for (int i = 0; i < countPeer; i++) {
                 Peer peer = peers.get(i);
+                logger.trace("peer.. "+ peer.getServerPort());
                 if (Arrays.equals(torrentPeers.getPeerID(peerPort), peer.getId())) {
                     logger.trace("find peer!! " + peerPort);
-                    setPeerBitfield(peerPieces, peerPort);
+                    synchronized (peerPieces){
+                        setPeerBitfield(peerPieces, peerPort);
+                    }
                     if (hasNeededPieces(peer)) {
                         return Id.INTERESTED;
                     }
+
                     return Id.NOT_INTERESTED;
-                    //if (hasNeededPieces(peerPieces)) {
                 }
             }
             logger.trace("peer not found");
             throw new RuntimeException();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            logger.trace("exception! "+ e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -223,16 +238,16 @@ public class ConnectOperation {
             int peerPort = addr.getPort();
             for(int i=0;i<countPeer;i++) {
                 Peer peer = peers.get(i);
-//            if(peer.getChannel() == channel){
                 if(Arrays.equals(torrentPeers.getPeerID(peerPort),peer.getId())){
                     logger.trace("find peer!! "+ peerPort);
                     peerPieces = peer.getBitfield();
                     BitSet neededPieces = (BitSet) peerPieces.clone();
-                    neededPieces.andNot(downloadedPieces);
+                    synchronized (downloadedPieces){
+                        neededPieces.andNot(downloadedPieces);
+                    }
                     int pieceIndex = neededPieces.nextSetBit(0);
                     logger.trace("needed piece "+ pieceIndex);
-                    int offset = blockManager.getNotDownloadedPart(pieceIndex);//с учетом байтового смещения(глобальный индекс)
-                    //ЛОМАЕМСЯ СТРОКОЙ ВЫШЕ
+                    int offset = blockManager.getNotDownloadedPart(pieceIndex);
                     logger.trace("needed part in piece(with offset) "+ offset);
                     return handler.getRequest(pieceIndex,offset,partSize);
                 }
@@ -240,12 +255,11 @@ public class ConnectOperation {
         } catch (IOException e) {
             logger.trace("IOEexception "+ e.getMessage());
         }
-
-
         return null;//?????
     }
 
     public Id handleRequest(ByteBuffer buffer){
+        logger.trace("handleRequest");
         logger.trace("position:" + buffer.position());
         buffer.getInt();
         buffer.get();
@@ -255,10 +269,12 @@ public class ConnectOperation {
         logger.trace("request offset "+offset);
         int length = buffer.getInt();
         logger.trace("request length "+length);
-        if(!downloadedPieces.get(index)){
-            return Id.END_CONNECT;
+        synchronized (downloadedPieces){
+            if(!downloadedPieces.get(index)){
+                return Id.END_CONNECT;
+            }
+            return Id.PIECE;
         }
-        return Id.PIECE;
     }
 
     public ByteBuffer sendPiece(ByteBuffer buffer) {
@@ -266,7 +282,6 @@ public class ConnectOperation {
         buffer.flip();
         logger.trace("position:" + buffer.position());
         try {
-            //buffer.rewind();
             buffer.getInt();
             buffer.get();
             int index = buffer.getInt();
@@ -297,13 +312,9 @@ public class ConnectOperation {
                 SocketChannel peerChannel =  peer.getChannel();
                 ConnectionContext ctx = contexts.get(peerChannel);
                 ctx.addToQueue(handler.getInterested(),selector);
-//                try{
-//                    peerChannel.write(handler.getInterested());
-//                } catch (IOException e) {}
-
             }
         }
-        //ни у кого не нашли куски
+        //!!!!!!!!!!!!!
     }
 
     public void sendHaveMessage(int index){
@@ -318,7 +329,6 @@ public class ConnectOperation {
                     logger.trace("peer address to send have message: "+peerChannel.getRemoteAddress());
                     ConnectionContext ctx = contexts.get(peerChannel);
                     ctx.addToQueue(handler.getHave(index),selector);
-                    //peerChannel.write(handler.getHave(index));
                 } catch (IOException e) {
                     logger.trace("IOEexception "+ e.getMessage());
                 }
@@ -359,7 +369,7 @@ public class ConnectOperation {
             logger.trace("position:" + buffer.position());
             buffer.getInt();
             buffer.get();
-            int index = buffer.getInt();//05.06. ошибка какая то
+            int index = buffer.getInt();
             logger.debug("received piece index "+index);
             int offset = buffer.getInt();
             logger.debug("received piece offset "+offset);
@@ -370,24 +380,25 @@ public class ConnectOperation {
             long filePosition = index*pieceSize+offset;
             localFile.seek(filePosition);
             localFile.write(block);
-            //Piece piece = notDownloadedPieces.get(index);
             Piece piece = blockManager.getPiece(index);
-            piece.addLoadedPart(offset /partSize, block);//на всякий случай
+            piece.addLoadedPart(offset /partSize, block);
             if(piece.checkIsCompletedPiece()){
                 ByteBuffer buff =piece.getPieceFile();
                 buff.flip();
                 byte[] array= new byte[piece.getSize()];
                 buff.get(array);
-               //if(metadata.compareSHAHashWithTorrent(index,piece.getPieceFile())){
                 if(metadata.compareSHAHashWithTorrent(index,array)){
                     logger.trace("hash is equals");
-                    downloadedPieces.set(index);
-                   //notDownloadedPieces.remove(index);
+                    synchronized (downloadedPieces){
+                        downloadedPieces.set(index);
+                    }
                     blockManager.removePiece(index);
                     sendHaveMessage(index);
-                    if (downloadedPieces.cardinality() == countPieces){
-                        logger.info("FILE IS LOADED!!");
-                        return Id.END_CONNECT;
+                    synchronized (downloadedPieces){
+                        if (downloadedPieces.cardinality() == countPieces){
+                            logger.info("FILE IS LOADED!!");
+                            return Id.END_CONNECT;
+                        }
                     }
                    if(hasNeededPieces(neededPeer)){
                        return Id.INTERESTED;//!!!!!!!!!!!!!1
@@ -511,66 +522,79 @@ public class ConnectOperation {
 
     public synchronized Id handleHandshake(ByteBuffer buffer,SocketChannel channel,int peerPort){
         String peerID = handler.bytesToHex(torrentPeers.getPeerID(peerPort));
-        HandShake handshakeState = peerHandshakes.get(peerID);
-        logger.debug("Handshake state2: " + handshakeState);
-        switch (handshakeState){
-            case HandShake.COMPLETE_HANDSHAKE:
-                logger.debug("complete handshake with: " + peerPort);
-                return Id.NOT_HANDSHAKE;
-            case HandShake.INITIAL_HANDSHAKE:
-                logger.debug("initial handshake with: " + peerPort);
-                if(!handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
-                    logger.debug("is not correct handshake!");
-                    return Id.END_CONNECT;
-                }
-                peerHandshakes.put(peerID,HandShake.COMPLETE_HANDSHAKE);
-                logger.debug("is correct handshake!");
-                try{
-                    logger.trace("write handshake");
-                    ConnectionContext ctx = contexts.get(channel);
-                    ctx.addToQueue(createHandshake((InetSocketAddress)channel.getRemoteAddress()),selector);
-                    //channel.write(createHandshake((InetSocketAddress)channel.getRemoteAddress()));
-                } catch (IOException e) {
-                    logger.trace("exception " + e.getMessage());
-                }
-                return Id.BITFIELD;
-            case HandShake.WAIT_HANDSHAKE:
-                logger.debug("I wait handshake with: " + peerPort);
-                setPeerChannel(channel,peerPort);
-                if(handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
-                    peerHandshakes.put(peerID,HandShake.COMPLETE_HANDSHAKE);
-                    logger.debug("is correct handshake!");
-                    logger.trace("bytes after handshake "+buffer.remaining());
+        try{
+            InetSocketAddress addr = (InetSocketAddress)channel.getRemoteAddress();
+            HandShake handshakeState = peerHandshakes.get(addr.getPort());
+            logger.debug("Handshake state2: " + handshakeState);
+            switch (handshakeState){
+                case HandShake.COMPLETE_HANDSHAKE:
+                    logger.debug("complete handshake with: " + peerPort);
                     return Id.NOT_HANDSHAKE;
+                case HandShake.INITIAL_HANDSHAKE:
+                    logger.debug("initial handshake with: " + peerPort);
+                    if(!handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
+                        logger.debug("is not correct handshake!");
+                        return Id.END_CONNECT;
+                    }
+                    peerHandshakes.put(addr.getPort(),HandShake.COMPLETE_HANDSHAKE);
+                    logger.debug("is correct handshake!");
+                    try{
+                        logger.trace("write handshake");
+                        ConnectionContext ctx = contexts.get(channel);
+                        ctx.addToQueue(createHandshake((InetSocketAddress)channel.getRemoteAddress()),selector);
+                        //channel.write(createHandshake((InetSocketAddress)channel.getRemoteAddress()));
+                    } catch (IOException e) {
+                        logger.trace("exception " + e.getMessage());
+                    }
+                    logger.trace("return Id bitfield");
+                    return Id.BITFIELD;
                     //return Id.END_CONNECT;
-                }
-                logger.debug("is not correct handshake!");
-                return Id.NOT_HANDSHAKE;
+                case HandShake.WAIT_HANDSHAKE:
+                    logger.debug("I wait handshake with: " + peerPort);
+                    setPeerChannel(channel,peerPort);
+                    if(handler.isCorrectHandshake(buffer,metadata.getInfoHash())){
+                        peerHandshakes.put(addr.getPort(),HandShake.COMPLETE_HANDSHAKE);
+                        logger.debug("is correct handshake!");
+                        logger.trace("bytes after handshake "+buffer.remaining());
+                        return Id.NOT_HANDSHAKE;
+                        //return Id.END_CONNECT;
+                    }
+                    logger.debug("is not correct handshake!");
+                    return Id.NOT_HANDSHAKE;
                 //return Id.END_CONNECT;
-            default: return Id.END_CONNECT;
+                default: return Id.END_CONNECT;
+            }
+        } catch (Exception e) {
+            logger.trace("exception!!!!!!");
+            throw new RuntimeException(e);
         }
+
     }
 
     public Id handlePeerMessage(ByteBuffer buffer,SocketChannel channel) {
         logger.trace("handle message!!!!!111");
         int peerPort;
-        try{
+        try {
             InetSocketAddress peerAddress = (InetSocketAddress) channel.getRemoteAddress();
             peerPort = peerAddress.getPort();
-            logger.trace("peer port"+ peerPort);
-        } catch (IOException e) {
-            logger.trace("address exception" + e.getMessage());
-            return Id.END_CONNECT;}
-        logger.trace("position:" + buffer.position());
-        String peerID = handler.bytesToHex(torrentPeers.getPeerID(peerPort));
-        HandShake handshakeState = peerHandshakes.get(peerID);
-        logger.debug("Handshake state: " + handshakeState);
-        if(handshakeState != HandShake.COMPLETE_HANDSHAKE){
-            switch(handleHandshake(buffer,channel,peerPort)){
-                case Id.NOT_HANDSHAKE: break;
-                case Id.BITFIELD: return Id.BITFIELD;
-                default: return Id.END_CONNECT;
+            logger.trace("peer port" + peerPort);
+            logger.trace("position:" + buffer.position());
+            String peerID = handler.bytesToHex(torrentPeers.getPeerID(peerPort));
+            HandShake handshakeState = peerHandshakes.get(peerAddress.getPort());
+            logger.debug("Handshake state: " + handshakeState);
+            if (handshakeState != HandShake.COMPLETE_HANDSHAKE) {
+                switch (handleHandshake(buffer, channel, peerPort)) {
+                    case Id.NOT_HANDSHAKE:
+                        break;
+                    case Id.BITFIELD:
+                        return Id.BITFIELD;
+                    default:
+                        return Id.END_CONNECT;
+                }
             }
+        }catch (IOException e) {
+            logger.trace("address exception" + e.getMessage());
+            return Id.END_CONNECT;
         }
         logger.trace("position before handling:" + buffer.position());
         logger.trace("size before handling:" + buffer.limit());
@@ -601,3 +625,7 @@ public class ConnectOperation {
         }
     }
 }
+
+
+
+

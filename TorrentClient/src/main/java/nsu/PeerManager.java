@@ -106,12 +106,30 @@ public class PeerManager{
                         }else{
                             logger.trace("bad connect to peer");
                         }
-                    }catch(Exception e){
+                    }catch(IOException e){
                         logger.trace("connect exception: "+ e.getMessage());
-                        key.cancel();
-                        customChannel.close();
+                        //InetSocketAddress clientAddr =(InetSocketAddress)customChannel.getRemoteAddress();
+                        //InetSocketAddress serverAddr = (InetSocketAddress)customChannel.getRemoteAddress();
                         contexts.remove(customChannel);
-                        break;
+                        logger.trace("counter "+ctx.getConnectionCounter());
+                        if(ctx.getConnectionCounter() <2){
+                            try{
+                                logger.trace("connect again");
+                                ctx.incrConnectionCounter();
+                                logger.trace("before address");
+                                logger.trace("after address");
+                                customChannel.close();
+                                key.cancel();
+                                logger.trace("before threads");
+                                Thread.sleep(5000);
+                                connectWithPeers();
+
+                            } catch (InterruptedException ex) {
+                                logger.trace("interrupt! "+e.getMessage());
+                                throw new RuntimeException(ex);
+                            }
+                            break;
+                        }
                     }
                     InetSocketAddress peerAddres = (InetSocketAddress)customChannel.getRemoteAddress();
                     logger.trace("peer address: " + peerAddres);
@@ -204,15 +222,16 @@ public class PeerManager{
         try {
             channel = SocketChannel.open();
             logger.trace("my leecher port " + leecherPort);
+            channel.socket().setReuseAddress(true);
             channel.bind(new InetSocketAddress(leecherPort));
             channel.configureBlocking(false);
-            channel.socket().setReuseAddress(true);
             channel.connect(new InetSocketAddress(hostname, serverPort));
             ConnectionContext ctx = new ConnectionContext(channel, BUFFER_SIZE);
             contexts.put(channel,ctx);
             logger.trace("leecher address:"+ channel.getLocalAddress());
             channel.register(selector, SelectionKey.OP_CONNECT,ctx);
         } catch (IOException e) {
+            logger.trace("fail connection!!!!!");
             logger.trace("connection failed "+ e.getMessage());
             if(channel!=null){
                 try{
