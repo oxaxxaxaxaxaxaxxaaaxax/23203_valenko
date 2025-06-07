@@ -67,11 +67,15 @@ public class PeerManager{
         serverChanel.register(selector, SelectionKey.OP_ACCEPT);
     }
 
-    public void handlePeers() throws IOException {
+    public void handlePeers(){
         //ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         while (true) {
             System.out.println("Waiting for clients");
-            selector.select();
+            try{
+                selector.select();
+            } catch (IOException e) {
+                throw new RuntimeException("bad selector");
+            }
             //logger.trace("Accepted client!");
             Set<SelectionKey> selectedKeys = selector.selectedKeys();
             Iterator<SelectionKey> iter = selectedKeys.iterator();
@@ -118,7 +122,11 @@ public class PeerManager{
                                 ctx.incrConnectionCounter();
                                 logger.trace("before address");
                                 logger.trace("after address");
-                                customChannel.close();
+                                try{
+                                    customChannel.close();
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                                 key.cancel();
                                 logger.trace("before threads");
                                 Thread.sleep(5000);
@@ -131,15 +139,19 @@ public class PeerManager{
                             break;
                         }
                     }
-                    InetSocketAddress peerAddres = (InetSocketAddress)customChannel.getRemoteAddress();
-                    logger.trace("peer address: " + peerAddres);
-                    ByteBuffer handshake = op.createInitialHandshake(peerAddres);
-                    ctx.addToQueue(handshake,selector);
-                    key.interestOps(SelectionKey.OP_WRITE|SelectionKey.OP_READ);
-                    //customChannel.write(handshake);
-                    logger.trace("write handshake");
-                    //ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
-                    //customChannel.register(selector, SelectionKey.OP_READ,ctx);
+                    try{
+                        InetSocketAddress peerAddres = (InetSocketAddress)customChannel.getRemoteAddress();
+                        logger.trace("peer address: " + peerAddres);
+                        ByteBuffer handshake = op.createInitialHandshake(peerAddres);
+                        ctx.addToQueue(handshake,selector);
+                        key.interestOps(SelectionKey.OP_WRITE|SelectionKey.OP_READ);
+                        //customChannel.write(handshake);
+                        logger.trace("write handshake");
+                        //ByteBuffer buff = ByteBuffer.allocate(BUFFER_SIZE);
+                        //customChannel.register(selector, SelectionKey.OP_READ,ctx);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 if (key.isReadable()) {
                     try{
@@ -178,7 +190,11 @@ public class PeerManager{
                         ConnectionContext ctx = (ConnectionContext)key.attachment();
                         SocketChannel client = ctx.getChannel();
                         logger.info("peer is unavailable");
-                        client.close();
+                        try{
+                            client.close();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         key.cancel();
                         contexts.remove(client);
                     }
@@ -207,7 +223,11 @@ public class PeerManager{
                         logger.info("peer is unavailable");
                         ConnectionContext ctx = (ConnectionContext) key.attachment();
                         SocketChannel client = ctx.getChannel();
-                        client.close();
+                        try{
+                            client.close();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         key.cancel();
                         contexts.remove(client);
                     }

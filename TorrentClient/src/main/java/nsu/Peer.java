@@ -14,7 +14,7 @@ public class Peer {
     //private final int leecherPort1;
     //private final int leecherPort2;
     private List<Integer> leecherPorts = new ArrayList<>();
-    private BitSet bitfield = new BitSet();
+    private BitSet bitfield;
     private SocketChannel channel =null;
     private final Logger logger = LogManager.getLogger(Peer.class);
     private Handler handler= new Handler();
@@ -36,7 +36,7 @@ public class Peer {
         //this.leecherPort2 = leecherPort2;
     }
     public void setPeerBitfield(BitSet peerBitfield){
-        synchronized (bitfield){
+        synchronized (peerBitfield){
             bitfield = peerBitfield;
         }
     }

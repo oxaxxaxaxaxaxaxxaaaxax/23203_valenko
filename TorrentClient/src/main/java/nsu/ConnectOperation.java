@@ -147,23 +147,29 @@ public class ConnectOperation {
 //            Peer peer = peers.get(i);
 //            if (Arrays.equals(torrentPeers.getPeerID(peerPort), peer.getId())) {
 //                logger.trace("find peer!! " + peerPort);
-        BitSet neededPieces = (BitSet) peer.getBitfield().clone();
-        logger.trace("peer: "+ peer.getServerPort());
-        for(int i=0;i<countPieces;i++){
-            System.out.print(neededPieces.get(i));
+        Object firstLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? peer.getBitfield(): downloadedPieces;
+        Object secondLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? downloadedPieces: peer.getBitfield();
+        synchronized (firstLock) {
+            synchronized (secondLock) {
+                BitSet neededPieces = (BitSet) peer.getBitfield().clone();
+                logger.trace("peer: "+ peer.getServerPort());
+                for(int i=0;i<countPieces;i++){
+                    System.out.print(neededPieces.get(i));
+                }
+                logger.trace("my bitfield");
+                for(int i=0;i<countPieces;i++){
+                    System.out.print(downloadedPieces.get(i));
+                }
+                synchronized (downloadedPieces){
+                    neededPieces.andNot(downloadedPieces);
+                }
+                logger.trace("nedeed bitfield ");
+                for(int i=0;i<countPieces;i++){
+                    System.out.print(neededPieces.get(i));
+                }
+                return !neededPieces.isEmpty();
+            }
         }
-        logger.trace("my bitfield");
-        for(int i=0;i<countPieces;i++){
-            System.out.print(downloadedPieces.get(i));
-        }
-        synchronized (downloadedPieces){
-            neededPieces.andNot(downloadedPieces);
-        }
-        logger.trace("nedeed bitfield ");
-        for(int i=0;i<countPieces;i++){
-            System.out.print(neededPieces.get(i));
-        }
-        return !neededPieces.isEmpty();
 //            }
 //        }
 //        logger.trace("not found peer");
@@ -211,9 +217,7 @@ public class ConnectOperation {
                 logger.trace("peer.. "+ peer.getServerPort());
                 if (Arrays.equals(torrentPeers.getPeerID(peerPort), peer.getId())) {
                     logger.trace("find peer!! " + peerPort);
-                    synchronized (peerPieces){
-                        setPeerBitfield(peerPieces, peerPort);
-                    }
+                    setPeerBitfield(peerPieces, peerPort);
                     if (hasNeededPieces(peer)) {
                         return Id.INTERESTED;
                     }
@@ -240,22 +244,32 @@ public class ConnectOperation {
                 Peer peer = peers.get(i);
                 if(Arrays.equals(torrentPeers.getPeerID(peerPort),peer.getId())){
                     logger.trace("find peer!! "+ peerPort);
-                    peerPieces = peer.getBitfield();
-                    BitSet neededPieces = (BitSet) peerPieces.clone();
-                    synchronized (downloadedPieces){
-                        neededPieces.andNot(downloadedPieces);
+                    Object firstLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? peer.getBitfield(): downloadedPieces;
+                    Object secondLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? downloadedPieces: peer.getBitfield();
+                    synchronized (firstLock){
+                        synchronized (secondLock){
+                            peerPieces = peer.getBitfield();
+                            BitSet neededPieces = (BitSet) peerPieces.clone();
+                            neededPieces.andNot(downloadedPieces);
+                            int pieceIndex = neededPieces.nextSetBit(0);
+                            logger.trace("needed piece "+ pieceIndex);
+                            int offset = blockManager.getNotDownloadedPart(pieceIndex);
+                            if(offset == -1){
+                                logger.trace("all parts dowloads");
+                                throw new RuntimeException("bad request");
+                            }
+                            logger.trace("needed part in piece(with offset) "+ offset);
+                            return handler.getRequest(pieceIndex,offset,partSize);
+                        }
                     }
-                    int pieceIndex = neededPieces.nextSetBit(0);
-                    logger.trace("needed piece "+ pieceIndex);
-                    int offset = blockManager.getNotDownloadedPart(pieceIndex);
-                    logger.trace("needed part in piece(with offset) "+ offset);
-                    return handler.getRequest(pieceIndex,offset,partSize);
                 }
             }
-        } catch (IOException e) {
-            logger.trace("IOEexception "+ e.getMessage());
+            logger.trace("not find peer");
+            throw new RuntimeException("bad request");
+        } catch (Exception e) {
+            logger.trace("Eexception "+ e.getMessage());
+            throw new RuntimeException("bad request");
         }
-        return null;//?????
     }
 
     public Id handleRequest(ByteBuffer buffer){
@@ -273,7 +287,12 @@ public class ConnectOperation {
             if(!downloadedPieces.get(index)){
                 return Id.END_CONNECT;
             }
-            return Id.PIECE;
+            if(blockManager.isRequestInBlock(index)){
+                logger.trace("is requested block!");
+                return Id.PIECE;
+            }
+            logger.trace("this not a needed block");
+            return Id.UNCHOKE;//////22 23
         }
     }
 
@@ -281,7 +300,6 @@ public class ConnectOperation {
         logger.trace("position:" + buffer.position());
         buffer.flip();
         logger.trace("position:" + buffer.position());
-        try {
             buffer.getInt();
             buffer.get();
             int index = buffer.getInt();
@@ -291,13 +309,18 @@ public class ConnectOperation {
             int length = buffer.getInt();
             logger.trace("piece length "+length);
             long filePosition = index * pieceSize + offset;
-            localFile.seek(filePosition);
+        try {
+            synchronized (localFile) {
+                localFile.seek(filePosition);
+            }
             byte[] sendData = new byte[length];
-            localFile.readFully(sendData);
+            synchronized (localFile) {
+                localFile.readFully(sendData);
+            }
             return handler.getPiece(index,offset,sendData);
         } catch (IOException e) {
             logger.trace("IOEexception "+e.getMessage());
-            return null;
+            throw new RuntimeException("bad file") ;
         }
     }
 
@@ -371,6 +394,10 @@ public class ConnectOperation {
             buffer.get();
             int index = buffer.getInt();
             logger.debug("received piece index "+index);
+            Piece piece = blockManager.getPiece(index);
+            if(piece == null){
+                return Id.NOT_INTERESTED;
+            }
             int offset = buffer.getInt();
             logger.debug("received piece offset "+offset);
             int length = buffer.remaining();
@@ -378,9 +405,10 @@ public class ConnectOperation {
             byte[] block = new byte[length];
             buffer.get(block);
             long filePosition = index*pieceSize+offset;
-            localFile.seek(filePosition);
-            localFile.write(block);
-            Piece piece = blockManager.getPiece(index);
+            synchronized (localFile){
+                localFile.seek(filePosition);
+                localFile.write(block);
+            }
             piece.addLoadedPart(offset /partSize, block);
             if(piece.checkIsCompletedPiece()){
                 ByteBuffer buff =piece.getPieceFile();

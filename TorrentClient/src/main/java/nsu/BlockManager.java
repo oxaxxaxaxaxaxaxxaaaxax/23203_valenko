@@ -42,15 +42,17 @@ public class BlockManager {
             logger.trace("Block is completed");
             return;
         }
-        for(int i=0;i< countPiecesInBlock;i++){
-            if(i >= countPieces){
-                return;
-            }
+        int start = currentBlockIndex*countPiecesInBlock;
+        int end = Math.min(start+countPiecesInBlock,(int)countPieces);
+        for(int i=start;i<end;i++){
+//            if(i >= countPieces){
+//                return;
+//            }
             synchronized (downloadedPieces){
-                if(!downloadedPieces.get(currentBlockIndex*countPiecesInBlock +i)){
+                if(!downloadedPieces.get(i)){
                     logger.trace("set piece!!!");
-                    pieces.put(i,new Piece(countPartsInPiece,i));
-                    logger.trace(i);
+                    pieces.put(i-start,new Piece(countPartsInPiece,i-start));
+                    logger.trace(i-start);
                 }else{
                     logger.trace("piece is correct");
                 }
@@ -75,9 +77,11 @@ public class BlockManager {
             logger.info("failed index");
             return false;
         }
+        int start = currentBlockIndex*countPiecesInBlock;
+        int end = Math.min(start+countPiecesInBlock,(int)countPieces);
         synchronized (downloadedPieces){
-            for(int i=0;i<countPiecesInBlock;i++){
-                if(!downloadedPieces.get(index*countPiecesInBlock + i)){
+            for(int i=start;i<end;i++){
+                if(!downloadedPieces.get(i)){
                     return false;
                 }
             }
@@ -87,18 +91,25 @@ public class BlockManager {
 
     public void removePiece(int idx){
         int blockIndex = idx/countPiecesInBlock;
-        if(blockIndex != currentBlockIndex){
-            if(blockIndex == 1+ currentBlockIndex){
+        int localIndex = idx%countPiecesInBlock;
+        if(blockIndex == currentBlockIndex){
+            pieces.remove(localIndex);
+            logger.trace("piece is removed");
+            if(isCompleteBlock(currentBlockIndex)){
+                updateBlock();
+            }
+            return;
+        }else{
+            if((blockIndex == 1+ currentBlockIndex) && isCompleteBlock(currentBlockIndex)){
                 logger.trace("load new block");
                 updateBlock();
                 return;
+            }else{
+                logger.trace("index didn't match");
+                return;
             }
-            logger.trace("index didn't match");
-            return;
         }
-        int index = idx%countPiecesInBlock;
-        pieces.remove(index);
-        logger.trace("piece is removed");
+
     }
 
     public Piece getPiece(int idx){
@@ -116,20 +127,40 @@ public class BlockManager {
         logger.trace("block index "+blockIndex);
         logger.trace("currentBlockIndex" + currentBlockIndex);
         if(blockIndex != currentBlockIndex){
-            if(blockIndex == 1+ currentBlockIndex){
+            if((blockIndex == 1+ currentBlockIndex) && (isCompleteBlock(currentBlockIndex))){
                 logger.trace("load new block");
                 updateBlock();
             }else{
                 logger.trace("index didn't match");
-                return 0;
+                throw new RuntimeException("INDEX DIDNT MATCH");
+                //return 0;
             }
         }
         logger.trace("find piece index "+idx);
         if(idx ==0){
+            logger.trace("idx in getNotDownloadedPart " +idx);
             return pieces.get(0).getFreePart();
         }
+        logger.trace("idx in getNotDownloadedPart " +idx);
         int index = idx%countPiecesInBlock;
         return pieces.get(index).getFreePart();
+    }
+
+    public boolean isRequestInBlock(int idx){
+        int blockIndex = idx/countPiecesInBlock;
+        logger.trace("block index "+blockIndex);
+        logger.trace("currentBlockIndex" + currentBlockIndex);
+        if(blockIndex != currentBlockIndex) {
+            if ((blockIndex == 1 + currentBlockIndex) && (isCompleteBlock(currentBlockIndex))) {
+                logger.trace("load new block");
+                updateBlock();
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
     }
 }
 

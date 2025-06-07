@@ -23,13 +23,17 @@ public class Piece {
         parts = new BitSet(countParts);
     }
     public int getFreePart(){
-        for(int i=0;i< countParts;i++){
-            if(!parts.get(i)){
-                logger.trace("find free part "+ i);
-                return i*partSize;
+        logger.trace("in get free part");
+        synchronized (parts){
+            for(int i=0;i< countParts;i++){
+                if(!parts.get(i)){
+                    logger.trace("find free part "+ i);
+                    return i*partSize;
+                }
             }
         }
-        throw new RuntimeException("all part is loaded!!!!!");
+        logger.trace("not free part!!");
+        return -1;
     }
 //    public void addLoadedPart(int idx, byte[] loadedPart){
 //        parts.set(idx);
@@ -37,11 +41,19 @@ public class Piece {
 //    }
 
     public void addLoadedPart(int idx, byte[] loadedPart) {
-        if (parts.get(idx)) return;
+        synchronized (parts){
+            if (parts.get(idx)) {
+                return;
+            }
+        }
         int offset = idx * partSize;
-        pieceFile.position(offset);
-        pieceFile.put(loadedPart);
-        parts.set(idx);
+        synchronized (pieceFile){
+            pieceFile.position(offset);
+            pieceFile.put(loadedPart);
+        }
+        synchronized (parts){
+            parts.set(idx);
+        }
     }
 
 //    public boolean checkIsCompletedPiece(){
@@ -49,13 +61,17 @@ public class Piece {
 //    }
 
     public boolean checkIsCompletedPiece() {
-        return parts.cardinality() == countParts;
+        synchronized (parts){
+            return parts.cardinality() == countParts;
+        }
     }
 
     //public byte[] getPieceFile(){return pieceFile;}
 
     public ByteBuffer getPieceFile() {
-        return pieceFile.duplicate(); // безопасная копия для работы
+        synchronized (pieceFile){
+            return pieceFile.duplicate(); // безопасная копия для работы
+        }
     }
 
     public int getSize(){return countParts*partSize;}
@@ -65,8 +81,12 @@ public class Piece {
 //    }
 
     public void clearPiece() {
-        pieceFile.clear(); // position=0, limit=capacity
-        parts.clear();     // сбрасываем все биты
+        synchronized (pieceFile){
+            pieceFile.clear(); // position=0, limit=capacity
+        }
+        synchronized (parts){
+            parts.clear();     // сбрасываем все биты
+        }
         logger.trace("piece is clear");
     }
 
