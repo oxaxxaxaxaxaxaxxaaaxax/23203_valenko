@@ -26,7 +26,8 @@ public class FileFunc {
             // Пишем нули в нужный диапазон
             ByteBuffer zeroBuf = ByteBuffer.allocate((int)pieceLength);
             channel.position(half*pieceLength);
-            long remaining = (countPieces - half)*pieceLength;
+            long endPos = Math.min(length,countPieces*pieceLength);
+            long remaining = endPos - half*pieceLength;
             logger.trace("remaining zero "+ remaining/32768);
 
             while (remaining > 0) {
@@ -35,7 +36,8 @@ public class FileFunc {
                     zeroBuf.put((byte) 0);
                 }
                 zeroBuf.flip();
-                int writeLen = (int)pieceLength;
+                int writeLen = Math.min((int)remaining,pieceLength);
+                //int writeLen = (int)maxWrite;
                 logger.trace("writelen "+writeLen);
                 zeroBuf.limit(writeLen);
                 channel.write(zeroBuf);
@@ -92,7 +94,7 @@ public class FileFunc {
             logger.trace("countPieces " +countPieces);
             ByteBuffer zeroBuf = ByteBuffer.allocate((int)pieceLength);
             channel.position(0);
-            long remaining = (long) countPieces * pieceLength;
+            long remaining = length;
             logger.trace("remaining zero "+ remaining/32768);
 
             while (remaining > 0) {
@@ -101,7 +103,7 @@ public class FileFunc {
                     zeroBuf.put((byte) 0);
                 }
                 zeroBuf.flip();
-                int writeLen = (int)pieceLength;
+                int writeLen = Math.min((int)remaining,pieceLength);
                 logger.trace("writelen "+writeLen);
                 zeroBuf.limit(writeLen);
                 channel.write(zeroBuf);

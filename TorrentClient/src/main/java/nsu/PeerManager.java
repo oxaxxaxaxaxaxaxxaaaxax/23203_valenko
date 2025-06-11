@@ -26,7 +26,7 @@ public class PeerManager{
     private final String hostname = "127.0.0.1";
     private Selector selector;
     private static final int BUFFER_SIZE = 17000;///////////////
-    private final ExecutorService executor = Executors.newFixedThreadPool(20);
+    private final ExecutorService executor = Executors.newFixedThreadPool(10);
     private final Logger logger = LogManager.getLogger(PeerManager.class);
     private Map<SocketChannel, ConnectionContext> contexts = new ConcurrentHashMap<>();
 
@@ -160,7 +160,9 @@ public class PeerManager{
                         ConnectionContext ctx = (ConnectionContext)key.attachment();
                         SocketChannel client = ctx.getChannel();
                         ByteBuffer readBuffer = ctx.getReadBuffer();
+                        logger.trace("get read buff");
                         if(!client.isOpen()){
+                            logger.trace("not open");
                             client.close();
                             key.cancel();
                             contexts.remove(client);
@@ -169,6 +171,7 @@ public class PeerManager{
                         readBuffer.clear();
                         int read = client.read(readBuffer);
                         if (read == -1) {
+                            logger.trace("not read");
                             client.close();
                             key.cancel();
                             contexts.remove(client);
@@ -182,8 +185,12 @@ public class PeerManager{
                             readBuffer.get(copyBuffer);
                             ByteBuffer buffer = ByteBuffer.wrap(copyBuffer);
                             executor.submit(() -> {
-                                Id sendMessageID = op.handlePeerMessage(buffer, client);
-                                op.sendMessage(sendMessageID, client, buffer);
+                                try{
+                                    Id sendMessageID = op.handlePeerMessage(buffer, client);
+                                    op.sendMessage(sendMessageID, client, buffer);
+                                }catch(Exception e){
+                                    logger.info("Exception! "+e.getMessage());
+                                }
                             });
                         }
                     }catch (IOException e){

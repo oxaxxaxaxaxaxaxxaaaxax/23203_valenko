@@ -161,7 +161,7 @@ public class TorrentData {
                 logger.trace("Actual hash:   {}", HexFormat.of().formatHex(pieceHash));
                 return;
             }
-            //logger.trace("equals pieces!!!!");
+            logger.trace("equals pieces!!!!");
             piecesCard.set(pieceIdx);
         }catch(IOException e){
             logger.trace("IOEexception!!!!" + e.getMessage());

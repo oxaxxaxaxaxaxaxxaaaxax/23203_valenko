@@ -27,6 +27,7 @@ public class Piece {
         synchronized (parts){
             for(int i=0;i< countParts;i++){
                 if(!parts.get(i)){
+                    parts.set(i);
                     logger.trace("find free part "+ i);
                     return i*partSize;
                 }
@@ -41,18 +42,18 @@ public class Piece {
 //    }
 
     public void addLoadedPart(int idx, byte[] loadedPart) {
+        logger.trace("in loaded part");
         synchronized (parts){
-            if (parts.get(idx)) {
-                return;
+//            if (parts.get(idx)) {
+//                return;
+//            }
+            int offset = idx * partSize;
+            synchronized (pieceFile){
+                pieceFile.position(offset);
+                pieceFile.put(loadedPart);
             }
-        }
-        int offset = idx * partSize;
-        synchronized (pieceFile){
-            pieceFile.position(offset);
-            pieceFile.put(loadedPart);
-        }
-        synchronized (parts){
-            parts.set(idx);
+            logger.trace("file part is loaded");
+                parts.set(idx);
         }
     }
 
@@ -81,8 +82,13 @@ public class Piece {
 //    }
 
     public void clearPiece() {
-        synchronized (pieceFile){
-            pieceFile.clear(); // position=0, limit=capacity
+        logger.trace("in clear piece");
+        if(pieceFile!= null){
+            synchronized (pieceFile){
+                Arrays.fill(pieceFile.array(), (byte)0);
+                logger.trace("fill 0 bytes)");
+                pieceFile.clear(); // position=0, limit=capacity
+            }
         }
         synchronized (parts){
             parts.clear();     // сбрасываем все биты

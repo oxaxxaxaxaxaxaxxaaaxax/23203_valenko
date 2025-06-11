@@ -14,8 +14,9 @@ public class Peer {
     //private final int leecherPort1;
     //private final int leecherPort2;
     private List<Integer> leecherPorts = new ArrayList<>();
-    private BitSet bitfield;
+    private BitSet bitfield= new BitSet();
     private SocketChannel channel =null;
+    private Object monitor = new Object();
     private final Logger logger = LogManager.getLogger(Peer.class);
     private Handler handler= new Handler();
     //private final String ip;
@@ -36,8 +37,14 @@ public class Peer {
         //this.leecherPort2 = leecherPort2;
     }
     public void setPeerBitfield(BitSet peerBitfield){
-        synchronized (peerBitfield){
+        synchronized (monitor){
             bitfield = peerBitfield;
+        }
+    }
+
+    public BitSet getBitfieldCopy() {
+        synchronized(monitor) {
+            return (BitSet) bitfield.clone();
         }
     }
     public void setLoadedPiece(int index){
@@ -45,7 +52,7 @@ public class Peer {
 //        if(bitfield.get(index)){
 //            logger.trace("this piece already loaded");
 //        }
-        synchronized (bitfield){
+        synchronized (monitor){
             bitfield.set(index);
         }
         logger.trace("set successful");
@@ -61,8 +68,20 @@ public class Peer {
         return true;
     }
     public BitSet getBitfield() {
-        synchronized (bitfield) {
+        synchronized (monitor) {
             return bitfield;
+        }
+    }
+
+    public BitSet compareBitfield(BitSet downloadedPieces){
+        Object firstLock = System.identityHashCode(monitor) < System.identityHashCode(downloadedPieces) ? monitor: downloadedPieces;
+        Object secondLock = System.identityHashCode(monitor) < System.identityHashCode(downloadedPieces) ? downloadedPieces: monitor;
+        synchronized (firstLock) {
+            synchronized (secondLock) {
+                BitSet neededPieces = (BitSet) bitfield.clone();
+                neededPieces.andNot(downloadedPieces);
+                return neededPieces;
+            }
         }
     }
     public void setId(byte[] id){

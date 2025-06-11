@@ -56,12 +56,13 @@ public class ConnectOperation {
     private final BitSet downloadedPieces;
     private Handler handler= new Handler();
     BlockManager blockManager;
-    private Map<Integer, Piece> notDownloadedPieces = new ConcurrentHashMap<>();
+    //private Map<Integer, Piece> notDownloadedPieces = new ConcurrentHashMap<>();
     private final long countPieces;
     private final int partSize = 16* 1024;
     private final long pieceSize;
     private final int MESSAGE_ID_INDEX = 4;
     private TorrentData metadata;
+    private static final int BUFFER_SIZE = 17000;
     private Map<Integer, HandShake> peerHandshakes= new ConcurrentHashMap<>();
     private final Logger logger = LogManager.getLogger(ConnectOperation.class);
     private Map<SocketChannel, ConnectionContext> contexts = new ConcurrentHashMap<>();
@@ -82,7 +83,7 @@ public class ConnectOperation {
         }
         countPieces = metadata.getCountPieces();
         pieceSize = metadata.getPieceSize();
-        blockManager = new BlockManager(countPieces, metadata.getLength(),pieceSize,downloadedPieces,(int)(pieceSize+partSize - 1)/partSize);
+        blockManager = new BlockManager(countPieces, metadata.getLength(),pieceSize,downloadedPieces,(int)(pieceSize+partSize - 1)/partSize,torrentPeers);
         fillHandshakes(torrentPeers);
     }
 
@@ -128,11 +129,14 @@ public class ConnectOperation {
     public ByteBuffer createBitfield(){
         logger.trace("create bitfield");
         synchronized (downloadedPieces){
+            for(int i=0;i<countPieces;i++){
+                System.out.print(downloadedPieces.get(i));
+            }
             return handler.getBitfield(downloadedPieces);
         }
     }
 
-    public boolean hasNeededPieces(Peer peer) {
+    public boolean hasNeededPieces(Peer peer, SocketChannel channel) {
 //        System.out.println("peer bitfield:");
 //        for(int i=0;i< countPieces;i++){
 //            System.out.print(peerPieces.get(i));
@@ -147,34 +151,54 @@ public class ConnectOperation {
 //            Peer peer = peers.get(i);
 //            if (Arrays.equals(torrentPeers.getPeerID(peerPort), peer.getId())) {
 //                logger.trace("find peer!! " + peerPort);
-        Object firstLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? peer.getBitfield(): downloadedPieces;
-        Object secondLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? downloadedPieces: peer.getBitfield();
-        synchronized (firstLock) {
-            synchronized (secondLock) {
-                BitSet neededPieces = (BitSet) peer.getBitfield().clone();
-                logger.trace("peer: "+ peer.getServerPort());
-                for(int i=0;i<countPieces;i++){
-                    System.out.print(neededPieces.get(i));
-                }
-                logger.trace("my bitfield");
-                for(int i=0;i<countPieces;i++){
-                    System.out.print(downloadedPieces.get(i));
-                }
-                synchronized (downloadedPieces){
-                    neededPieces.andNot(downloadedPieces);
-                }
-                logger.trace("nedeed bitfield ");
-                for(int i=0;i<countPieces;i++){
-                    System.out.print(neededPieces.get(i));
-                }
-                return !neededPieces.isEmpty();
+        //Object firstLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? peer.getBitfield(): downloadedPieces;
+        //Object secondLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? downloadedPieces: peer.getBitfield();
+        //synchronized (firstLock) {
+            //synchronized (secondLock) {
+                //BitSet neededPieces = (BitSet) peer.getBitfield().clone();
+        if(peer.getChannel() == null){
+            logger.trace("ADD CHANNEL");
+            peer.setChannel(channel);
+            ConnectionContext ctx = contexts.get(channel);
+            if(ctx == null){
+                logger.trace("ADD CTX");
+                ctx = new ConnectionContext(channel,BUFFER_SIZE);
+            }
+            try{
+                InetSocketAddress addr= (InetSocketAddress) channel.getRemoteAddress();
+                ByteBuffer handshake = createInitialHandshake(addr);
+                ctx.addToQueue(handshake,selector);
+            } catch (IOException e) {
+                logger.trace("IOexception "+ e.getMessage());
+            }
+            return false;
+        }
+        BitSet neededPieces = peer.compareBitfield(downloadedPieces);
+        logger.trace("peer: "+ peer.getServerPort());
+//        for(int i=0;i<countPieces;i++){
+//            System.out.print(neededPieces.get(i));
+//        }
+        logger.trace("my bitfield");
+        synchronized (downloadedPieces){
+            for(int i=0;i<countPieces;i++){
+                System.out.print(downloadedPieces.get(i));
             }
         }
+//                synchronized (downloadedPieces){
+//                    neededPieces.andNot(downloadedPieces);
+//                }
+        logger.trace("nedeed bitfield ");
+        for(int i=0;i<countPieces;i++){
+            System.out.print(neededPieces.get(i));
+        }
+        return !neededPieces.isEmpty();
+    }
+
 //            }
 //        }
 //        logger.trace("not found peer");
 //        throw new RuntimeException();
-    }
+    //}
 
     public void setPeerBitfield(BitSet peerPieces, int peerPort){
         int countPeer = torrentPeers.getCountPeers();
@@ -189,22 +213,37 @@ public class ConnectOperation {
     }
 
     public Id handleBitfield(ByteBuffer buffer, SocketChannel channel) {
+        int port =0;
+        try{
+            InetSocketAddress addr= (InetSocketAddress) channel.getRemoteAddress();
+            port = addr.getPort();
+        } catch (IOException e) {
+            logger.trace("IOexception "+ e.getMessage());
+        }
         logger.trace("handle peer's bitfield");
         logger.trace("position:" + buffer.position());
         logger.trace("buffer length "+ buffer.remaining());
         int length = buffer.getInt();
         logger.trace("length:" + length);
         buffer.get();
+        byte[] buff = new byte[((int)countPieces + 8-1)/8];
+        logger.trace("buff: "+buff.length);
         if (length == 1) {
-            return Id.NOT_INTERESTED;
+            logger.trace("all bits is 0");
+        }else{
+            logger.trace("length >1");
+            // byte[] buff = new byte[length-1];
+            int remaining = buffer.remaining();
+            buffer.get(buff,0,remaining);
         }
-        logger.trace("length >1");
-        byte[] buff = new byte[length-1];
-        buffer.get(buff);
         logger.trace("position:" + buffer.position());
-        buffer.flip();
+        //buffer.flip();
         logger.trace("position:" + buffer.position());
         BitSet peerPieces = handler.ByteToBit(buff, (int) countPieces);
+        logger.trace("bitfield " + port + " :");
+        for(int i=0;i<countPieces;i++){
+            System.out.print(peerPieces.get(i));
+        }
         logger.trace("");
         try{
             InetSocketAddress addr = (InetSocketAddress) channel.getRemoteAddress();
@@ -218,7 +257,7 @@ public class ConnectOperation {
                 if (Arrays.equals(torrentPeers.getPeerID(peerPort), peer.getId())) {
                     logger.trace("find peer!! " + peerPort);
                     setPeerBitfield(peerPieces, peerPort);
-                    if (hasNeededPieces(peer)) {
+                    if (hasNeededPieces(peer,channel)) {
                         return Id.INTERESTED;
                     }
 
@@ -234,7 +273,7 @@ public class ConnectOperation {
     }
 
     public ByteBuffer requestPiece(SocketChannel channel){
-        BitSet peerPieces;
+        //BitSet peerPieces;
         List<Peer> peers = torrentPeers.getPeers();
         int countPeer = torrentPeers.getCountPeers();
         try{
@@ -244,24 +283,30 @@ public class ConnectOperation {
                 Peer peer = peers.get(i);
                 if(Arrays.equals(torrentPeers.getPeerID(peerPort),peer.getId())){
                     logger.trace("find peer!! "+ peerPort);
-                    Object firstLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? peer.getBitfield(): downloadedPieces;
-                    Object secondLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? downloadedPieces: peer.getBitfield();
-                    synchronized (firstLock){
-                        synchronized (secondLock){
-                            peerPieces = peer.getBitfield();
-                            BitSet neededPieces = (BitSet) peerPieces.clone();
-                            neededPieces.andNot(downloadedPieces);
-                            int pieceIndex = neededPieces.nextSetBit(0);
-                            logger.trace("needed piece "+ pieceIndex);
-                            int offset = blockManager.getNotDownloadedPart(pieceIndex);
-                            if(offset == -1){
-                                logger.trace("all parts dowloads");
-                                throw new RuntimeException("bad request");
-                            }
-                            logger.trace("needed part in piece(with offset) "+ offset);
-                            return handler.getRequest(pieceIndex,offset,partSize);
-                        }
+                    //Object firstLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? peer.getBitfield(): downloadedPieces;
+                    //Object secondLock = System.identityHashCode(peer.getBitfield()) < System.identityHashCode(downloadedPieces) ? downloadedPieces: peer.getBitfield();
+                    //synchronized (firstLock){
+                        //synchronized (secondLock){
+                            //peerPieces = peer.getBitfield();
+                            //BitSet neededPieces = (BitSet) peerPieces.clone();
+                            //neededPieces.andNot(downloadedPieces);
+                    BitSet neededPieces = peer.compareBitfield(downloadedPieces);
+                    int pieceIndex = neededPieces.nextSetBit(0);
+                    if(pieceIndex == -1){
+                        logger.trace("all parts dowloads");
+                        return handler.getNotInterested();
                     }
+                    logger.trace("needed piece "+ pieceIndex);
+                    int offset = blockManager.getNotDownloadedPart(pieceIndex);
+                    if(offset == -1){
+                        logger.trace("all parts dowloads");
+                        return handler.getNotInterested();///////!!!!!!!02 02
+                        //throw new RuntimeException("bad request");
+                    }
+                    logger.trace("needed part in piece(with offset) "+ offset);
+                    return handler.getRequest(pieceIndex,offset,partSize);
+                        //}
+                    //}
                 }
             }
             logger.trace("not find peer");
@@ -287,12 +332,13 @@ public class ConnectOperation {
             if(!downloadedPieces.get(index)){
                 return Id.END_CONNECT;
             }
-            if(blockManager.isRequestInBlock(index)){
-                logger.trace("is requested block!");
-                return Id.PIECE;
-            }
-            logger.trace("this not a needed block");
-            return Id.UNCHOKE;//////22 23
+            return Id.PIECE;
+//            if(blockManager.isRequestInBlock(index)){
+//                logger.trace("is requested block!");
+//                return Id.PIECE;
+//            }
+            //logger.trace("this not a needed block");
+            //return Id.UNCHOKE;//////22 23
         }
     }
 
@@ -324,23 +370,25 @@ public class ConnectOperation {
         }
     }
 
-    public void askAllPeer(){
+    public void askAllPeer(int index,SocketChannel channel){
         logger.trace("ask all peer");
         List<Peer> peers = torrentPeers.getPeers();
         int countPeer = torrentPeers.getCountPeers();
         for(int i=0;i<countPeer;i++){
             Peer peer =peers.get(i);
-            if(hasNeededPieces(peer)){
+            if(hasNeededPieces(peer,channel)){
                 logger.trace("find peer!");
                 SocketChannel peerChannel =  peer.getChannel();
                 ConnectionContext ctx = contexts.get(peerChannel);
+                //ctx.addToQueue(handler.getRequest(index,0,partSize),selector);
+                ctx.addToQueue(requestPiece(channel),selector);
                 ctx.addToQueue(handler.getInterested(),selector);
             }
         }
         //!!!!!!!!!!!!!
     }
 
-    public void sendHaveMessage(int index){
+    public void sendHaveMessage(int index,SocketChannel channel){
         logger.trace("send have message");
         List<Peer> peers = torrentPeers.getPeers();
         int countPeer = torrentPeers.getCountPeers();
@@ -355,6 +403,23 @@ public class ConnectOperation {
                 } catch (IOException e) {
                     logger.trace("IOEexception "+ e.getMessage());
                 }
+//            }else{
+//                if(peer.getChannel() == null){
+//                    logger.trace("ADD CHANNEL");
+//                    peer.setChannel(channel);
+//                    ConnectionContext ctx = contexts.get(channel);
+//                    if(ctx == null){
+//                        logger.trace("ADD CTX");
+//                        ctx = new ConnectionContext(channel,BUFFER_SIZE);
+//                    }
+//                    try{
+//                        InetSocketAddress addr= (InetSocketAddress) channel.getRemoteAddress();
+//                        ByteBuffer handshake = createInitialHandshake(addr);
+//                        ctx.addToQueue(handshake,selector);
+//                    } catch (IOException e) {
+//                        logger.trace("IOexception "+ e.getMessage());
+//                    }
+//                }
             }
         }
     }
@@ -405,10 +470,7 @@ public class ConnectOperation {
             byte[] block = new byte[length];
             buffer.get(block);
             long filePosition = index*pieceSize+offset;
-            synchronized (localFile){
-                localFile.seek(filePosition);
-                localFile.write(block);
-            }
+            logger.trace("offset)");
             piece.addLoadedPart(offset /partSize, block);
             if(piece.checkIsCompletedPiece()){
                 ByteBuffer buff =piece.getPieceFile();
@@ -417,31 +479,35 @@ public class ConnectOperation {
                 buff.get(array);
                 if(metadata.compareSHAHashWithTorrent(index,array)){
                     logger.trace("hash is equals");
+                    synchronized (localFile){
+                        localFile.seek(index*pieceSize);
+                        localFile.write(array);
+                    }
                     synchronized (downloadedPieces){
                         downloadedPieces.set(index);
                     }
                     blockManager.removePiece(index);
-                    sendHaveMessage(index);
+                    sendHaveMessage(index,channel);
                     synchronized (downloadedPieces){
                         if (downloadedPieces.cardinality() == countPieces){
                             logger.info("FILE IS LOADED!!");
                             return Id.END_CONNECT;
                         }
                     }
-                   if(hasNeededPieces(neededPeer)){
+                   if(hasNeededPieces(neededPeer,channel)){
                        return Id.INTERESTED;//!!!!!!!!!!!!!1
                        //return Id.END_CONNECT;
                    }
                    return Id.END_CONNECT;
-               }
+                }
                 logger.trace("hash not equals, need to load again");
                 //return Id.END_CONNECT;
-               piece.clearPiece();
-               askAllPeer();
-               return Id.END_CONNECT;//ЭТО НУЖНАЯ ЧАСТЬ УДАЛЕНА ДЛЯ ОТЛАДКИ 05.06.12:52
+                piece.clearPiece();
+                askAllPeer(index,channel);
+                return Id.END_CONNECT;//ЭТО НУЖНАЯ ЧАСТЬ УДАЛЕНА ДЛЯ ОТЛАДКИ 05.06.12:52
             }
             logger.trace("need to load more parts");
-            if(hasNeededPieces(neededPeer)){
+            if(hasNeededPieces(neededPeer,channel)){
                 return Id.INTERESTED;
             }
             return Id.END_CONNECT;
@@ -467,17 +533,18 @@ public class ConnectOperation {
                 if(Arrays.equals(torrentPeers.getPeerID(peerPort),peer.getId())){
                     logger.trace("found peer with have message");
                     peer.setLoadedPiece(index);
-                    if(hasNeededPieces(peer)){
+                    if(hasNeededPieces(peer,channel)){
                         logger.trace("this peer has needed pieces");
                         return Id.INTERESTED;
                     }
                     logger.trace("this peer hasn't needed pieces");
-                    //return Id.NOT_INTERESTED;//////////////ПОМЕНЯЯЯТЬ ОБРАТНО 05.06.13 07
-                    return Id.END_CONNECT;
+                    return Id.NOT_INTERESTED;//////////////ПОМЕНЯЯЯТЬ ОБРАТНО 05.06.13 07
+                    //return Id.END_CONNECT;
                 }
             }
             logger.trace("not found peer with have message");
-            return Id.END_CONNECT;
+            //return Id.END_CONNECT;
+            return Id.NOT_INTERESTED;
         }catch(IOException e){
             logger.trace("IOEexception "+ e.getMessage());
             throw new RuntimeException();
@@ -602,6 +669,27 @@ public class ConnectOperation {
     public Id handlePeerMessage(ByteBuffer buffer,SocketChannel channel) {
         logger.trace("handle message!!!!!111");
         int peerPort;
+//        List<Peer> peers = torrentPeers.getPeers();
+//        int countPeer = torrentPeers.getCountPeers();
+//        for (int i = 0; i < countPeer; i++) {
+//            Peer peer = peers.get(i);
+//            if (peer.getChannel() == null) {
+//                logger.trace("ADD CHANNEL");
+//                peer.setChannel(channel);
+//                ConnectionContext ctx = contexts.get(channel);
+//                if (ctx == null) {
+//                    logger.trace("ADD CTX");
+//                    ctx = new ConnectionContext(channel, BUFFER_SIZE);
+//                }
+//                try {
+//                    InetSocketAddress addr = (InetSocketAddress) channel.getRemoteAddress();
+//                    ByteBuffer handshake = createInitialHandshake(addr);
+//                    ctx.addToQueue(handshake, selector);
+//                } catch (IOException e) {
+//                    logger.trace("IOexception " + e.getMessage());
+//                }
+//            }
+//        }
         try {
             InetSocketAddress peerAddress = (InetSocketAddress) channel.getRemoteAddress();
             peerPort = peerAddress.getPort();

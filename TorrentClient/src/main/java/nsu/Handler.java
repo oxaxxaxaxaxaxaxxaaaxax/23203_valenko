@@ -19,11 +19,15 @@ public class Handler {
     private final Logger logger = LogManager.getLogger(Handler.class);
 
     public byte[] BitToByte(BitSet bitset) {
+        logger.trace("in bit to byte");
         int bitLength = bitset.length();
+        logger.trace("length bit: "+bitLength);
         int length = (bitLength + 7) / 8;
+        logger.trace("length byte: "+length);
         byte[] bytes = new byte[length];
         for (int i = 0; i < bitLength; i++) {
             if (bitset.get(i)) {
+                logger.trace("i 1: " + i);
                 bytes[i / 8] |= (byte) 1 << (7 - i % 8);
             }
         }
@@ -144,10 +148,12 @@ public class Handler {
 
     public ByteBuffer getBitfield(BitSet downloadedPieces) {
         byte[] bitfieldsByte = BitToByte(downloadedPieces);
+        logger.trace("length bytes:" + bitfieldsByte.length);
         ByteBuffer buff = ByteBuffer.allocate(4 + bitfieldsByte.length + 1);
         buff.putInt(bitfieldsByte.length + 1);
         buff.put((byte) 5);
         buff.put(bitfieldsByte);
+        logger.trace("length : "+buff.capacity());
         logger.trace("position " + buff.position());
         buff.flip();
         logger.trace("position " + buff.position());
